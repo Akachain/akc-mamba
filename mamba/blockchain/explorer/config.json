@@ -1,0 +1,93 @@
+{
+  "network-configs": {
+    "network-1": {
+      "channels": {
+        "akctestchannel": {
+          "peers": {
+            "peer1-mambatest.mambatest": {
+              
+            },
+            "peer0-mambatest.mambatest": {
+              
+            }
+          },
+          "connection": {
+            "timeout": {
+              "peer": {
+                "endorser": "6000",
+                "eventReg": "6000",
+                "eventHub": "6000"
+              }
+            }
+          }
+        }
+      },
+      "peers": {
+        "peer1-mambatest.mambatest": {
+          "eventUrl": "grpcs://peer1-mambatest.mambatest:7053",
+          "tlsCACerts": {
+            "path": "/opt/explorer/crypto-config/peerOrganizations/mambatest/peers/peer1.mambatest/tls/tlsca.mambatest-cert.pem"
+          },
+          "grpcOptions": {
+            "ssl-target-name-override": "peer1-mambatest.mambatest"
+          },
+          "url": "grpcs://peer1-mambatest.mambatest:7051"
+        },
+        "peer0-mambatest.mambatest": {
+          "eventUrl": "grpcs://peer0-mambatest.mambatest:7053",
+          "tlsCACerts": {
+            "path": "/opt/explorer/crypto-config/peerOrganizations/mambatest/peers/peer0.mambatest/tls/tlsca.mambatest-cert.pem"
+          },
+          "grpcOptions": {
+            "ssl-target-name-override": "peer0-mambatest.mambatest"
+          },
+          "url": "grpcs://peer0-mambatest.mambatest:7051"
+        }
+      },
+      "organizations": {
+        "mambatestMSP": {
+          "signedCert": {
+            "path": "/opt/explorer/crypto-config/peerOrganizations/mambatest/users/admin/msp/signcerts"
+          },
+          "adminPrivateKey": {
+            "path": "/opt/explorer/crypto-config/peerOrganizations/mambatest/users/admin/msp/keystore"
+          },
+          "mspid": "mambatestMSP",
+          "fullpath": false
+        },
+        "ordererMSP": {
+          "adminPrivateKey": {
+            "path": "/opt/explorer/crypto-config/ordererOrganizations/orderer/users/admin/msp/keystore"
+          },
+          "mspid": "ordererMSP"
+        }
+      },
+      "version": "1.0",
+      "clients": {
+        "mambatest": {
+          "credentialStore": {
+            "path": "/opt/explorer/crypto-path/fabric-client-kv-mambatest",
+            "cryptoStore": {
+              "path": "/tmp/crypto-store/fabric-client-kv-mambatest"
+            }
+          },
+          "tlsEnable": true,
+          "organization": "mambatestMSP",
+          "channel": "akctestchannel"
+        }
+      },
+      "orderers": {
+        "orderer0-orderer.orderer": {
+          "tlsCACerts": {
+            "path": "/opt/explorer/crypto-config/ordererOrganizations/orderer/orderers/orderer0.orderer/tls/tlsca.orderer-cert.pem"
+          },
+          "grpcOptions": {
+            "ssl-target-name-override": "orderer0-orderer.orderer"
+          },
+          "url": "grpcs://orderer0-orderer.orderer:7050"
+        }
+      }
+    }
+  },
+  "license": "Apache-2.0"
+}

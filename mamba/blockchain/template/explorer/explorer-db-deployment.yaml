@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{DOMAIN}}
+  name: explorer-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: explorer-db
+      tier: {{DOMAIN}}
+  template:
+    metadata:
+      labels:
+        app: explorer-db
+        tier: {{DOMAIN}}
+    spec:
+      containers:
+      - name: explorer-db
+        image: akachain/devtool-explorer-db
+        env:
+          - name: DATABASE_DATABASE
+            value: fabricexplorer
+          - name: DATABASE_USERNAME
+            value: postgres
+          - name: DATABASE_PASSWORD
+            value: {{DATABASE_PASSWORD}}
+        ports:
+        - containerPort: 5432
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: explorer-pvc
+            mountPath: /var/lib/postgresql
+  volumeClaimTemplates:
+  - metadata:
+      name: explorer-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: gp2
+      resources:
+        requests:
+          storage: 25Gi

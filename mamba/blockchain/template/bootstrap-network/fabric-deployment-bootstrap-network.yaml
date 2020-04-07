@@ -1,0 +1,28 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORDERER_DOMAIN}}
+  name: bootstrap-network
+spec:
+  template:
+    metadata:
+      labels:
+        app: bootstrap-network
+        tier: {{ORDERER_DOMAIN}}
+    spec:
+      restartPolicy: "Never"
+      containers:
+      - name: bootstrap-network
+        image: alpine
+        command: ["sh"]
+        args:  ["-c", "apk add bash; apk add curl; ./scripts/bootstrap-network.sh 2>&1;"]
+        volumeMounts:
+          - name: rca-scripts
+            mountPath: /scripts
+      volumes:
+      - name: rca-scripts
+        nfs:
+          server: {{EFS_SERVER}}
+          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+

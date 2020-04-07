@@ -1,0 +1,63 @@
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+  external_labels:
+    monitor: 'codelab_monitor'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+#rule_files:
+#  - 'prometheus.rules.yml'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    scheme: 'http'
+    static_configs:
+    - targets: ['localhost:9090']
+
+  - job_name: 'network_prometheus'
+    scrape_interval: 5s
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    scheme: 'http'
+    static_configs:
+    - targets: [{{PROM_TARGET}}]
+    # - targets: ['peer0.cathay:9443','peer1.cathay:8443','orderer0.orderer:10443', 'admin.orderer:4001','cathaydapp-akc.cathay:4500','cathaydapp-akc.cathay-dev:4500','peer0.merchant:9443','peer1.merchant:8443']
+  # - job_name: 'example-random'
+  #   scrape_interval: 5s
+
+  #   static_configs:
+  #   - targets: ['localhost:8080', 'localhost:8081']
+  #     labels:
+  #       group: 'production'
+
+  #   - targets: ['localhost:8082']
+  #     labels:
+  #       group: 'canary'
+
+  # - job_name: 'myapp'
+  #   scrape_interval: 5s
+
+  #   static_configs:
+  #   - targets: ['localhost:2112']
+
+  # - job_name: cadvisor
+  #   scrape_interval: 5s
+  #   static_configs:
+  #   - targets:
+  #     - cadvisor:8080

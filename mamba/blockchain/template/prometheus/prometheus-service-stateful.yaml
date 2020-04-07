@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{DOMAIN}}
+  name: prometheus
+spec:
+  selector:
+    app: hyperledger
+    role: prometheus
+    type: stateful
+  type: NodePort
+  ports:
+  - name: externale-listen-endpoint
+    protocol: TCP
+    port: 9090
+    targetPort: 9090

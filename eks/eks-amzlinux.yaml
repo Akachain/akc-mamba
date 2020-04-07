@@ -1,0 +1,89 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  #Cluster name, region, and cluster version
+  name: cluster-mamba
+  region: ap-southeast-1
+  version: "1.15"
+
+# If we don't define an exist vpc, eksctl will create a new vpc, 
+# public and private subnet
+vpc:
+  #id: "vpc-123456789abcdef"
+  #cidr: "192.168.0.0/16"
+  #subnets:
+  #  private:
+  #    ap-southeast-1a:
+  #      id: "subnet-123456789abcdef"
+  #      cidr: "192.168.1.0/19"
+  #    ap-southeast-1b:
+  #      id: "subnet-123456789abcdef1"
+  #      cidr: "192.168.2.0/19"
+  #    ap-southeast-1c:
+  #      id: "subnet-123456789abcdef2"
+  #      cidr: "192.168.3.0/19"
+  #  public:
+  #    ap-southeast-1a:
+  #      id: "subnet-0123456789abcdef"
+  #      cidr: "192.168.4.0/19"
+  #    ap-southeast-1b:
+  #      id: "subnet-0123456789abcdef1"
+  #      cidr: "192.168.5.0/19"
+  #    ap-southeast-1c:
+  #      id: "subnet-0123456789abcdef2"
+  #      cidr: "192.168.6.0/19"
+  nat:
+    gateway: Single
+
+# Role used by the EKS control plane itself when managing resources
+iam:
+  serviceRoleARN: "arn:aws:iam::xxxxxxxxxxx:role/EKSServiceRole"
+
+# Here we only have only 1 node group that consists only T3.medium instances
+# In a production environment, it is recommended to have separated NodeGroups for different types of service.
+nodeGroups:
+  - name: nodeGroup-mamba
+    # Size section
+    desiredCapacity: 3
+    minSize: 2
+    maxSize: 5
+    instanceType: t3.medium
+    volumeSize: 50
+    volumeType: gp2
+    # Kubelet section
+    kubeletExtraConfig:
+        kubeReserved:
+            cpu: "300m"
+            memory: "300Mi"
+            ephemeral-storage: "1Gi"
+        kubeReservedCgroup: "/kube-reserved"
+        systemReserved:
+            cpu: "300m"
+            memory: "300Mi"
+            ephemeral-storage: "1Gi"
+        evictionHard:
+            memory.available:  "200Mi"
+            nodefs.available: "10%"
+        featureGates:
+            DynamicKubeletConfig: true
+            RotateKubeletServerCertificate: true # has to be enabled, otherwise it will be disabled
+    #Ubuntu AMI and Family
+    #ami: ami-01168bce413d4be53
+    #amiFamily: Ubuntu1804
+
+    #AmazonLinux AMI and Family
+    ami: ami-0d275f57a60281ccc
+    amiFamily: AmazonLinux2
+    volumeEncrypted: true
+    #Isolate nodegroup from the public internet
+    privateNetworking: true
+    #When define privateNetworking, ssh port can only be accessed inside VPC
+    ssh:
+      publicKeyName: workernode-cluster-mamba
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::xxxxxxxxxxx:policy/k8s-asg-policy
+        - arn:aws:iam::xxxxxxxxxxx:policy/ingressController-iam-policy
+        - arn:aws:iam::xxxxxxxxxxx:policy/WorkerNodesRolePoliciesEKS
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy

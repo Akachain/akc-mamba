@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderer{{ORDERER_INDEX}}-{{ORDERER}}
+  namespace: {{ORDERER_DOMAIN}}
+spec:
+  selector:
+    app: hyperledger
+    role: orderer
+    orderer-id: orderer{{ORDERER_INDEX}}-{{ORDERER}}
+    org: {{ORDERER_DOMAIN}}
+  type: NodePort
+  ports:
+  - name: listen-endpoint
+    protocol: TCP
+    port: 7050
+    targetPort: 7050
+  - name: prometheus-listen-endpoint
+    protocol: TCP
+    port: 10443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderer{{ORDERER_INDEX}}-{{ORDERER}}
+  namespace: {{ORDERER_DOMAIN}}
+spec:
+  selector:
+    app: hyperledger
+    role: orderer
+    orderer-id: orderer{{ORDERER_INDEX}}-{{ORDERER}}
+    org: {{ORDERER_DOMAIN}}
+  type: NodePort
+  ports:
+  - name: listen-endpoint
+    protocol: TCP
+    port: 7050
+    targetPort: 7050
+  - name: prometheus-listen-endpoint
+    protocol: TCP
+    port: 10443

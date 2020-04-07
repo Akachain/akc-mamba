@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{PEER_DOMAIN}}
+  name: peer{{PEER_INDEX}}-{{PEER_ORG}}
+spec:
+  selector:
+    app: hyperledger
+    role: peer
+    peer-id: peer{{PEER_INDEX}}-{{PEER_ORG}}
+    org: {{PEER_DOMAIN}}
+    type: stateful
+  type: NodePort
+  ports:
+  - name: external-listen-endpoint
+    protocol: TCP
+    port: 7051
+    targetPort: 7051
+    #nodePort: 30031
+
+  - name: chaincode-listen
+    protocol: TCP
+    port: 7052
+    targetPort: 7052
+    #nodePort: 30032
+
+  - name: event-listen
+    protocol: TCP
+    port: 7053
+    targetPort: 7053
+    #nodePort: 30033
+
+  - name: prometheus-listen
+    protocol: TCP
+    port: 9443
+    targetPort: 9443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{PEER_DOMAIN}}
+  name: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
+spec:
+  selector:
+    app: hyperledger
+    role: couchdb
+    couchdb-id: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
+    org: {{PEER_DOMAIN}}
+    type: stateful
+  type: NodePort
+  ports:
+  - name: couchdb-port
+    protocol: TCP
+    port: 5984
+    targetPort: 5984
+  - name: couchdb2-port
+    protocol: TCP
+    port: 5986
+    targetPort: 5986

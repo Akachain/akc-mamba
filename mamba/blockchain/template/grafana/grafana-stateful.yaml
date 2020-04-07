@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{DOMAIN}}
+  name: grafana
+spec:
+  serviceName: grafana
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hyperledger
+      role: grafana
+      type: stateful
+  template:
+    metadata:
+      labels:
+        app: hyperledger
+        role: grafana
+        type: stateful
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana
+        resources:
+          requests:
+            memory: "150Mi"
+            cpu: "350m"
+          limits:
+            memory: "3000Mi"
+            cpu: "2"
+        ports:
+        - containerPort: 3000

@@ -1,0 +1,48 @@
+---
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: couch-service
+    namespace: akctest
+    labels:
+      app: couch
+  spec:
+    type: ClusterIP
+    clusterIP: None
+    ports:
+    - port: 5984
+      protocol: TCP
+      targetPort: 5984
+    selector:
+      app: hyperledger
+      role: couchdb
+      couchdb-id: couchdb1-akctest
+      org: akctest
+      type: stateful
+      name: couchdb
+---
+  kind: Service
+  apiVersion: v1
+  metadata:
+    name: couchdb1-akctest
+    namespace: akctest
+    labels:
+      app: couch
+  spec:
+    type: NodePort            # NodePort service
+    ports:
+    - name: couchdb-port
+      protocol: TCP
+      port: 5984
+      targetPort: 5984
+    - name: couchdb2-port
+      protocol: TCP
+      port: 5986
+      targetPort: 5986
+    selector:
+      app: hyperledger
+      role: couchdb
+      couchdb-id: couchdb1-akctest
+      org: akctest
+      type: stateful
+      name: couchdb
