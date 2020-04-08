@@ -16,6 +16,7 @@ def gen_channel_artifact():
     k8s_template_file = '%s/channel-artifacts/fabric-deployment-channel-artifacts.yaml' % util.get_k8s_template_path()
     dict_env = {
         'ORDERER_DOMAIN': domains[0],
+        'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND

@@ -32,6 +32,7 @@ def setup_rca():
         'ORG': domain,
         'RCA_NAME': settings.RCA_NAME,
         'FABRIC_ORGS': settings.ORGS,
+        'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND

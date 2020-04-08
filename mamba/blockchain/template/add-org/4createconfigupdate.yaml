@@ -14,7 +14,7 @@ spec:
       restartPolicy: "Never"
       containers:
       - name: createconfigupdate 
-        image: hyperledger/fabric-tools:1.4.1
+        image: hyperledger/fabric-tools:{{FABRIC_TAG}}
         command: 
         - /bin/sh
         - -c

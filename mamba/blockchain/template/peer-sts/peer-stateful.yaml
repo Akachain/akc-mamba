@@ -82,7 +82,7 @@ spec:
     spec:
       containers:
       - name: peer{{PEER_INDEX}}-{{PEER_ORG}}
-        image: hyperledger/fabric-peer:1.4.1
+        image: hyperledger/fabric-peer:{{FABRIC_TAG}}
         # resources:
         #   requests:
         #     # memory: "3000Mi"
@@ -140,6 +140,11 @@ spec:
           value: 0.0.0.0:9443
         - name: CORE_METRICS_PROVIDER
           value: prometheus
+        # Allow more time for chaincode container to build on install.
+        - name: CORE_CHAINCODE_EXECUTETIMEOUT
+          value: 300s
+        - name: FABRIC_LOGGING_SPEC
+          value: INFO
         workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         ports:
         - containerPort: 7051

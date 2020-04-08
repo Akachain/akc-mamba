@@ -26,6 +26,7 @@ def fetch_config(org=None, domain=None):
         'ORDERER_NAME': settings.ORDERER_ORGS,
         'ORDERER_DOMAIN': settings.ORDERER_DOMAINS,
         'CHANNEL_NAME': settings.CHANNEL_NAME,
+        'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND
@@ -41,6 +42,7 @@ def modify_config(domain=None):
     dict_env = {
         'ORG_DOMAIN': domain,
         'NEW_ORG_NAME': settings.NEW_ORG_NAME,
+        'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND
@@ -57,6 +59,7 @@ def create_config_update_pb(domain=None):
     dict_env = {
         'ORG_DOMAIN': domain,
         'CHANNEL_NAME': settings.CHANNEL_NAME,
+        'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND
@@ -76,6 +79,7 @@ def update_channel_config(org=None, domain=None):
         'CHANNEL_NAME': settings.CHANNEL_NAME,
         'ORDERER_NAME': settings.ORDERER_ORGS,
         'ORDERER_DOMAIN': settings.ORDERER_DOMAINS,
+        'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND

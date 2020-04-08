@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: orderer{{ORDERER_INDEX}}-orderer-akc
-        image: hyperledger/fabric-orderer:1.4.1
+        image: hyperledger/fabric-orderer:{{FABRIC_TAG}}
         resources:
           requests:
             memory: "150Mi"

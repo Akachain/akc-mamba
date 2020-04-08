@@ -15,7 +15,7 @@ spec:
      restartPolicy: "Never"
      containers:
        - name: enroll-p{{PEER_INDEX}}-{{PEER}}
-         image: hyperledger/fabric-ca:1.4.1
+         image: hyperledger/fabric-ca:{{FABRIC_TAG}}
          env:
           - name: CORE_PEER_TLS_CERT_FILE
             value: /opt/gopath/src/github.com/hyperledger/fabric/peer/tls/server.crt

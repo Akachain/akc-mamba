@@ -76,6 +76,7 @@ def create_new_org():
     dict_env = {
         'ORG_NAME': settings.PEER_ORGS,
         'ORG_DOMAIN': settings.PEER_DOMAINS,
+        'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND

@@ -15,7 +15,7 @@ spec:
      restartPolicy: "Never"
      containers:
        - name: channel-artifacts
-         image: hyperledger/fabric-tools:1.4.1
+         image: hyperledger/fabric-tools:{{FABRIC_TAG}}
          command: ["sh"]
          args:  ["-c", "/scripts/gen-channel-artifacts.sh 2>&1;"]
          volumeMounts:

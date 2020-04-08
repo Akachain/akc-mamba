@@ -52,6 +52,7 @@ def setup_ica(ica_org):
         'ICA_DOMAIN': ica_domain,
         'RCA_NAME': settings.RCA_NAME,
         'RCA_HOST': rca_host,
+        'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND

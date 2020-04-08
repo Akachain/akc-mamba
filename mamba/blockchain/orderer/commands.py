@@ -38,6 +38,7 @@ def setup_orderer(orderer, index):
         'ORDERER': orderer,
         'ORDERER_DOMAIN': domain,
         'ORDERER_INDEX': index,
+        'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND
