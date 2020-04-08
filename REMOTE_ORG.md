@@ -33,7 +33,6 @@ cp /tmp/artifact/cluster-merchant-example/akc-ca-data/remotetest.json /tmp/artif
 mamba -config='config/operator.env' --set-default
 mamba channel-config auto-update
 ```
-....
 
 8. Install test chaincode on operator cluster
 ```
@@ -51,6 +50,18 @@ curl -s -X POST   http://admin-rca-ica.ordererhai:4001/chaincodes   -H "content-
 - Copy ica-orderer-ca-chain.pem from operator (/tmp/artifact/cluster-operator-demo/akc-ca-data/ica-orderer-ca-chain.pem) to merchant cluster (same path)
 ```
 cp /tmp/artifact/cluster-example/akc-ca-data/ica-orderer-ca-chain.pem /tmp/artifact/cluster-merchant-example/akc-ca-data/
+```
+
+Note:
+
+If endorsement policy is all org, you must send tlsca cert between endorsement peers.
+  Merchant send operator -> Operator edit network config
+  Operator send merchant -> Merchant edit network config
+
+
+- Copy tls of peer operator to merchant
+```
+cp /tmp/artifact/cluster-example/akc-ca-data/ica-mambatest-ca-chain.pem /tmp/artifact/cluster-merchant-example/akc-ca-data/
 ```
 
 - Register new user for new org
@@ -79,11 +90,6 @@ curl -s -X POST   http://admin-rca-ica.default:4001/chaincodes   -H "content-typ
 }'
 ```
 
-Note:
-
-If endorsement policy is all org, you must send tlsca cert between endorsement peers.
-  Merchant send operator -> Operator edit network config
-  Operator gui merchant -> Merchant edit network config
 
 
 10. Init/Upgrade chaincode on Operator cluster
