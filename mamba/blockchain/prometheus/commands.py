@@ -26,6 +26,7 @@ def generate_prom_config():
     orderers = settings.ORDERER_ORGS.split(' ')
     for orderer in orderers:
         domain = util.get_domain(orderer)
+        settings.k8s.prereqs(domain)
         for peer in range(int(settings.NUM_ORDERERS)):
             if len(prom_target) > 0:
                 prom_target += ','
