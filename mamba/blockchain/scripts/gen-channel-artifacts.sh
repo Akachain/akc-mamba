@@ -105,7 +105,7 @@ Orderer: &OrdererDefaults
     for ORG in $ORDERER_ORGS; do
       local COUNT=1
       while [[ "$COUNT" -le $NUM_ORDERERS ]]; do
-         if [ $FABRIC_NETWORK_TYPE == "PROD" ] && [[ "$COUNT" -gt 1 ]]; then
+         if [ "$FABRIC_NETWORK_TYPE" == "PROD" ] && [[ "$COUNT" -gt 1 ]]; then
             COUNT=$((COUNT+1))
             continue
          fi
@@ -357,8 +357,7 @@ Profiles:
 
    echo "
     OrgsChannel:
-        Capabilities:
-            <<: *ChannelCapabilities
+        <<: *ChannelDefaults
         Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
@@ -384,7 +383,11 @@ function generateChannelArtifacts() {
   log "Generating orderer genesis block at $GENESIS_BLOCK_FILE"
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
-  configtxgen -profile OrgsOrdererGenesis -outputBlock $GENESIS_BLOCK_FILE
+  if [ "$FABRIC_TAG" == "2.0.0" ]; then
+    configtxgen -profile OrgsOrdererGenesis -channelID mamba-sys-channel -outputBlock $GENESIS_BLOCK_FILE
+  else
+    configtxgen -profile OrgsOrdererGenesis -outputBlock $GENESIS_BLOCK_FILE
+  fi
   if [ "$?" -ne 0 ]; then
     fatal "Failed to generate orderer genesis block"
   fi

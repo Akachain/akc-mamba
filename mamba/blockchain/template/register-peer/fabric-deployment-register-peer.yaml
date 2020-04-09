@@ -15,7 +15,7 @@ spec:
      restartPolicy: "Never"
      containers:
        - name: register-p-{{PEER_ORG}}
-         image: hyperledger/fabric-ca:{{FABRIC_TAG}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
          env:
           - name: PEERORG
             value: {{PEER_ORG}}
