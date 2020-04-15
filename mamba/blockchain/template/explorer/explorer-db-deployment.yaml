@@ -40,4 +40,4 @@ spec:
       storageClassName: gp2
       resources:
         requests:
-          storage: 25Gi
+          storage: 5Gi

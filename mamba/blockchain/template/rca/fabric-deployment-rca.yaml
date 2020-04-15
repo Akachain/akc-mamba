@@ -69,7 +69,7 @@ spec:
       storageClassName: gp2
       resources:
         requests:
-          storage: 10Gi
+          storage: 5Gi
 ---
 apiVersion: v1
 kind: Service

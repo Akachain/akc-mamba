@@ -54,7 +54,7 @@
         storageClassName: gp2
         resources:
           requests:
-            storage: 10Gi
+            storage: 5Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -175,5 +175,5 @@ spec:
       storageClassName: gp2
       resources:
         requests:
-          storage: 10Gi
+          storage: 5Gi
 
