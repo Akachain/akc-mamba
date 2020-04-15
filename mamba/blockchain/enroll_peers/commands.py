@@ -22,7 +22,7 @@ def enroll_peer(peer, index):
         'ENROLL_DOMAIN': domain,
         'PEER_INDEX': index,
         'EXTERNAL_PEER_HOST': external_domain,
-        'FABRIC_TAG': settings.FABRIC_TAG,
+        'FABRIC_CA_TAG': settings.FABRIC_CA_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND

@@ -23,7 +23,7 @@ spec:
     spec:
      containers:
        - name: {{ICA_NAME}}
-         image: hyperledger/fabric-ca:{{FABRIC_TAG}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
          env:
          - name:  FABRIC_CA_SERVER_HOME
            value: /etc/hyperledger/fabric-ca

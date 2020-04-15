@@ -85,13 +85,13 @@ def start_network():
     time.sleep(1)
     setup_admin()
 
-    # Bootrap network
-    time.sleep(1)
-    bootstrap_network()
+    # # Bootrap network
+    # time.sleep(1)
+    # bootstrap_network()
 
-    # cat log
-    domains = settings.ORDERER_DOMAINS.split(' ')
-    settings.k8s.read_pod_log('bootstrap-network', domains[0])
+    # # cat log
+    # domains = settings.ORDERER_DOMAINS.split(' ')
+    # settings.k8s.read_pod_log('bootstrap-network', domains[0])
 
     return True
 

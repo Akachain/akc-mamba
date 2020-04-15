@@ -17,7 +17,7 @@ def enroll_orderer(orderer):
     dict_env = {
         'ORDERER': orderer,
         'ENROLL_DOMAIN': domain,
-        'FABRIC_TAG': settings.FABRIC_TAG,
+        'FABRIC_CA_TAG': settings.FABRIC_CA_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND

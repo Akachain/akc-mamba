@@ -25,7 +25,7 @@
       spec:
         containers:
         - name: couchdb
-          image: couchdb:2.3.1
+          image: couchdb:{{COUCHDB_TAG}}
           ports:
             - containerPort: 5984
           # resources:

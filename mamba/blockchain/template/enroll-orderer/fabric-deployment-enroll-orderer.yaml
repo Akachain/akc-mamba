@@ -15,7 +15,7 @@ spec:
      restartPolicy: "Never"
      containers:
        - name: enroll-o-{{ORDERER}}
-         image: hyperledger/fabric-ca:{{FABRIC_TAG}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
          env:
           - name: ORDERERORG
             value: {{ORDERER}}

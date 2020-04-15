@@ -15,7 +15,7 @@ spec:
      restartPolicy: "Never"
      containers:
        - name: register-org-{{ORG}}
-         image: hyperledger/fabric-ca:{{FABRIC_TAG}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
          env:
           - name: ORG
             value: {{ORG}}
