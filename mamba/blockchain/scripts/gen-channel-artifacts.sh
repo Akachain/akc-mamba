@@ -34,7 +34,10 @@ function printOrg {
             Rule: \"OR('$ORG_MSP_ID.member')\"
         Admins:
             Type: Signature
-            Rule: \"OR('$ORG_MSP_ID.admin')\""
+            Rule: \"OR('$ORG_MSP_ID.admin')\"
+        Endorsement:
+            Type: Signature
+            Rule: \"OR('$ORG_MSP_ID.peer')\""
 }
 
 # printOrdererOrg <ORG>
@@ -62,14 +65,14 @@ function makeConfigTxYaml {
 #
 ################################################################################
 Capabilities:
-    Global: &ChannelCapabilities
-        V1_3: true
+    Channel: &ChannelCapabilities
+        V2_0: true
 
     Orderer: &OrdererCapabilities
-        V1_1: true
+        V2_0: true
 
     Application: &ApplicationCapabilities
-        V1_3: true"
+        V2_0: true"
 
    echo "
 ################################################################################
@@ -99,9 +102,10 @@ Orderer: &OrdererDefaults
     # Available types are \"solo\" and \"kafka\".
     OrdererType: $ORDERER_TYPE
 
-    Addresses:
-        - $EXTERNAL_ORDERER_ADDRESSES:7050"
-
+    Addresses:"
+    if [ "$EXTERNAL_ORDERER_ADDRESSES" != "" ]; then
+        echo"        - $EXTERNAL_ORDERER_ADDRESSES:7050"
+    fi
     for ORG in $ORDERER_ORGS; do
       local COUNT=1
       while [[ "$COUNT" -le $NUM_ORDERERS ]]; do
@@ -130,7 +134,7 @@ Orderer: &OrdererDefaults
         # the serialized messages in a batch. If the 'kafka' OrdererType is
         # selected, set 'message.max.bytes' and 'replica.fetch.max.bytes' on the
         # Kafka brokers to a value that is larger than this one.
-        AbsoluteMaxBytes: 98 MB
+        AbsoluteMaxBytes: 99 MB
 
         # Preferred Max Bytes: The preferred maximum number of bytes allowed for
         # the serialized messages in a batch. A message larger than the
@@ -140,15 +144,18 @@ Orderer: &OrdererDefaults
 
     # Max Channels is the maximum number of channels to allow on the ordering
     # network. When set to 0, this implies no maximum number of channels.
-    MaxChannels: 0
+    MaxChannels: 0"
 
+    if [ "$ORDERER_TYPE" == "kafka" ]; then
+        echo "
     Kafka:
         # Brokers: A list of Kafka brokers to which the orderer connects. Edit
         # this list to identify the brokers of the ordering service.
         # NOTE: Use IP:port notation.
         Brokers:
-            - broker.$KAFKA_NAMESPACE:9092
-
+            - broker.$KAFKA_NAMESPACE:9092"
+    fi
+    echo "
     # Organizations is the list of orgs which are defined as participants on
     # the orderer side of the network.
     Organizations:"
@@ -310,6 +317,12 @@ Application: &ApplicationDefaults
         Admins:
             Type: ImplicitMeta
             Rule: \"MAJORITY Admins\"
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: \"MAJORITY Endorsement\"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: \"MAJORITY Endorsement\"
 
     # Capabilities describes the application level capabilities, see the
     # dedicated Capabilities section elsewhere in this file for a full
@@ -327,6 +340,8 @@ Profiles:
 
     OrgsOrdererGenesis:
         <<: *ChannelDefaults
+        Capabilities:
+            <<: *ChannelCapabilities
         Orderer:
             <<: *OrdererDefaults
             Organizations:"
