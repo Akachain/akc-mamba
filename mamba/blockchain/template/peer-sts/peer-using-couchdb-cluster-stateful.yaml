@@ -19,11 +19,11 @@
         containers:
         - name: peer1-akctest
           image: hyperledger/fabric-peer:1.4.1
-          resources:
-            requests:
-              # memory: "3000Mi"
-              memory: "300Mi"
-              cpu: "200m"
+          # resources:
+          #   requests:
+          #     # memory: "3000Mi"
+          #     memory: "300Mi"
+          #     cpu: "200m"
           command: ["sh", "-c", "peer node start"]
           env:
           - name: CORE_PEER_ID
