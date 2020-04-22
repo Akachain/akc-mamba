@@ -2,13 +2,16 @@
 # https://github.com/actions/labeler
 
 # Add 'guide' label to all md file changes
-guide:
+documentation:
   - ./**/*.md
+  - *.md
 
 # Add 'feature' label to all md file changes
 feature:
   - ./**/*.py
+  - *.py
 
 # Add 'template' label to all md file changes
 template:
   - ./**/*.yaml
+  - *.yaml
