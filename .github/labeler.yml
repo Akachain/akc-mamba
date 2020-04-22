@@ -4,14 +4,11 @@
 # Add 'guide' label to all md file changes
 documentation:
   - ./**/*.md
-  - *.md
 
 # Add 'feature' label to all md file changes
 feature:
   - ./**/*.py
-  - *.py
 
 # Add 'template' label to all md file changes
 template:
   - ./**/*.yaml
-  - *.yaml
