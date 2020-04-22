@@ -10,7 +10,7 @@ EKS_SCALING_SIZE="2:10"
 
 # RootCA configuration
 RCA_NAME="rca-akc"
-RCA_ORG="akachain"
+RCA_DOMAIN="akachain"
 
 # EFS information
 EFS_SERVER="fs-xxxxxxxx.efs.ap-southeast-1.amazonaws.com"
