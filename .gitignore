@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 _temp
 .vscode/
+.DS_Store
 
 # vpn key file
 *.ovpn
