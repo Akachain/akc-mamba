@@ -39,19 +39,19 @@ spec:
       - name: akc-ca-data
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
       - name: crypto-store-efs
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-store/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-store/
       - name: crypto-path-efs
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-path/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-path/
       - name: artifacts-efs
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/artifacts/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/artifacts/
       imagePullSecrets:
       - name: mamba
       

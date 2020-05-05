@@ -10,7 +10,7 @@ set -e
 
 source $(dirname "$0")/env.sh
 # Initialize the root CA
-fabric-ca-server init -b "$BOOTSTRAP_USER_PASS" --csr.hosts "$EXTERNAL_RCA_ADDRESSES" --csr.hosts "$RCA_NAME.$RCA_DOMAIN"
+fabric-ca-server init -b "$BOOTSTRAP_USER_PASS" --csr.hosts "$EXTERNAL_RCA_ADDRESSES" --csr.hosts "$RCA_NAME.$RCA_ORG"
 
 # Copy the root CA's signing certificate to the data directory to be used by others
 cp $FABRIC_CA_SERVER_HOME/ca-cert.pem $TARGET_CERTFILE
@@ -29,4 +29,4 @@ sed -i "/affiliations:/a \\   $aff" \
 # sed -i 's/OU: Fabric/OU:/' $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
 
 # Start the root CA
-fabric-ca-server start --csr.hosts "$EXTERNAL_RCA_ADDRESSES" --csr.hosts "$RCA_NAME.$RCA_DOMAIN"
+fabric-ca-server start --csr.hosts "$EXTERNAL_RCA_ADDRESSES" --csr.hosts "$RCA_NAME.$RCA_ORG"

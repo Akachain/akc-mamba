@@ -34,13 +34,20 @@ def setup_orderer(orderer, index):
     # Create temp folder & namespace
     settings.k8s.prereqs(domain)
 
+    if settings.K8S_TYPE == 'minikube':
+        store_class = 'standard'
+    else:
+        store_class = 'gp2'
+
     dict_env = {
         'ORDERER': orderer,
         'ORDERER_DOMAIN': domain,
         'ORDERER_INDEX': index,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH,
+        'STORE_CLASS': store_class
     }
 
     orderer_stateful = '%s/orderer-sts/orderer-stateful.yaml' % util.get_k8s_template_path()

@@ -8,7 +8,7 @@ import settings
 
 def terminate_rca():
     name = settings.RCA_NAME
-    domain = settings.RCA_DOMAIN
+    domain = settings.RCA_ORG
 
     # Terminate stateful set
     return settings.k8s.delete_stateful(name=name, namespace=domain, delete_pvc=True) 
@@ -16,17 +16,22 @@ def terminate_rca():
 
 def delete_rca():
     name = settings.RCA_NAME
-    domain = settings.RCA_DOMAIN
+    domain = settings.RCA_ORG
 
     # Delete stateful set
     return settings.k8s.delete_stateful(name=name, namespace=domain)
 
 
 def setup_rca():
-    domain = settings.RCA_DOMAIN
+    domain = settings.RCA_ORG
 
     # Create temp folder & namespace
     settings.k8s.prereqs(domain)
+
+    if settings.K8S_TYPE == 'minikube':
+        storage_class = 'standard'
+    else:
+        storage_class = 'gp2'
 
     dict_env = {
         'ORG': domain,
@@ -34,7 +39,9 @@ def setup_rca():
         'FABRIC_ORGS': settings.ORGS,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH,
+        'STORAGE_CLASS': storage_class
     }
 
     k8s_template_file = '%s/rca/fabric-deployment-rca.yaml' % util.get_k8s_template_path()

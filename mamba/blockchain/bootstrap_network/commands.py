@@ -18,7 +18,8 @@ def bootstrap_network():
         'ORDERER_DOMAIN': domains[0],
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
 
     settings.k8s.apply_yaml_from_template(
