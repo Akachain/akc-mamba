@@ -43,7 +43,7 @@ def setup_ica(ica_org):
 
     rca_host = settings.EXTERNAL_RCA_ADDRESSES
     if not settings.EXTERNAL_RCA_ADDRESSES:
-        rca_host = '%s.%s' % (settings.RCA_NAME, settings.RCA_ORG)
+        rca_host = '%s.%s' % (settings.RCA_NAME, settings.RCA_DOMAIN)
 
     if settings.K8S_TYPE == 'minikube':
         storage_class = 'standard'

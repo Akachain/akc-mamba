@@ -208,11 +208,11 @@ function createNamespace {
 # TODO: optional mod to connect to an external RCA through vpn
 function setupRCA {
   # Create new namespace
-  createNamespace $RCA_ORG
+  createNamespace $RCA_DOMAIN
 
   # Edit deployment information
   rca=`cat "./k8s/rca/fabric-deployment-rca-akc.yaml" | sed \
-      -e "s/{{ORG}}/$RCA_ORG/g"\
+      -e "s/{{ORG}}/$RCA_DOMAIN/g"\
       -e "s/{{RCA_NAME}}/$RCA_NAME/g"\
       -e "s/{{FABRIC_ORGS}}/$ORGS/g"\
       -e "s/{{EFS_SERVER}}/$EFS_SERVER/g"\
@@ -224,11 +224,11 @@ function setupRCA {
 }
 function deleteRCA {
   # Create new namespace
-  createNamespace $RCA_ORG
+  createNamespace $RCA_DOMAIN
 
   # Edit deployment information
   rca=`cat "./k8s/rca/fabric-deployment-rca-akc.yaml" | sed \
-      -e "s/{{ORG}}/$RCA_ORG/g"\
+      -e "s/{{ORG}}/$RCA_DOMAIN/g"\
       -e "s/{{RCA_NAME}}/$RCA_NAME/g"\
       -e "s/{{FABRIC_ORGS}}/$ORGS/g"\
       -e "s/{{EFS_SERVER}}/$EFS_SERVER/g"\
@@ -243,10 +243,10 @@ function deleteRCA {
 function terminateRCA {
   # Delete RCA pod and service
   deleteRCA
-  local pvc=`kubectl get pvc -n  ${RCA_ORG} | grep "rca" | awk '{print $1}'`
+  local pvc=`kubectl get pvc -n  ${RCA_DOMAIN} | grep "rca" | awk '{print $1}'`
   if [ ! -z "$pvc" ];
   then
-    kubectl delete pvc -n ${RCA_ORG} $pvc
+    kubectl delete pvc -n ${RCA_DOMAIN} $pvc
   fi
 }
 
@@ -264,7 +264,7 @@ function setupICA {
       -e "s/{{ICA_NAME}}/$ICA_NAME/g"\
       -e "s/{{ICA_DOMAIN}}/$DOMAIN/g"\
       -e "s/{{RCA_NAME}}/$RCA_NAME/g"\
-      -e "s/{{RCA_HOST}}/$RCA_NAME.$RCA_ORG/g"\
+      -e "s/{{RCA_HOST}}/$RCA_NAME.$RCA_DOMAIN/g"\
       -e "s/{{EFS_SERVER}}/$EFS_SERVER/g"\
       -e "s/{{EFS_PATH}}/$EFS_PATH/g"\
       -e "s/{{EFS_EXTEND}}/$EFS_EXTEND/g"`
@@ -286,7 +286,7 @@ function deleteICA {
       -e "s/{{ICA_NAME}}/$ICA_NAME/g"\
       -e "s/{{ICA_DOMAIN}}/$DOMAIN/g"\
       -e "s/{{RCA_NAME}}/$RCA_NAME/g"\
-      -e "s/{{RCA_HOST}}/$RCA_NAME.$RCA_ORG/g"\
+      -e "s/{{RCA_HOST}}/$RCA_NAME.$RCA_DOMAIN/g"\
       -e "s/{{EFS_SERVER}}/$EFS_SERVER/g"\
       -e "s/{{EFS_PATH}}/$EFS_PATH/g"\
       -e "s/{{EFS_EXTEND}}/$EFS_EXTEND/g"`
@@ -1111,7 +1111,7 @@ function terminate {
   kubectl exec -i $EFS_POD -- bash -c "rm -rf $EFS_ROOT/admin/*"
 
   log "Deleting namespace.."
-  kubectl delete ns $RCA_ORG $DOMAINS
+  kubectl delete ns $RCA_DOMAIN $DOMAINS
 }
 
 function start {
@@ -1128,7 +1128,7 @@ function start {
 
   log "Create a new Root Certificate Authority service"
   setupRCA
-  podPending $RCA_ORG
+  podPending $RCA_DOMAIN
 
   log "Create new Intermediate Certificate Authority services"
   for i in $ORGS

@@ -24,13 +24,13 @@ spec:
       containers:
       - name: orderer{{ORDERER_INDEX}}-orderer-akc
         image: hyperledger/fabric-orderer:1.4.1
-        resources:
-          requests:
-            memory: "150Mi"
-            cpu: "50m"
-          limits:
-            memory: "3000Mi"
-            cpu: "2"
+        # resources:
+        #   requests:
+        #     memory: "150Mi"
+        #     cpu: "50m"
+        #   limits:
+        #     memory: "3000Mi"
+        #     cpu: "2"
         command: ["sh", "-c", "orderer"]
         env:
         - name: FABRIC_LOGGING_SPEC

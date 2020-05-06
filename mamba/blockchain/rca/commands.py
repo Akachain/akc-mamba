@@ -8,7 +8,7 @@ import settings
 
 def terminate_rca():
     name = settings.RCA_NAME
-    domain = settings.RCA_ORG
+    domain = settings.RCA_DOMAIN
 
     # Terminate stateful set
     return settings.k8s.delete_stateful(name=name, namespace=domain, delete_pvc=True) 
@@ -16,14 +16,14 @@ def terminate_rca():
 
 def delete_rca():
     name = settings.RCA_NAME
-    domain = settings.RCA_ORG
+    domain = settings.RCA_DOMAIN
 
     # Delete stateful set
     return settings.k8s.delete_stateful(name=name, namespace=domain)
 
 
 def setup_rca():
-    domain = settings.RCA_ORG
+    domain = settings.RCA_DOMAIN
 
     # Create temp folder & namespace
     settings.k8s.prereqs(domain)

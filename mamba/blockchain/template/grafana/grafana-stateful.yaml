@@ -22,12 +22,12 @@ spec:
       containers:
       - name: grafana
         image: grafana/grafana
-        resources:
-          requests:
-            memory: "150Mi"
-            cpu: "350m"
-          limits:
-            memory: "3000Mi"
-            cpu: "2"
+        # resources:
+        #   requests:
+        #     memory: "150Mi"
+        #     cpu: "350m"
+        #   limits:
+        #     memory: "3000Mi"
+        #     cpu: "2"
         ports:
         - containerPort: 3000
