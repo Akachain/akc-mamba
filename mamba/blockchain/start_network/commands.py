@@ -65,14 +65,14 @@ def start_network():
         # Create new Kafka services
         setup_kafka()
     
-    # # Run job to generate channel.tx, genesis.block
-    # gen_channel_artifact()
+    # Run job to generate channel.tx, genesis.block
+    gen_channel_artifact()
 
-    # # Create new StatefullSet orderers
-    # setup_all_orderer()
+    # Create new StatefullSet orderers
+    setup_all_orderer()
 
-    # # Create new StatefullSet peers
-    # setup_all_peer()
+    # Create new StatefullSet peers
+    setup_all_peer()
 
     # # Run jobs to generate application artifacts
     # generate_artifact()

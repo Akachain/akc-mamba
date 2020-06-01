@@ -109,19 +109,19 @@ spec:
         - name: CORE_PEER_LOCALMSPID
           value: {{PEER_ORG}}MSP
         - name: CORE_PEER_MSPCONFIGPATH
-          value: /shared/peers/peer{{PEER_INDEX}}.{{PEER_DOMAIN}}/msp/
-          #- name: CORE_LOGGING_LEVEL
+          value: /shared/peers/peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}/msp/
+          #- name: FABRIC_LOGGING_SPEC
           #value: info
-        - name: CORE_LOGGING_GRPC
+        - name: FABRIC_LOGGING_SPEC
           value: debug
         - name: CORE_PEER_TLS_ENABLED
           value: "true"
         - name: CORE_PEER_TLS_CERT_FILE
-          value: /shared/peers/peer{{PEER_INDEX}}.{{PEER_DOMAIN}}/tls/server.crt
+          value: /shared/peers/peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}/tls/server.crt
         - name: CORE_PEER_TLS_KEY_FILE
-          value: /shared/peers/peer{{PEER_INDEX}}.{{PEER_DOMAIN}}/tls/server.key
+          value: /shared/peers/peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}/tls/server.key
         - name: CORE_PEER_TLS_ROOTCERT_FILE
-          value: /shared/peers/peer{{PEER_INDEX}}.{{PEER_DOMAIN}}/tls/tlsca.{{PEER_DOMAIN}}-cert.pem
+          value: /shared/peers/peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}/tls/tlscacerts/tls-ica-{{PEER_ORG}}-{{PEER_DOMAIN}}-7054.pem
         - name: CORE_LEDGER_STATE_STATEDATABASE
           value: CouchDB
         - name: FABRIC_CFG_PATH
@@ -163,7 +163,7 @@ spec:
       - name: crypto-config
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/crypto-config/peerOrganizations/{{PEER_DOMAIN}}
+          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/crypto-config/{{PEER_ORG}}.{{PEER_DOMAIN}}
       - name: dockersocket
         hostPath:
           path: /var/run/docker.sock

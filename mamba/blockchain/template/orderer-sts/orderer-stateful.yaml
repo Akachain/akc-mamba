@@ -45,7 +45,7 @@ spec:
         - name: ORDERER_GENERAL_LISTENADDRESS
           value: 0.0.0.0
         - name: ORDERER_GENERAL_LOCALMSPDIR
-          value: /shared/crypto-config/ordererOrganizations/{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/msp
+          value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/msp
         - name: ORDERER_GENERAL_LOCALMSPID
           value: ordererMSP
         - name: ORDERER_GENERAL_GENESISMETHOD
@@ -55,12 +55,12 @@ spec:
         - name: ORDERER_GENERAL_TLS_ENABLED
           value: "true"
         - name: ORDERER_GENERAL_TLS_PRIVATEKEY
-          value: /shared/crypto-config/ordererOrganizations/{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/server.key
+          value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/server.key
         - name: ORDERER_GENERAL_TLS_CERTIFICATE
-          value: /shared/crypto-config/ordererOrganizations/{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/server.crt
+          value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/server.crt
         # THIS IS BROKEN: * 'General.TLS.RootCAs': source data must be an array or slice, got string
         - name: ORDERER_GENERAL_TLS_ROOTCAS
-          value: /shared/crypto-config/ordererOrganizations/{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/tlsca.{{ORDERER_DOMAIN}}-cert.pem
+          value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/tlscacerts/tls-ica-{{ORDERER}}-{{ORDERER_DOMAIN}}-7054.pem
         - name: GODEBUG
           value: netdns=go
         - name: ORDERER_OPERATIONS_LISTENADDRESS

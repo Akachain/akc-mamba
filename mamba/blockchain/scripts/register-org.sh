@@ -25,16 +25,16 @@ function enrollCAAdmin {
     echo "NodeOUs:
     Enable: true
     ClientOUIdentifier:
-      Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
+      # Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
       OrganizationalUnitIdentifier: client
     PeerOUIdentifier:
-      Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
+      # Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
       OrganizationalUnitIdentifier: peer
     AdminOUIdentifier:
-      Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
+      # Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
       OrganizationalUnitIdentifier: admin
     OrdererOUIdentifier:
-      Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
+      # Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
       OrganizationalUnitIdentifier: orderer" > ${FABRIC_CA_CLIENT_HOME}/msp/config.yaml
 }
 
