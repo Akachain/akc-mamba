@@ -54,10 +54,10 @@ def start_network():
     # Run jobs to enroll peers
     enroll_all_peer()
 
-    time.sleep(5)
+    # time.sleep(5)
 
-    # Create crypto-config folder to contains artifacts
-    update_folder()
+    # # Create crypto-config folder to contains artifacts
+    # update_folder()
 
     if settings.ORDERER_TYPE == 'kafka':
         # Create new Zookeeper services
@@ -65,25 +65,25 @@ def start_network():
         # Create new Kafka services
         setup_kafka()
     
-    # Run job to generate channel.tx, genesis.block
-    gen_channel_artifact()
+    # # Run job to generate channel.tx, genesis.block
+    # gen_channel_artifact()
 
-    # Create new StatefullSet orderers
-    setup_all_orderer()
+    # # Create new StatefullSet orderers
+    # setup_all_orderer()
 
-    # Create new StatefullSet peers
-    setup_all_peer()
+    # # Create new StatefullSet peers
+    # setup_all_peer()
 
-    # Run jobs to generate application artifacts
-    generate_artifact()
+    # # Run jobs to generate application artifacts
+    # generate_artifact()
 
-    # Create secret if use private docker hub
-    if settings.PRIVATE_DOCKER_IMAGE == 'true':
-        create_all_docker_secret('mamba')
+    # # Create secret if use private docker hub
+    # if settings.PRIVATE_DOCKER_IMAGE == 'true':
+    #     create_all_docker_secret('mamba')
 
-    # Create new a new Admin service
-    time.sleep(1)
-    setup_admin()
+    # # Create new a new Admin service
+    # time.sleep(1)
+    # setup_admin()
 
     # # Bootrap network
     # time.sleep(1)

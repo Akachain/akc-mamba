@@ -23,9 +23,25 @@ function printOrg {
     # MSPDir is the filesystem path which contains the MSP configuration
     MSPDir: $ORG_MSP_DIR
 
-    AdminPrincipal: Role.ADMIN
+    # AdminPrincipal: Role.ADMIN
 
-    Policies:
+    Policies:"
+    if [ "$1" == "peer" ]; then
+        echo "
+        Readers:
+            Type: Signature
+            Rule: \"OR('$ORG_MSP_ID.admin', '$ORG_MSP_ID.peer', '$ORG_MSP_ID.client')\"
+        Writers:
+            Type: Signature
+            Rule: \"OR('$ORG_MSP_ID.admin', '$ORG_MSP_ID.client')\"
+        Admins:
+            Type: Signature
+            Rule: \"OR('$ORG_MSP_ID.admin')\"
+        Endorsement:
+            Type: Signature
+            Rule: \"OR('$ORG_MSP_ID.peer')\""
+    else
+        echo "
         Readers:
             Type: Signature
             Rule: \"OR('$ORG_MSP_ID.member')\"
@@ -34,10 +50,8 @@ function printOrg {
             Rule: \"OR('$ORG_MSP_ID.member')\"
         Admins:
             Type: Signature
-            Rule: \"OR('$ORG_MSP_ID.admin')\"
-        Endorsement:
-            Type: Signature
-            Rule: \"OR('$ORG_MSP_ID.peer')\""
+            Rule: \"OR('$ORG_MSP_ID.admin')\""
+    fi
 }
 
 # printOrdererOrg <ORG>
@@ -49,7 +63,8 @@ function printOrdererOrg {
 # printPeerOrg <ORG> <COUNT>
 function printPeerOrg {
    initPeerVars $1 $2
-   printOrg
+   local PEER="peer"
+   printOrg $PEER
    echo "
     AnchorPeers:
        - Host: $PEER_HOST
@@ -160,10 +175,10 @@ Orderer: &OrdererDefaults
     # the orderer side of the network.
     Organizations:"
 
-    for ORG in $ORDERER_ORGS; do
-      initOrgVars $ORG
-      echo "        - *${ORG_CONTAINER_NAME}"
-    done
+    # for ORG in $ORDERER_ORGS; do
+    #   initOrgVars $ORG
+    #   echo "        - *${ORG_CONTAINER_NAME}"
+    # done
 
    echo "
     # Policies defines the set of policies at this level of the config tree
@@ -232,73 +247,6 @@ Channel: &ChannelDefaults
 #
 ################################################################################
 Application: &ApplicationDefaults
-    ACLs: &ACLsDefault
-        # This section provides defaults for policies for various resources
-        # in the system. These \"resources\" could be functions on system chaincodes
-        # (e.g., \"GetBlockByNumber\" on the \"qscc\" system chaincode) or other resources
-        # (e.g.,who can receive Block events). This section does NOT specify the resource's
-        # definition or API, but just the ACL policy for it.
-        #
-        # User's can override these defaults with their own policy mapping by defining the
-        # mapping under ACLs in their channel definition
-
-        #---Lifecycle System Chaincode (lscc) function to policy mapping for access control---#
-
-        # ACL policy for lscc's \"getid\" function
-        lscc/ChaincodeExists: /Channel/Application/Readers
-
-        # ACL policy for lscc's \"getdepspec\" function
-        lscc/GetDeploymentSpec: /Channel/Application/Readers
-
-        # ACL policy for lscc's \"getccdata\" function
-        lscc/GetChaincodeData: /Channel/Application/Readers
-
-        # ACL Policy for lscc's \"getchaincodes\" function
-        lscc/GetInstantiatedChaincodes: /Channel/Application/Readers
-
-        #---Query System Chaincode (qscc) function to policy mapping for access control---#
-
-        # ACL policy for qscc's \"GetChainInfo\" function
-        qscc/GetChainInfo: /Channel/Application/Readers
-
-        # ACL policy for qscc's \"GetBlockByNumber\" function
-        qscc/GetBlockByNumber: /Channel/Application/Readers
-
-        # ACL policy for qscc's  \"GetBlockByHash\" function
-        qscc/GetBlockByHash: /Channel/Application/Readers
-
-        # ACL policy for qscc's \"GetTransactionByID\" function
-        qscc/GetTransactionByID: /Channel/Application/Readers
-
-        # ACL policy for qscc's \"GetBlockByTxID\" function
-        qscc/GetBlockByTxID: /Channel/Application/Readers
-
-        #---Configuration System Chaincode (cscc) function to policy mapping for access control---#
-
-        # ACL policy for cscc's \"GetConfigBlock\" function
-        cscc/GetConfigBlock: /Channel/Application/Readers
-
-        # ACL policy for cscc's \"GetConfigTree\" function
-        cscc/GetConfigTree: /Channel/Application/Readers
-
-        # ACL policy for cscc's \"SimulateConfigTreeUpdate\" function
-        cscc/SimulateConfigTreeUpdate: /Channel/Application/Readers
-
-        #---Miscellanesous peer function to policy mapping for access control---#
-
-        # ACL policy for invoking chaincodes on peer
-        peer/Propose: /Channel/Application/Writers
-
-        # ACL policy for chaincode to chaincode invocation
-        peer/ChaincodeToChaincode: /Channel/Application/Readers
-
-        #---Events resource to policy mapping for access control###---#
-
-        # ACL policy for sending block events
-        event/Block: /Channel/Application/Readers
-
-        # ACL policy for sending filtered block events
-        event/FilteredBlock: /Channel/Application/Readers
 
     # Organizations is the list of orgs which are defined as participants on
     # the application side of the network.
@@ -347,7 +295,7 @@ Profiles:
             Organizations:"
                 for ORG in $ORDERER_ORGS; do
                   initOrgVars $ORG
-                  echo "                    - *${ORG_CONTAINER_NAME}"
+                  echo "                - *${ORG_CONTAINER_NAME}"
                 done
    echo "
             Capabilities:
@@ -357,7 +305,7 @@ Profiles:
             Organizations:"
                 for ORG in $ORDERER_ORGS; do
                   initOrgVars $ORG
-                  echo "                    - *${ORG_CONTAINER_NAME}"
+                  echo "                - *${ORG_CONTAINER_NAME}"
                 done
    echo "
             Capabilities:
@@ -367,7 +315,7 @@ Profiles:
                 Organizations:"
                     for ORG in $PEER_ORGS; do
                       initOrgVars $ORG
-                      echo "                - *${ORG_CONTAINER_NAME}"
+                      echo "                    - *${ORG_CONTAINER_NAME}"
                     done
 
    echo "
@@ -379,7 +327,7 @@ Profiles:
             Organizations:"
                     for ORG in $PEER_ORGS; do
                       initOrgVars $ORG
-                      echo "            - *${ORG_CONTAINER_NAME}"
+                      echo "                - *${ORG_CONTAINER_NAME}"
                     done
    echo "
             Capabilities:

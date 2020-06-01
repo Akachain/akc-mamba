@@ -31,9 +31,10 @@ function main {
 function enrollCAAdmin {
    initOrgVars $ORG
    log "Enrolling with $CA_NAME as bootstrap identity ..."
-   export FABRIC_CA_CLIENT_HOME=$HOME/cas/$CA_NAME
+   export FABRIC_CA_CLIENT_HOME=$DATA/crypto-config/$ORG.$DOMAIN
+   mkdir -p $FABRIC_CA_CLIENT_HOME
    export FABRIC_CA_CLIENT_TLS_CERTFILES=$CA_CHAINFILE
-   fabric-ca-client enroll -d -u https://$CA_ADMIN_USER_PASS@$CA_HOST:7054
+#    fabric-ca-client enroll -d -u https://$CA_ADMIN_USER_PASS@$CA_HOST:7054
 }
 
 # Register any identities associated with a peer

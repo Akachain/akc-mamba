@@ -99,7 +99,8 @@ function initOrgVars {
    INT_CA_CHAINFILE=/${DATA}/ica-${ORG}-ca-chain.pem
    ANCHOR_TX_FILE=/${DATA}/orgs/${ORG}/anchors.tx
    ORG_MSP_ID=${ORG}MSP
-   ORG_MSP_DIR=/${DATA}/orgs/${ORG}/msp
+   # ORG_MSP_DIR=/${DATA}/orgs/${ORG}/msp
+   ORG_MSP_DIR=/${DATA}/crypto-config/${ORG}.${DOMAIN}/msp
    ORG_ADMIN_CERT=${ORG_MSP_DIR}/admincerts/cert.pem
    ORG_ADMIN_HOME=/${DATA}/orgs/$ORG/admin
 

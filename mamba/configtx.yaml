@@ -1,0 +1,257 @@
+
+################################################################################
+#
+#   SECTION: Capabilities
+#
+################################################################################
+Capabilities:
+    Channel: &ChannelCapabilities
+        V2_0: true
+
+    Orderer: &OrdererCapabilities
+        V2_0: true
+
+    Application: &ApplicationCapabilities
+        V2_0: true
+
+################################################################################
+#
+#   Section: Organizations
+#
+################################################################################
+Organizations:
+
+  - &orderer
+
+    Name: orderer
+
+    # ID to load the MSP definition as
+    ID: ordererMSP
+
+    # MSPDir is the filesystem path which contains the MSP configuration
+    MSPDir: /data/crypto-config/orderer.harisato/msp
+
+    # AdminPrincipal: Role.ADMIN
+
+    Policies:
+
+        Readers:
+            Type: Signature
+            Rule: "OR('ordererMSP.member')"
+        Writers:
+            Type: Signature
+            Rule: "OR('ordererMSP.member')"
+        Admins:
+            Type: Signature
+            Rule: "OR('ordererMSP.admin')"
+
+  - &harisato
+
+    Name: harisato
+
+    # ID to load the MSP definition as
+    ID: harisatoMSP
+
+    # MSPDir is the filesystem path which contains the MSP configuration
+    MSPDir: /data/crypto-config/harisato.harisato/msp
+
+    # AdminPrincipal: Role.ADMIN
+
+    Policies:
+
+        Readers:
+            Type: Signature
+            Rule: "OR('harisatoMSP.admin', 'harisatoMSP.peer', 'harisatoMSP.client')"
+        Writers:
+            Type: Signature
+            Rule: "OR('harisatoMSP.admin', 'harisatoMSP.client')"
+        Admins:
+            Type: Signature
+            Rule: "OR('harisatoMSP.admin')"
+        Endorsement:
+            Type: Signature
+            Rule: "OR('harisatoMSP.peer')"
+
+    AnchorPeers:
+       - Host: 
+         Port: 7051
+
+################################################################################
+#
+#   SECTION: Orderer
+#
+################################################################################
+Orderer: &OrdererDefaults
+
+    # Orderer Type: The orderer implementation to start.
+    # Available types are "solo" and "kafka".
+    OrdererType: solo
+
+    Addresses:
+        - orderer0-orderer.harisato:7050
+
+    # Batch Timeout: The amount of time to wait before creating a batch.
+    BatchTimeout: 1s
+
+    # Batch Size: Controls the number of messages batched into a block.
+    BatchSize:
+
+        # Max Message Count: The maximum number of messages to permit in a
+        # batch.
+        MaxMessageCount: 100
+
+        # Absolute Max Bytes: The absolute maximum number of bytes allowed for
+        # the serialized messages in a batch. If the 'kafka' OrdererType is
+        # selected, set 'message.max.bytes' and 'replica.fetch.max.bytes' on the
+        # Kafka brokers to a value that is larger than this one.
+        AbsoluteMaxBytes: 99 MB
+
+        # Preferred Max Bytes: The preferred maximum number of bytes allowed for
+        # the serialized messages in a batch. A message larger than the
+        # preferred max bytes will result in a batch larger than preferred max
+        # bytes.
+        PreferredMaxBytes: 512 KB
+
+    # Max Channels is the maximum number of channels to allow on the ordering
+    # network. When set to 0, this implies no maximum number of channels.
+    MaxChannels: 0
+
+    # Organizations is the list of orgs which are defined as participants on
+    # the orderer side of the network.
+    Organizations:
+
+    # Policies defines the set of policies at this level of the config tree
+    # For Orderer policies, their canonical path is
+    #   /Channel/Orderer/<PolicyName>
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        # BlockValidation specifies what signatures must be included in the block
+        # from the orderer for the peer to validate it.
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+    # Capabilities describes the orderer level capabilities, see the
+    # dedicated Capabilities section elsewhere in this file for a full
+    # description
+    Capabilities:
+        <<: *OrdererCapabilities
+
+################################################################################
+#
+#   CHANNEL
+#
+#   This section defines the values to encode into a config transaction or
+#   genesis block for channel related parameters.
+#
+################################################################################
+Channel: &ChannelDefaults
+    # Policies defines the set of policies at this level of the config tree
+    # For Channel policies, their canonical path is
+    #   /Channel/<PolicyName>
+    Policies:
+        # Who may invoke the 'Deliver' API
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        # Who may invoke the 'Broadcast' API
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        # By default, who may modify elements at this config level
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+
+    # Capabilities describes the channel level capabilities, see the
+    # dedicated Capabilities section elsewhere in this file for a full
+    # description
+    Capabilities:
+        <<: *ChannelCapabilities
+
+################################################################################
+#
+#   SECTION: Application
+#
+################################################################################
+Application: &ApplicationDefaults
+
+    # Organizations is the list of orgs which are defined as participants on
+    # the application side of the network.
+    Organizations:
+
+    # Policies defines the set of policies at this level of the config tree
+    # For Application policies, their canonical path is
+    #   /Channel/Application/<PolicyName>
+    Policies: &ApplicationDefaultPolicies
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+
+    # Capabilities describes the application level capabilities, see the
+    # dedicated Capabilities section elsewhere in this file for a full
+    # description
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+################################################################################
+#
+#   Profiles
+#
+################################################################################
+Profiles:
+
+    OrgsOrdererGenesis:
+        <<: *ChannelDefaults
+        Capabilities:
+            <<: *ChannelCapabilities
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *orderer
+
+            Capabilities:
+                <<: *OrdererCapabilities
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *orderer
+
+            Capabilities:
+                <<: *ApplicationCapabilities
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *harisato
+
+    OrgsChannel:
+        <<: *ChannelDefaults
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *harisato
+
+            Capabilities:
+                <<: *ApplicationCapabilities

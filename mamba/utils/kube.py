@@ -224,7 +224,7 @@ class KubeHelper:
     def exec_pod(self, podName, namespace, command):
         try:
             resp = stream(self.coreApi.connect_get_namespaced_pod_exec,
-                          name=podName, namespace=namespace, stderr=True, stdin=True, stdout=True, command=command)
+                          name=podName, namespace=namespace, container='test-pod', stderr=True, stdin=True, stdout=True, command=command)
             # return util.resultDict(success=True, msg='Success', data=resp)
             return util.Result(success=True, msg='Success', data=resp)
         except ApiException as e:

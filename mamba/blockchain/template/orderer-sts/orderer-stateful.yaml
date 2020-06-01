@@ -35,7 +35,7 @@ spec:
         env:
         - name: FABRIC_LOGGING_SPEC
           #value: info
-          value: INFO
+          value: DEBUG
         - name: ORDERER_CFG_PATH
           value: /shared/
         - name: ORDERER_GENERAL_LEDGERTYPE
