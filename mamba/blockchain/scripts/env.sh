@@ -189,24 +189,20 @@ function genClientTLSCert {
 
 # initPeerVars <ORG> <NUM optional>
 function initPeerVars {
-   if [ $# -gt 2 ]; then
-      echo "Usage: initPeerVars <ORG> <NUM optional>: $*"
+   if [ $# -ne 2 ]; then
+      echo "Usage: initPeerVars <ORG> <NUM>: $*"
       exit 1
    fi
 
    ORG=$1
+   NUM=$2
    initOrgVars $ORG
 
-   # PEER_NAME and PEER_HOST are set from yaml
    # Set peer variables. TODO: Deal with anchor peer external Host
+   initOrgVars $ORG
+   getDomain $ORG
    PEER_NAME=${PEER_PREFIX}${NUM}-${ORG}
    PEER_HOST=${PEER_NAME}.${DOMAIN}
-   if [ $# -eq 2 ]; then
-      NUM=$2
-      initOrgVars $ORG
-      getDomain $ORG
-      PEER_NAME=${PEER_PREFIX}${NUM}-${ORG}
-   fi
 
    PEER_PASS=${PEER_NAME}pw
    PEER_NAME_PASS=${PEER_NAME}:${PEER_PASS}

@@ -40,7 +40,7 @@ spec:
           - name: EXTERNAL_PEER_HOST
             value: {{EXTERNAL_PEER_HOST}}
          command: ["sh"]
-         args:  ["-c", "/scripts/enroll-peer.sh 2>&1;"]
+         args:  ["-c", "/scripts/enroll-peer.sh {{PEER_INDEX}} 2>&1;"]
          volumeMounts:
           - mountPath: /scripts
             name: rca-scripts
