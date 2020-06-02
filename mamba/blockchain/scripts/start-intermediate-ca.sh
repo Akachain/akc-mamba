@@ -19,10 +19,10 @@ aff="${aff#\\n   }"
 sed -i "/affiliations:/a \\   $aff" \
    $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
 
-sed -i 's+C: US+C: VN+g' $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
-sed -i "s+ST: \"North Carolina\"+ST: \"Hanoi\"+g" $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
-sed -i "s/O: Hyperledger/O: $ORG/g" $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
-sed -i 's/OU: Fabric/OU:/' $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
+# sed -i 's+C: US+C: VN+g' $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
+# sed -i "s+ST: \"North Carolina\"+ST: \"Hanoi\"+g" $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
+# sed -i "s/O: Hyperledger/O: $ORG/g" $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
+# sed -i 's/OU: Fabric/OU:/' $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
 
 # Start the intermediate CA
 fabric-ca-server start

@@ -5,10 +5,10 @@ source $(dirname "$0")/env.sh
 log "Enrolling peer for org $PEERORG ..."
 initPeerVars $PEERORG
 ENROLLMENT_URL="https://$PEER_NAME_PASS@$CA_HOST:7054"
-getDomain $PEERORG
+# getDomain $PEERORG
 
-export FABRIC_CA_CLIENT_HOME=/$DATA/crypto-config/$PEERORG.$DOMAIN
-mkdir -p $FABRIC_CA_CLIENT_HOME
+# export FABRIC_CA_CLIENT_HOME=/$DATA/crypto-config/$PEERORG.$DOMAIN
+# mkdir -p $FABRIC_CA_CLIENT_HOME
 export FABRIC_CA_CLIENT_TLS_CERTFILES=$CA_CHAINFILE
 
 export TLS_CONFIG_PATH=$FABRIC_CA_CLIENT_HOME/peers/$PEER_HOST/tls

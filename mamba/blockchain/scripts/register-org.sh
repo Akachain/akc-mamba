@@ -25,16 +25,16 @@ function enrollCAAdmin {
     echo "NodeOUs:
     Enable: true
     ClientOUIdentifier:
-      # Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
+      Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
       OrganizationalUnitIdentifier: client
     PeerOUIdentifier:
-      # Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
+      Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
       OrganizationalUnitIdentifier: peer
     AdminOUIdentifier:
-      # Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
+      Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
       OrganizationalUnitIdentifier: admin
     OrdererOUIdentifier:
-      # Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
+      Certificate: cacerts/ica-${ORG}-${DOMAIN}-7054.pem
       OrganizationalUnitIdentifier: orderer" > ${FABRIC_CA_CLIENT_HOME}/msp/config.yaml
 }
 
@@ -68,6 +68,15 @@ function getCACerts {
         cp ${FABRIC_CA_CLIENT_HOME}/msp/config.yaml ${FABRIC_CA_CLIENT_HOME}/users/admin/msp/config.yaml
         set +x
     fi
+
+    mkdir -p organizations/peerOrganizations/org1.example.com/users
+    mkdir -p ${FABRIC_CA_CLIENT_HOME}/users/${USER_NAME}
+    echo
+    echo "## Generate the user msp"
+    echo
+    set -x
+    fabric-ca-client enroll -u https://${USER_NAME}:$USER_PASS@$CA_HOST:7054 -M ${FABRIC_CA_CLIENT_HOME}/users/${USER_NAME}/msp
+    set +x
 }
 
 set +e
