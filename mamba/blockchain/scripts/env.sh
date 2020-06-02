@@ -199,8 +199,8 @@ function initPeerVars {
 
    # PEER_NAME and PEER_HOST are set from yaml
    # Set peer variables. TODO: Deal with anchor peer external Host
-   # PEER_NAME=${PEER_PREFIX}${NUM}-${ORG}
-   # PEER_HOST=${PEER_NAME}.${DOMAIN}
+   PEER_NAME=${PEER_PREFIX}${NUM}-${ORG}
+   PEER_HOST=${PEER_NAME}.${DOMAIN}
    if [ $# -eq 2 ]; then
       NUM=$2
       initOrgVars $ORG
