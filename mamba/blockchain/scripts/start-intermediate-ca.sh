@@ -5,12 +5,21 @@ initOrgVars $ORG
 
 set -e
 
+############################
+# Unuse RCA
+fabric-ca-server init -b $BOOTSTRAP_USER_PASS
+cp $FABRIC_CA_SERVER_HOME/ca-cert.pem $TARGET_CHAINFILE
+
+###########################
+# Using RCA
 # Initialize the intermediate CA
-fabric-ca-server init -b $BOOTSTRAP_USER_PASS -u $PARENT_URL
+# fabric-ca-server init -b $BOOTSTRAP_USER_PASS -u $PARENT_URL
 
 # Copy the intermediate CA's certificate chain to the data directory to be used by others
-cp $FABRIC_CA_SERVER_HOME/ca-chain.pem $TARGET_CHAINFILE
+# cp $FABRIC_CA_SERVER_HOME/ca-chain.pem $TARGET_CHAINFILE
 
+
+#########################
 # Add the custom orgs
 # for o in $ORGS; do
 aff=$aff"\n   $ORG.akc: []"

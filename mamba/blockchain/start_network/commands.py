@@ -34,7 +34,7 @@ def start_network():
     copy_scripts()
 
     # Create a new Root Certificate Authority service
-    setup_rca()
+    # setup_rca()
 
     # Create new Intermediate Certificate Authority services
     setup_all_ica()
@@ -59,20 +59,20 @@ def start_network():
     # # Create crypto-config folder to contains artifacts
     # update_folder()
 
-    if settings.ORDERER_TYPE == 'kafka':
-        # Create new Zookeeper services
-        setup_zookeeper()
-        # Create new Kafka services
-        setup_kafka()
+    # if settings.ORDERER_TYPE == 'kafka':
+    #     # Create new Zookeeper services
+    #     setup_zookeeper()
+    #     # Create new Kafka services
+    #     setup_kafka()
     
     # Run job to generate channel.tx, genesis.block
     gen_channel_artifact()
 
-    # # Create new StatefullSet orderers
-    # setup_all_orderer()
+    # Create new StatefullSet orderers
+    setup_all_orderer()
 
-    # # Create new StatefullSet peers
-    # setup_all_peer()
+    # Create new StatefullSet peers
+    setup_all_peer()
 
     # # Run jobs to generate application artifacts
     # generate_artifact()

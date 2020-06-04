@@ -45,7 +45,7 @@ function registerPeerIdentities {
     while [[ "$COUNT" -lt $NUM_PEERS ]]; do
         initPeerVars $ORG $COUNT
         log "##### Registering $PEER_NAME with $CA_NAME. Executing: fabric-ca-client register -d --id.name $PEER_NAME --id.secret $PEER_PASS --id.type peer"
-        fabric-ca-client register -d --id.name $PEER_NAME --id.secret $PEER_PASS --id.type peer
+        fabric-ca-client register -d --id.name $PEER_NAME --id.secret $PEER_PASS --id.type peer --id.affiliation ""
         COUNT=$((COUNT+1))
     done
 }
