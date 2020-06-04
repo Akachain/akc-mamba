@@ -34,7 +34,7 @@ def start_network():
     copy_scripts()
 
     # Create a new Root Certificate Authority service
-    # setup_rca()
+    setup_rca()
 
     # Create new Intermediate Certificate Authority services
     setup_all_ica()

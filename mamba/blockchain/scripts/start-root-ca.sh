@@ -30,3 +30,4 @@ sed -i "/affiliations:/a \\   $aff" \
 
 # Start the root CA
 fabric-ca-server start --csr.hosts "$EXTERNAL_RCA_ADDRESSES" --csr.hosts "$RCA_NAME.$RCA_ORG"
+# tail -f /etc/hosts

@@ -7,16 +7,16 @@ set -e
 
 ############################
 # Unuse RCA
-fabric-ca-server init -b $BOOTSTRAP_USER_PASS
-cp $FABRIC_CA_SERVER_HOME/ca-cert.pem $TARGET_CHAINFILE
+# fabric-ca-server init -b $BOOTSTRAP_USER_PASS
+# cp $FABRIC_CA_SERVER_HOME/ca-cert.pem $TARGET_CHAINFILE
 
 ###########################
 # Using RCA
 # Initialize the intermediate CA
-# fabric-ca-server init -b $BOOTSTRAP_USER_PASS -u $PARENT_URL
+fabric-ca-server init -b $BOOTSTRAP_USER_PASS -u $PARENT_URL
 
 # Copy the intermediate CA's certificate chain to the data directory to be used by others
-# cp $FABRIC_CA_SERVER_HOME/ca-chain.pem $TARGET_CHAINFILE
+cp $FABRIC_CA_SERVER_HOME/ca-chain.pem $TARGET_CHAINFILE
 
 
 #########################
@@ -35,3 +35,4 @@ sed -i "/affiliations:/a \\   $aff" \
 
 # Start the intermediate CA
 fabric-ca-server start
+# tail -f /etc/hosts

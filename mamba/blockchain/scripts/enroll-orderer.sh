@@ -43,7 +43,7 @@ fi
 # fabric-ca-client enroll -d -u $ENROLLMENT_URL -M $ORDERER_GENERAL_LOCALMSPDIR
 
 # Finish setting up the local MSP for the orderer
-# finishMSPSetup $MSPCONFIGPATH
+finishMSPSetup $MSPCONFIGPATH
 cp ${FABRIC_CA_CLIENT_HOME}/msp/config.yaml ${MSPCONFIGPATH}/config.yaml
 set -x
 cp ${TLS_CONFIG_PATH}/tlscacerts/*  ${TLS_CONFIG_PATH}/ca.crt
