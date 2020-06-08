@@ -2,6 +2,7 @@
 
 ## 1. Installation Instructions
 
+### a. Edit configuration files
 First, copy the content of `config/operator.env-template` to be `config/.env`. This file will contain all modifiable configuration of Mamba.
 
 ```
@@ -10,6 +11,7 @@ cp ./config/operator.env-template ./config/.env
 
 Update configuration parameters in `config/.env`, the file content is pretty much self-explained.
 
+### b. Install required packages
 Install required Python3 modules with
 
 ```
@@ -19,10 +21,11 @@ pip3 install -r requirements.txt
 We now can use the Mamba tool to prepare required helm and k8s components
 
 ```
+find . -type f -iname "*.sh" -exec chmod +x {} \;
 python3 mamba.py environment
 ```
 
-After this, just run
+### c. Deploy and bootstrap network
 
 ```
 python3 mamba.py start

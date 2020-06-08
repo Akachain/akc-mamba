@@ -131,7 +131,7 @@ _temp
 .vscode/
 
 # vpn key file
-.ovpn
+*.ovpn
 *.env
 env-scripts.sh
 
