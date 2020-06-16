@@ -66,12 +66,13 @@ class KubeHelper:
             if read_result.success == False:
                 return read_result
             volume_claim_templates = read_result.data.spec.volume_claim_templates
-            for pvt in volume_claim_templates:
-                pvt_name = pvt.metadata.name
-                list_pvc = self.find_pvc(namespace, keyword=pvt_name)
-                for pvc in list_pvc:
-                    hiss.echo('Delete pvc %s ' % pvc)
-                    self.delete_persistent_volume_claim(name=pvc, namespace=namespace)
+            if volume_claim_templates != None:
+                for pvt in volume_claim_templates:
+                    pvt_name = pvt.metadata.name
+                    list_pvc = self.find_pvc(namespace, keyword=pvt_name)
+                    for pvc in list_pvc:
+                        hiss.echo('Delete pvc %s ' % pvc)
+                        self.delete_persistent_volume_claim(name=pvc, namespace=namespace)
 
         try:
             body = client.V1DeleteOptions(propagation_policy='Background')
@@ -224,7 +225,7 @@ class KubeHelper:
     def exec_pod(self, podName, namespace, command):
         try:
             resp = stream(self.coreApi.connect_get_namespaced_pod_exec,
-                          name=podName, namespace=namespace, stderr=True, stdin=True, stdout=True, command=command)
+                          name=podName, namespace=namespace, container="test-pod", stderr=True, stdin=True, stdout=True, command=command)
             # return util.resultDict(success=True, msg='Success', data=resp)
             return util.Result(success=True, msg='Success', data=resp)
         except ApiException as e:
