@@ -152,8 +152,8 @@ spec:
             mountPath: /shared
           - mountPath: /host/var/run/docker.sock
             name: dockersocket
-          # - name: peer{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
-          #   mountPath: /var/hyperledger/production
+          - name: peer{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
+            mountPath: /var/hyperledger/production
       volumes:
       - name: crypto-config
         nfs:
@@ -162,13 +162,13 @@ spec:
       - name: dockersocket
         hostPath:
           path: /var/run/docker.sock
-  # volumeClaimTemplates:
-  # - metadata:
-  #     name: peer{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
-  #   spec:
-  #     accessModes: [ "ReadWriteOnce" ]
-  #     storageClassName: gp2
-  #     resources:
-  #       requests:
-  #         storage: 10Gi
+  volumeClaimTemplates:
+  - metadata:
+      name: peer{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: gp2
+      resources:
+        requests:
+          storage: 10Gi
 
