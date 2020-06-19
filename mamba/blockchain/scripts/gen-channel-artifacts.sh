@@ -46,6 +46,7 @@ function printOrdererOrg {
 # printPeerOrg <ORG> <COUNT>
 function printPeerOrg {
    initPeerVars $1 $2
+   PEER_HOST=${PEER_NAME}.${DOMAIN}
    printOrg
    echo "
     AnchorPeers:
@@ -344,7 +345,7 @@ Profiles:
             Organizations:"
                 for ORG in $ORDERER_ORGS; do
                   initOrgVars $ORG
-                  echo "                    - *${ORG_CONTAINER_NAME}"
+                  echo "                      - *${ORG_CONTAINER_NAME}"
                 done
    echo "
             Capabilities:
@@ -354,7 +355,7 @@ Profiles:
                 Organizations:"
                     for ORG in $PEER_ORGS; do
                       initOrgVars $ORG
-                      echo "                - *${ORG_CONTAINER_NAME}"
+                      echo "                  - *${ORG_CONTAINER_NAME}"
                     done
 
    echo "
@@ -367,7 +368,7 @@ Profiles:
             Organizations:"
                     for ORG in $PEER_ORGS; do
                       initOrgVars $ORG
-                      echo "            - *${ORG_CONTAINER_NAME}"
+                      echo "              - *${ORG_CONTAINER_NAME}"
                     done
    echo "
             Capabilities:
