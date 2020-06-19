@@ -92,6 +92,7 @@ class KubeHelper:
         # Check status
         count = 0 # Use count variable to detect replica
         while True:
+            time.sleep(1)
             # Find efs pod
             pods = self.find_pod(
                 namespace=namespace, keyword=keyword)
