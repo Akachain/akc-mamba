@@ -19,7 +19,7 @@ def init(dotenv_path, set_default):
         load_dotenv(dotenv_path)
 
     global PVS_PATH
-    if K8S_TYPE == 'eks':
+    if os.getenv('K8S_TYPE') == 'eks':
         PVS_PATH = '/pvs'
     else:
         PVS_PATH = '/exports'
