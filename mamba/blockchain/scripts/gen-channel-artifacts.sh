@@ -46,6 +46,7 @@ function printOrdererOrg {
 # printPeerOrg <ORG> <COUNT>
 function printPeerOrg {
    initPeerVars $1 $2
+   PEER_HOST=${PEER_NAME}.${DOMAIN}
    printOrg
    echo "
     AnchorPeers:
@@ -99,9 +100,11 @@ Orderer: &OrdererDefaults
     # Available types are \"solo\" and \"kafka\".
     OrdererType: $ORDERER_TYPE
 
-    Addresses:
+    Addresses:"
+    if [ "$EXTERNAL_ORDERER_ADDRESSES" != "" ]; then
+    echo "
         - $EXTERNAL_ORDERER_ADDRESSES:7050"
-
+    fi
     for ORG in $ORDERER_ORGS; do
       local COUNT=1
       while [[ "$COUNT" -le $NUM_ORDERERS ]]; do
@@ -342,7 +345,7 @@ Profiles:
             Organizations:"
                 for ORG in $ORDERER_ORGS; do
                   initOrgVars $ORG
-                  echo "                    - *${ORG_CONTAINER_NAME}"
+                  echo "                      - *${ORG_CONTAINER_NAME}"
                 done
    echo "
             Capabilities:
@@ -352,7 +355,7 @@ Profiles:
                 Organizations:"
                     for ORG in $PEER_ORGS; do
                       initOrgVars $ORG
-                      echo "                - *${ORG_CONTAINER_NAME}"
+                      echo "                  - *${ORG_CONTAINER_NAME}"
                     done
 
    echo "
@@ -365,7 +368,7 @@ Profiles:
             Organizations:"
                     for ORG in $PEER_ORGS; do
                       initOrgVars $ORG
-                      echo "            - *${ORG_CONTAINER_NAME}"
+                      echo "              - *${ORG_CONTAINER_NAME}"
                     done
    echo "
             Capabilities:

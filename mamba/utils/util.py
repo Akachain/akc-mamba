@@ -108,6 +108,9 @@ def get_peer_external_domain(peer, index_peer):
         ex_domains = settings.EXTERNAL_ORG_PEER1_ADDRESSES.split(' ')
 
     if peer in peers:
-        return ex_domains[peers.index(peer)]
+        if len(ex_domains) > peers.index(peer):
+            return ex_domains[peers.index(peer)]
+        else:
+            return ''
     else:
         return hiss.hiss('peer: %s does not exists in env file' % peer)

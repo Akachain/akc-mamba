@@ -19,7 +19,7 @@ def enroll_peer(peer, index):
     k8s_template_file = '%s/enroll-peer/fabric-deployment-enroll-peer.yaml' % util.get_k8s_template_path()
     dict_env = {
         'PEER': peer,
-        'ENROLL_DOMAIN': domain,
+        'PEER_DOMAIN': domain,
         'PEER_INDEX': index,
         'EXTERNAL_PEER_HOST': external_domain,
         'EFS_SERVER': settings.EFS_SERVER,
