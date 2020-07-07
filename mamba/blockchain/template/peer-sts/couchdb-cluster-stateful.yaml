@@ -30,8 +30,8 @@
             requests:
               # memory: "3000Mi"
               # cpu: "2000m"
-              memory: "512Mi"
-              cpu: "512m"
+              # memory: "512Mi"
+              # cpu: "512m"
           volumeMounts:
           - name: couch1-0-pvc-akctest
             mountPath: /opt/couchdb/data

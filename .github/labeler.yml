@@ -1,0 +1,14 @@
+# Check guide for labelling here:
+# https://github.com/actions/labeler
+
+# Add 'guide' label to all md file changes
+documentation:
+  - ./**/*.md
+
+# Add 'feature' label to all md file changes
+feature:
+  - ./**/*.py
+
+# Add 'template' label to all md file changes
+template:
+  - ./**/*.yaml

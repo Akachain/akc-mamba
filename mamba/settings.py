@@ -48,9 +48,9 @@ def init(dotenv_path, set_default):
     EFS_SERVER_ID = os.getenv('EFS_SERVER_ID')
 
     global RCA_NAME
-    global RCA_ORG
+    global RCA_DOMAIN
     RCA_NAME = os.getenv('RCA_NAME')
-    RCA_ORG = os.getenv('RCA_ORG')
+    RCA_DOMAIN = os.getenv('RCA_DOMAIN')
 
     global ORDERER_ORGS
     global ORDERER_DOMAINS

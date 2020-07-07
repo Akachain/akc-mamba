@@ -63,6 +63,7 @@ function printOrdererOrg {
 # printPeerOrg <ORG> <COUNT>
 function printPeerOrg {
    initPeerVars $1 $2
+   PEER_HOST=${PEER_NAME}.${DOMAIN}
    local PEER="peer"
    printOrg $PEER
    echo "
@@ -119,7 +120,8 @@ Orderer: &OrdererDefaults
 
     Addresses:"
     if [ "$EXTERNAL_ORDERER_ADDRESSES" != "" ]; then
-        echo"        - $EXTERNAL_ORDERER_ADDRESSES:7050"
+    echo "
+        - $EXTERNAL_ORDERER_ADDRESSES:7050"
     fi
     for ORG in $ORDERER_ORGS; do
       local COUNT=1

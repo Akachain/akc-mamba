@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  namespace: {{ENROLL_DOMAIN}}
+  namespace: {{PEER_DOMAIN}}
   name: enroll-p{{PEER_INDEX}}-{{PEER}}
 spec:
   template:
@@ -9,7 +9,7 @@ spec:
       labels:
        app: hyperledger
        role: peer
-       org: {{ENROLL_DOMAIN}}
+       org: {{PEER_DOMAIN}}
        name: enroll-p{{PEER_INDEX}}-{{PEER}}
     spec:
      restartPolicy: "Never"
@@ -33,10 +33,10 @@ spec:
             value: /opt/gopath/src/github.com/hyperledger/fabric/peer
           - name: PEERORG
             value: {{PEER}}
-          # - name: PEER_NAME
-          #   value: peer{{PEER_INDEX}}-{{PEER}}
-          # - name: PEER_HOST
-          #   value: peer{{PEER_INDEX}}-{{PEER}}.{{PEER}}
+          - name: PEER_NAME
+            value: peer{{PEER_INDEX}}-{{PEER}}
+          - name: PEER_HOST
+            value: peer{{PEER_INDEX}}-{{PEER}}.{{PEER_DOMAIN}}
           - name: EXTERNAL_PEER_HOST
             value: {{EXTERNAL_PEER_HOST}}
          command: ["sh"]

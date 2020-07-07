@@ -22,13 +22,13 @@ spec:
       containers:
       - name: prometheus
         image: prom/prometheus
-        resources:
-          requests:
-            memory: "150Mi"
-            cpu: "350m"
-          limits:
-            memory: "3000Mi"
-            cpu: "2"
+        # resources:
+        #   requests:
+        #     memory: "150Mi"
+        #     cpu: "350m"
+        #   limits:
+        #     memory: "3000Mi"
+        #     cpu: "2"
         command: ["sh", "-c", "prometheus --config.file=/etc/prometheus.yml"]
         ports:
         - containerPort: 9090
