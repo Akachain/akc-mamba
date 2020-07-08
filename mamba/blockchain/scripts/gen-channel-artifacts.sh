@@ -115,28 +115,9 @@ Organizations:"
 Orderer: &OrdererDefaults
 
     # Orderer Type: The orderer implementation to start.
-    # Available types are \"solo\" and \"kafka\".
+    # Available types are \"solo\", \"kafka\" and \"etcdraft\".
     OrdererType: $ORDERER_TYPE
 
-    Addresses:"
-    if [ "$EXTERNAL_ORDERER_ADDRESSES" != "" ]; then
-    echo "
-        - $EXTERNAL_ORDERER_ADDRESSES:7050"
-    fi
-    for ORG in $ORDERER_ORGS; do
-      local COUNT=1
-      while [[ "$COUNT" -le $NUM_ORDERERS ]]; do
-         if [ "$FABRIC_NETWORK_TYPE" == "PROD" ] && [[ "$COUNT" -gt 1 ]]; then
-            COUNT=$((COUNT+1))
-            continue
-         fi
-         initOrdererVars $ORG $COUNT
-         echo "        - $ORDERER_HOST:$ORDERER_PORT"
-         COUNT=$((COUNT+1))
-      done
-    done
-
-    echo "
     # Batch Timeout: The amount of time to wait before creating a batch.
     BatchTimeout: $BATCH_TIMEOUT
 
@@ -171,7 +152,46 @@ Orderer: &OrdererDefaults
         # NOTE: Use IP:port notation.
         Brokers:
             - broker.$KAFKA_NAMESPACE:9092"
+    elif [ "$ORDERER_TYPE" == "etcdraft" ]; then
+        echo "
+    EtcdRaft:
+        Consenters:"
+        for ORG in $ORDERER_ORGS; do
+            local COUNT=1
+            while [[ "$COUNT" -le $NUM_ORDERERS ]]; do
+                if [ "$FABRIC_NETWORK_TYPE" == "PROD" ] && [[ "$COUNT" -gt 1 ]]; then
+                    COUNT=$((COUNT+1))
+                    continue
+                fi
+                initOrdererVars $ORG $COUNT
+                echo "
+        - Host: $ORDERER_HOST
+          Port: $ORDERER_PORT
+          ClientTLSCert: /data/crypto-config/$ORG.$DOMAIN/orderers/$ORDERER_HOST/tls/server.crt
+          ServerTLSCert: /data/crypto-config/$ORG.$DOMAIN/orderers/$ORDERER_HOST/tls/server.crt
+                "
+                COUNT=$((COUNT+1))
+            done
+        done
     fi
+    echo "
+    Addresses:"
+    if [ "$EXTERNAL_ORDERER_ADDRESSES" != "" ]; then
+    echo "
+        - $EXTERNAL_ORDERER_ADDRESSES:7050"
+    fi
+    for ORG in $ORDERER_ORGS; do
+    local COUNT=1
+    while [[ "$COUNT" -le $NUM_ORDERERS ]]; do
+        if [ "$FABRIC_NETWORK_TYPE" == "PROD" ] && [[ "$COUNT" -gt 1 ]]; then
+            COUNT=$((COUNT+1))
+            continue
+        fi
+        initOrdererVars $ORG $COUNT
+        echo "        - $ORDERER_HOST:$ORDERER_PORT"
+        COUNT=$((COUNT+1))
+    done
+    done
     echo "
     # Organizations is the list of orgs which are defined as participants on
     # the orderer side of the network.
