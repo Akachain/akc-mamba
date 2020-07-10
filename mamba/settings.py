@@ -3,6 +3,7 @@
 # follow the instruction from here:
 # https://stackoverflow.com/questions/13034496/using-global-variables-between-files
 import os
+from os.path import expanduser
 import yaml
 import shutil
 from utils.kube import KubeHelper
@@ -12,10 +13,11 @@ from utils import util
 
 def init(dotenv_path, set_default):
     if set_default:
-        default_path = 'config/.env'
+        default_path = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
         shutil.copy(dotenv_path, default_path)
         load_dotenv(default_path)
     else:
+        print("%s", dotenv_path)
         load_dotenv(dotenv_path)
 
     global PVS_PATH

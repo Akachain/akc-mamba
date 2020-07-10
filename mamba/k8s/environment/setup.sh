@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+cd ~/.akachain/akc-mamba/mamba
 
 function podPending {
   PODSPENDING=$(kubectl get pods --namespace=$1 | awk '{ if ($3!="Completed") print $2}' | grep 0 | wc -l | awk '{print $1}')
@@ -179,3 +180,4 @@ function environment {
 source ./config/.env
 source ./blockchain/scripts/utilities.sh
 environment
+-
