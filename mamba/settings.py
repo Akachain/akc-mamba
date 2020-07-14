@@ -23,7 +23,7 @@ def init(dotenv_path, set_default):
         mamba_path = expanduser('~/.akachain')
         if not os.path.isdir(mamba_path):
             os.makedirs(mamba_path)
-            git.Git(mamba_path).clone('https://github.com/Akachain/akc-mamba.git', branch='install-homebrew')
+            git.Git(mamba_path).clone('https://github.com/Akachain/akc-mamba.git', branch='binary-config')
             env_template_path = expanduser('~/.akachain/akc-mamba/mamba/config/operator.env-template')
             shutil.copy(env_template_path, default_path)
             bashCommand = 'sudo vi ' + default_path
