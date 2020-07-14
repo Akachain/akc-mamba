@@ -1,4 +1,5 @@
 import os
+from os.path import expanduser
 import datetime
 import json
 import re
@@ -52,11 +53,11 @@ def smart_append(list_item, items):
 
 
 def get_temp_path():
-    return os.path.abspath(os.path.join(__file__, "../../_temp"))
+    return expanduser('~/.akachain/akc-mamba/mamba/_temp')
 
 
 def get_k8s_template_path():
-    return os.path.abspath(os.path.join(__package__, "../blockchain/template"))
+    return expanduser('~/.akachain/akc-mamba/mamba/blockchain/template')
 
 
 def split_timenow_utc():
