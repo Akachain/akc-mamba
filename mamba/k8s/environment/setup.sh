@@ -180,4 +180,3 @@ function environment {
 source ./config/.env
 source ./blockchain/scripts/utilities.sh
 environment
--
