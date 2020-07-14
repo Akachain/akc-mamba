@@ -9,14 +9,26 @@ import shutil
 from utils.kube import KubeHelper
 from dotenv import load_dotenv
 from utils import util
-
+import git
+import subprocess
 
 def init(dotenv_path, set_default):
+    default_path = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
     if set_default:
-        default_path = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
         shutil.copy(dotenv_path, default_path)
         load_dotenv(default_path)
     else:
+        print('Loading config from akachain git repo...')
+        # clone repo akc-mamba to load config
+        mamba_path = expanduser('~/.akachain')
+        if not os.path.isdir(mamba_path):
+            os.makedirs(mamba_path)
+            git.Git(mamba_path).clone('https://github.com/Akachain/akc-mamba.git', branch='install-homebrew')
+            env_template_path = expanduser('~/.akachain/akc-mamba/mamba/config/operator.env-template')
+            shutil.copy(env_template_path, default_path)
+            bashCommand = 'sudo vi ' + default_path
+            subprocess.call(bashCommand, shell=True)
+
         print("%s", dotenv_path)
         load_dotenv(dotenv_path)
 
