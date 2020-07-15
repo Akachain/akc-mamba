@@ -16,7 +16,7 @@ def update_anchor_peer(org):
     dict_env = {
         'ORG_NAME': org,
         'ORG_DOMAIN': domain,
-        'ORGS': settings.ORGS,
+        'ORGS': settings.PEER_ORGS,
         'ORDERER_NAME': settings.ORDERER_ORGS,
         'ORDERER_DOMAIN': settings.ORDERER_DOMAINS,
         'CHANNEL_NAME': settings.CHANNEL_NAME,
@@ -32,7 +32,7 @@ def update_anchor_peer(org):
 def delete_job_update_anchor_peer(org):
     # Get domain
     domain = util.get_domain(org)
-    jobname = 'update-anchor-peer'
+    jobname = 'update-anchor-peer-%s-%s' % (org, settings.CHANNEL_NAME)
     # Delete job pod
     return settings.k8s.delete_job(name=jobname, namespace=domain)
 
