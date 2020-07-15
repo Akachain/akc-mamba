@@ -21,7 +21,7 @@ from blockchain.orderer.commands import orderer
 from blockchain.update_folder.commands import updatefolder
 from blockchain.channel_artifact.commands import channel_artifact
 from blockchain.peer.commands import peer
-from blockchain.update_anchor_peer.commands import setup_anchor_peer
+from blockchain.update_anchor_peer.commands import anchor_peer
 from blockchain.gen_artifact.commands import gen_artifact
 from blockchain.admin.commands import admin
 from blockchain.bootstrap_network.commands import bootstrap
@@ -76,7 +76,7 @@ mamba.add_command(prometheus)
 mamba.add_command(grafana)
 mamba.add_command(create_org)
 mamba.add_command(channel_config)
-mamba.add_command(setup_anchor_peer)
+mamba.add_command(anchor_peer)
 
 if __name__ == '__main__':
     mamba()
