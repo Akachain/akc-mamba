@@ -2,7 +2,7 @@
 set -e
 
 source $(dirname "$0")/env.sh
-log "Enrolling peer for org $PEERORG ..."
+log "Enrolling peer $1 for org $PEERORG ..."
 initPeerVars $PEERORG $1
 ENROLLMENT_URL="https://$PEER_NAME_PASS@$CA_HOST:7054"
 # getDomain $PEERORG

@@ -4,7 +4,11 @@ set -e
 
 # Setup orderer enrollment environment variables
 source $(dirname "$0")/env.sh
-initOrdererVars orderer 1
+
+COUNT=$(($1+1))
+
+log "Enrolling orderer $COUNT for $ORDERERORG ..."
+initOrdererVars $ORDERERORG $COUNT
 ENROLLMENT_URL="https://$ORDERER_NAME_PASS@$CA_HOST:7054"
 
 export FABRIC_CA_CLIENT_HOME=/$DATA/crypto-config/orderer.$DOMAIN

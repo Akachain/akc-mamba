@@ -9,7 +9,7 @@ metadata:
 spec:
   selector:
     app: hyperledger
-    role: orderer
+    role: {{ORDERER}}
     orderer-id: orderer{{ORDERER_INDEX}}-{{ORDERER}}
     org: {{ORDERER_DOMAIN}}
   ports:

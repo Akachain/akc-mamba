@@ -10,14 +10,14 @@ spec:
   selector:
     matchLabels:
       app: hyperledger
-      role: orderer
+      role: {{ORDERER}}
       org: {{ORDERER_DOMAIN}}
       orderer-id: orderer{{ORDERER_INDEX}}-{{ORDERER}}
   template:
     metadata:
       labels:
         app: hyperledger
-        role: orderer
+        role: {{ORDERER}}
         org: {{ORDERER_DOMAIN}}
         orderer-id: orderer{{ORDERER_INDEX}}-{{ORDERER}}
     spec:

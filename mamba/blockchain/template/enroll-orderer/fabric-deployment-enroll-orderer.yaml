@@ -2,19 +2,19 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: {{ENROLL_DOMAIN}}
-  name: enroll-o-{{ORDERER}}
+  name: enroll-o{{ORDERER_INDEX}}-{{ORDERER}}
 spec:
   template:
     metadata:
       labels:
        app: hyperledger
-       role: orderer
+       role: {{ORDERER}}
        org: {{ENROLL_DOMAIN}}
-       name: enroll-o-{{ORDERER}}
+       name: enroll-o{{ORDERER_INDEX}}-{{ORDERER}}
     spec:
      restartPolicy: "Never"
      containers:
-       - name: enroll-o-{{ORDERER}}
+       - name: enroll-o{{ORDERER_INDEX}}-{{ORDERER}}
          image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
          env:
           - name: ORDERERORG
@@ -24,7 +24,7 @@ spec:
           - name: ORDERER_HOME
             value: /etc/hyperledger/orderer
          command: ["sh"]
-         args:  ["-c", "/scripts/enroll-orderer.sh 2>&1;"]
+         args:  ["-c", "/scripts/enroll-orderer.sh {{ORDERER_INDEX}} 2>&1;"]
          volumeMounts:
           - mountPath: /scripts
             name: rca-scripts
