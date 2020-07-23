@@ -54,7 +54,7 @@ def start_network():
     # Run jobs to enroll peers
     enroll_all_peer()
 
-    # time.sleep(5)
+    time.sleep(5)
 
     # # Create crypto-config folder to contains artifacts
     # update_folder()
