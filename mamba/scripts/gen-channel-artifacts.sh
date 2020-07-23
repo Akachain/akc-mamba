@@ -368,7 +368,7 @@ function generateChannelArtifacts() {
   log "Generating orderer genesis block at $GENESIS_BLOCK_FILE"
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
-  if [ "$FABRIC_TAG" == "2.0.0" ]; then
+  if [ "$FABRIC_TAG" == "2.2.0" ]; then
     configtxgen -profile OrgsOrdererGenesis -channelID mamba-sys-channel -outputBlock $GENESIS_BLOCK_FILE
   else
     configtxgen -profile OrgsOrdererGenesis -outputBlock $GENESIS_BLOCK_FILE

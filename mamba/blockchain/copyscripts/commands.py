@@ -40,7 +40,7 @@ def copy_scripts():
     config_file = os.path.abspath(os.path.join(
         __package__, "../config/.env"))
     env_script_File = os.path.abspath(os.path.join(
-        __package__, "../blockchain/scripts/env-scripts.sh"))
+        __package__, "../scripts/env-scripts.sh"))
     copyfile(config_file, env_script_File)
 
     # Remove old script folder in efs
@@ -58,7 +58,7 @@ def copy_scripts():
     # Copy scripts folder to efs
     hiss.sub_echo('Copy scripts folder to efs')
     script_path = os.path.abspath(os.path.join(
-        __package__, "../blockchain/scripts"))
+        __package__, "../scripts"))
     if not settings.k8s.cp_to_pod(podName=pods[0], namespace='default', source=script_path, target='%s/akc-ca-scripts' % settings.EFS_ROOT):
         return hiss.hiss('connot copy scripts folder to pod %s' % pods[0])
 

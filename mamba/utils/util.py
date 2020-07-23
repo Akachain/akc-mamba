@@ -56,7 +56,7 @@ def get_temp_path():
 
 
 def get_k8s_template_path():
-    return os.path.abspath(os.path.join(__package__, "../blockchain/template"))
+    return os.path.abspath(os.path.join(__package__, "../template"))
 
 
 def split_timenow_utc():
