@@ -1,7 +1,7 @@
 import click
 import os
 import time
-import settings
+from settings import settings
 from os import path
 
 from shutil import copyfile

@@ -4,7 +4,7 @@ import re
 from kubernetes import client
 from os import path
 from utils import hiss, util
-import settings
+from settings import settings
 
 def terminate_rca():
     name = settings.RCA_NAME

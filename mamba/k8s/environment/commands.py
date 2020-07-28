@@ -1,7 +1,7 @@
 import click
 import os
 from os.path import expanduser
-import settings
+from settings import settings
 from utils import hiss
 
 

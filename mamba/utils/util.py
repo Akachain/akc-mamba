@@ -5,7 +5,7 @@ import json
 import re
 import yaml
 from utils import hiss
-import settings
+from settings import settings
 
 class Result(object):
     def __init__(self, success, msg=None, data=None):

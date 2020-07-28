@@ -1,6 +1,6 @@
 import click
 import os
-import settings
+from settings import settings
 from os import path
 from shutil import copyfile
 from utils import hiss, util

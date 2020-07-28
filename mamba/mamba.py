@@ -1,5 +1,5 @@
 import click
-import settings
+from settings import settings
 from os.path import expanduser
 
 from utils import hiss

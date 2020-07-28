@@ -7,7 +7,7 @@ import time
 from kubernetes import client
 from os import path
 from utils import hiss, util
-import settings
+from settings import settings
 
 def get_namespace():
     # Get domain
