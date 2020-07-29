@@ -56,23 +56,16 @@ def start_network():
 
     time.sleep(5)
 
-    # # Create crypto-config folder to contains artifacts
-    # update_folder()
-
-    # if settings.ORDERER_TYPE == 'kafka':
-    #     # Create new Zookeeper services
-    #     setup_zookeeper()
-    #     # Create new Kafka services
-    #     setup_kafka()
-    
     # Run job to generate channel.tx, genesis.block
     gen_channel_artifact()
 
-    # Create new StatefullSet orderers
-    setup_all_orderer()
+    #TODO: Auto generate cpp, builder config map and apply external builder config map
 
-    # Create new StatefullSet peers
-    setup_all_peer()
+    # # Create new StatefullSet orderers
+    # setup_all_orderer()
+
+    # # Create new StatefullSet peers
+    # setup_all_peer()
 
     # # Run jobs to generate application artifacts
     # generate_artifact()

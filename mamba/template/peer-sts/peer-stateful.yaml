@@ -90,6 +90,8 @@ spec:
         #     cpu: "200m"
         command: ["sh", "-c", "peer node start"]
         env:
+        - name: CORE_CHAINCODE_BUILDER
+          value: hyperledger/fabric-ccenv:{{FABRIC_TAG}}
         - name: CORE_PEER_ID
           value: peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}
         - name: CORE_PEER_GOSSIP_BOOTSTRAP
@@ -155,8 +157,13 @@ spec:
         volumeMounts:
           - name: crypto-config
             mountPath: /shared
-          - mountPath: /host/var/run/docker.sock
-            name: dockersocket
+          - name: builders-config
+            mountPath: /etc/hyperledger/fabric/core.yaml
+            subPath: core.yaml
+          - name: external-builder
+            mountPath: /builders/external/bin
+          - name: dockersocket
+            mountPath: /host/var/run/docker.sock
           - name: peer{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
             mountPath: /var/hyperledger/production
       volumes:
@@ -164,6 +171,16 @@ spec:
         nfs:
           server: {{EFS_SERVER}}
           path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/crypto-config/{{PEER_ORG}}.{{PEER_DOMAIN}}
+      - name: builders-config
+        configMap:
+          name: builders-config
+          items:
+            - key: core.yaml
+              path: core.yaml
+      - name: external-builder
+        nfs:
+          server: {{EFS_SERVER}}
+          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/buildpack/bin/
       - name: dockersocket
         hostPath:
           path: /var/run/docker.sock

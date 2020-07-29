@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ORG_DOMAIN}}
+  name: chaincode-{{CHAINCODE_NAME}}-{{ORG_NAME}}
+spec:
+  selector:
+    app: chaincode-{{CHAINCODE_NAME}}-{{ORG_NAME}}
+    tier: {{ORG_DOMAIN}}
+  type: NodePort
+  ports:
+  - name: chaincode-{{CHAINCODE_NAME}}-{{ORG_NAME}}-port
+    protocol: TCP
+    port: 7052
+    targetPort: 7052
