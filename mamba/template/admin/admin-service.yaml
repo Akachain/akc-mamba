@@ -2,16 +2,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: {{ORDERER_DOMAIN}}
-  name: admin-rca-ica
+  namespace: {{ORG_DOMAIN}}
+  name: admin-v2
 spec:
   selector:
-    app: admin-rca-ica
-    tier: {{ORDERER_DOMAIN}}
+    app: admin-v2
+    tier: {{ORG_DOMAIN}}
   type: NodePort
   ports:
   - name: admin-port
     protocol: TCP
     port: 4001
     targetPort: 4001
-    # nodePort: 32330
