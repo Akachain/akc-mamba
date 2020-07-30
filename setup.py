@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
   name='akc-mamba',
-  version='0.0.6',
+  version='0.0.7',
   entry_points={'console_scripts': ['mamba = mamba.mamba:main'] },
   author="akaChain",
   author_email="admin@akachain.io",
@@ -15,8 +15,8 @@ setuptools.setup(
   long_description_content_type="text/markdown",
   url="https://github.com/Akachain/akc-mamba",
   include_package_data=True,
-  package_dir={'': 'mamba'},
-  packages=setuptools.find_packages('mamba'),
+  # package_dir={'': 'mamba'},
+  packages=setuptools.find_packages(),
   classifiers=[
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
