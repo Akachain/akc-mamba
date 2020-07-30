@@ -4,9 +4,13 @@ import sys
 with open("README.md", "r") as fh:
   long_description = fh.read()
 
+with open('requirements.txt', 'r') as f:
+  requirements = f.read().splitlines()
+  print(requirements)
+
 setuptools.setup(
   name='akc-mamba',
-  version='1.1.0',
+  version='1.1.1',
   entry_points={'console_scripts': ['mamba = cli.mamba:mamba'] },
   author="akaChain",
   author_email="admin@akachain.io",
@@ -15,6 +19,7 @@ setuptools.setup(
   long_description_content_type="text/markdown",
   url="https://github.com/Akachain/akc-mamba",
   include_package_data=True,
+  install_requires=requirements,
   # package_dir={'': 'mamba'},
   packages=setuptools.find_packages(),
   classifiers=[
