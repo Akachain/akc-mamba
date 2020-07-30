@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
   name='akc-mamba',
   version='0.0.8',
-  entry_points={'console_scripts': ['mamba = cli.mamba:main'] },
+  entry_points={'console_scripts': ['mamba = cli.mamba:mamba'] },
   author="akaChain",
   author_email="admin@akachain.io",
   description="A production ready, complete experience in deploying a Hyperledger Fabric",
