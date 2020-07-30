@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
   name='akc-mamba',
-  version='0.0.8',
+  version='1.1.0',
   entry_points={'console_scripts': ['mamba = cli.mamba:mamba'] },
   author="akaChain",
   author_email="admin@akachain.io",
