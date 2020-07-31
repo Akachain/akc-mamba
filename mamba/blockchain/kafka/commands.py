@@ -6,7 +6,7 @@ from kubernetes import client
 from os import path
 from kubernetes.client.rest import ApiException
 from utils import hiss, util
-import settings
+from settings import settings
 
 
 def terminate_kafka():

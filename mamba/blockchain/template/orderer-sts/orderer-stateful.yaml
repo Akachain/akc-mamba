@@ -75,18 +75,19 @@ spec:
           - name: crypto-config
             mountPath: /shared
           - name: orderer{{ORDERER_INDEX}}-{{ORDERER_DOMAIN}}-pvc-akc
+            mountPath: /var/ledger
             mountPath: /var/ledger/orderer{{ORDERER_INDEX}}
       volumes:
       - name: crypto-config
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
   volumeClaimTemplates:
   - metadata:
       name: orderer{{ORDERER_INDEX}}-{{ORDERER_DOMAIN}}-pvc-akc
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: gp2
+      storageClassName: {{STORE_CLASS}}
       resources:
         requests:
           storage: 10Gi

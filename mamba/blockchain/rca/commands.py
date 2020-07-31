@@ -4,7 +4,7 @@ import re
 from kubernetes import client
 from os import path
 from utils import hiss, util
-import settings
+from settings import settings
 
 def terminate_rca():
     name = settings.RCA_NAME
@@ -28,13 +28,20 @@ def setup_rca():
     # Create temp folder & namespace
     settings.k8s.prereqs(domain)
 
+    if settings.K8S_TYPE == 'minikube':
+        storage_class = 'standard'
+    else:
+        storage_class = 'gp2'
+
     dict_env = {
         'ORG': domain,
         'RCA_NAME': settings.RCA_NAME,
         'FABRIC_ORGS': settings.ORGS,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH,
+        'STORAGE_CLASS': storage_class
     }
 
     k8s_template_file = '%s/rca/fabric-deployment-rca.yaml' % util.get_k8s_template_path()

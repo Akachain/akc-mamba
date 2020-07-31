@@ -8,7 +8,7 @@ from kubernetes.stream import stream
 from pprint import pprint
 from utils import hiss, util
 from k8s.namespace import Namespace
-import settings
+from settings import settings
 
 
 class KubeHelper:
