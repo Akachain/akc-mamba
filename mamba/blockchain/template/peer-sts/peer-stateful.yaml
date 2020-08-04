@@ -51,7 +51,7 @@
         name: couch{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: gp2
+        storageClassName: {{STORAGE_CLASS}}
         resources:
           requests:
             storage: 10Gi
@@ -90,6 +90,8 @@ spec:
         #     cpu: "200m"
         command: ["sh", "-c", "peer node start"]
         env:
+        - name: CORE_CHAINCODE_BUILDER
+          value: hyperledger/fabric-ccenv:{{FABRIC_TAG}}
         - name: CORE_PEER_ID
           value: peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}
         - name: CORE_PEER_GOSSIP_BOOTSTRAP
@@ -158,7 +160,7 @@ spec:
       - name: crypto-config
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/crypto-config/peerOrganizations/{{PEER_DOMAIN}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/crypto-config/peerOrganizations/{{PEER_DOMAIN}}
       - name: dockersocket
         hostPath:
           path: /var/run/docker.sock
@@ -167,7 +169,7 @@ spec:
       name: peer{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: gp2
+      storageClassName: {{STORAGE_CLASS}}
       resources:
         requests:
           storage: 10Gi

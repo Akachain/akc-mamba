@@ -4,7 +4,7 @@ import re
 from kubernetes import client
 from os import path
 from utils import hiss, util
-import settings
+from settings import settings
 
 def enroll_peer(peer, index):
     # Get domain
@@ -19,12 +19,13 @@ def enroll_peer(peer, index):
     k8s_template_file = '%s/enroll-peer/fabric-deployment-enroll-peer.yaml' % util.get_k8s_template_path()
     dict_env = {
         'PEER': peer,
-        'ENROLL_DOMAIN': domain,
+        'PEER_DOMAIN': domain,
         'PEER_INDEX': index,
         'EXTERNAL_PEER_HOST': external_domain,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
 
     settings.k8s.apply_yaml_from_template(

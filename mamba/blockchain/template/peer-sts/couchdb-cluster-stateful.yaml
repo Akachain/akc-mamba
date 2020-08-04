@@ -57,7 +57,7 @@
         name: couch1-0-pvc-akctest
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: gp2
+        storageClassName: {{STORAGE_CLASS}}
         resources:
           requests:
             storage: 10Gi

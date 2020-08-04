@@ -129,11 +129,13 @@ dmypy.json
 .pyre/
 _temp
 .vscode/
+.DS_Store
 
 # vpn key file
-.ovpn
+*.ovpn
 *.env
 env-scripts.sh
 
 # auto-generated files
 auto_generated_*
+mamba/mamba

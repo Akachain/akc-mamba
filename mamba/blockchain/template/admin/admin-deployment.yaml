@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: admin-rca-ica
-        image: docker.pkg.github.com/akachain/akc-admin/master:v1.5.1
+        image: docker.pkg.github.com/akachain/akc-admin/master:v1.5.2
         ports:  
         - containerPort: 4001
         imagePullPolicy: Always
@@ -39,19 +39,19 @@ spec:
       - name: akc-ca-data
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
       - name: crypto-store-efs
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-store/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-store/
       - name: crypto-path-efs
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-path/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-path/
       - name: artifacts-efs
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/artifacts/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/artifacts/
       imagePullSecrets:
       - name: mamba
       

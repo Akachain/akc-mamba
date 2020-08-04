@@ -6,7 +6,7 @@ from kubernetes import client
 from os import path
 from kubernetes.client.rest import ApiException
 from utils import hiss, util
-import settings
+from settings import settings
 
 
 def terminate_ica(ica_org):
@@ -43,7 +43,12 @@ def setup_ica(ica_org):
 
     rca_host = settings.EXTERNAL_RCA_ADDRESSES
     if not settings.EXTERNAL_RCA_ADDRESSES:
-        rca_host = '%s.%s' % (settings.RCA_NAME, settings.RCA_ORG)
+        rca_host = '%s.%s' % (settings.RCA_NAME, settings.RCA_DOMAIN)
+
+    if settings.K8S_TYPE == 'minikube':
+        storage_class = 'standard'
+    else:
+        storage_class = 'gp2'
 
     k8s_template_file = '%s/ica/fabric-deployment-ica.yaml' % util.get_k8s_template_path()
     dict_env = {
@@ -54,7 +59,9 @@ def setup_ica(ica_org):
         'RCA_HOST': rca_host,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH,
+        'STORAGE_CLASS': storage_class
     }
     settings.k8s.apply_yaml_from_template(
         namespace=ica_domain, k8s_template_file=k8s_template_file, dict_env=dict_env)

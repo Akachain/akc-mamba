@@ -24,18 +24,18 @@ spec:
       containers:
       - name: orderer{{ORDERER_INDEX}}-orderer-akc
         image: hyperledger/fabric-orderer:1.4.1
-        resources:
-          requests:
-            memory: "150Mi"
-            cpu: "50m"
-          limits:
-            memory: "3000Mi"
-            cpu: "2"
+        # resources:
+        #   requests:
+        #     memory: "150Mi"
+        #     cpu: "50m"
+        #   limits:
+        #     memory: "3000Mi"
+        #     cpu: "2"
         command: ["sh", "-c", "orderer"]
         env:
         - name: FABRIC_LOGGING_SPEC
           #value: info
-          value: INFO
+          value: DEBUG
         - name: ORDERER_CFG_PATH
           value: /shared/
         - name: ORDERER_GENERAL_LEDGERTYPE
@@ -75,18 +75,19 @@ spec:
           - name: crypto-config
             mountPath: /shared
           - name: orderer{{ORDERER_INDEX}}-{{ORDERER_DOMAIN}}-pvc-akc
-            mountPath: /var/hyperledger/production
+            mountPath: /var/ledger
+            mountPath: /var/ledger/orderer{{ORDERER_INDEX}}
       volumes:
       - name: crypto-config
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
   volumeClaimTemplates:
   - metadata:
       name: orderer{{ORDERER_INDEX}}-{{ORDERER_DOMAIN}}-pvc-akc
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: gp2
+      storageClassName: {{STORE_CLASS}}
       resources:
         requests:
           storage: 10Gi

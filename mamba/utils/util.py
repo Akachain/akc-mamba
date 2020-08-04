@@ -1,10 +1,11 @@
 import os
+from os.path import expanduser
 import datetime
 import json
 import re
 import yaml
 from utils import hiss
-import settings
+from settings import settings
 
 class Result(object):
     def __init__(self, success, msg=None, data=None):
@@ -52,11 +53,11 @@ def smart_append(list_item, items):
 
 
 def get_temp_path():
-    return os.path.abspath(os.path.join(__file__, "../../_temp"))
+    return expanduser('~/.akachain/akc-mamba/mamba/_temp')
 
 
 def get_k8s_template_path():
-    return os.path.abspath(os.path.join(__package__, "../blockchain/template"))
+    return expanduser('~/.akachain/akc-mamba/mamba/blockchain/template')
 
 
 def split_timenow_utc():
@@ -108,6 +109,9 @@ def get_peer_external_domain(peer, index_peer):
         ex_domains = settings.EXTERNAL_ORG_PEER1_ADDRESSES.split(' ')
 
     if peer in peers:
-        return ex_domains[peers.index(peer)]
+        if len(ex_domains) > peers.index(peer):
+            return ex_domains[peers.index(peer)]
+        else:
+            return ''
     else:
         return hiss.hiss('peer: %s does not exists in env file' % peer)

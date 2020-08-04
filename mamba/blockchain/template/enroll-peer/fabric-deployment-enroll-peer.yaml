@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  namespace: {{ENROLL_DOMAIN}}
+  namespace: {{PEER_DOMAIN}}
   name: enroll-p{{PEER_INDEX}}-{{PEER}}
 spec:
   template:
@@ -9,7 +9,7 @@ spec:
       labels:
        app: hyperledger
        role: peer
-       org: {{ENROLL_DOMAIN}}
+       org: {{PEER_DOMAIN}}
        name: enroll-p{{PEER_INDEX}}-{{PEER}}
     spec:
      restartPolicy: "Never"
@@ -36,7 +36,7 @@ spec:
           - name: PEER_NAME
             value: peer{{PEER_INDEX}}-{{PEER}}
           - name: PEER_HOST
-            value: peer{{PEER_INDEX}}-{{PEER}}.{{PEER}}
+            value: peer{{PEER_INDEX}}-{{PEER}}.{{PEER_DOMAIN}}
           - name: EXTERNAL_PEER_HOST
             value: {{EXTERNAL_PEER_HOST}}
          command: ["sh"]
@@ -50,8 +50,8 @@ spec:
        - name: rca-scripts
          nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
        - name: rca-data
          nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/

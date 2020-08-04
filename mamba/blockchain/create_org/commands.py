@@ -1,7 +1,7 @@
 import click
 import os
 import time
-import settings
+from settings import settings
 from os import path
 
 from shutil import copyfile
@@ -78,7 +78,8 @@ def create_new_org():
         'ORG_DOMAIN': settings.PEER_DOMAINS,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
 
     # Create configtx

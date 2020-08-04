@@ -31,12 +31,15 @@ Besides original Hyperledger Fabric, AKC-Mamba uses several inhouse developed to
     sudo apt-get install python3
     ```
 
-1. Make sure you have all necessary tools on your bastion host:
-    ```
-    kubectl
-    awscli - version 2
-    git
-    ```
+1. Make sure you have all necessary tools on your bastion host following this 
+    - awscli - version 2 ([instruction](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html))
+    - kubectl & aws-iam-authenticator ([instruction](https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html))
+    
+1. Config `awscli` with your user credentials 
+
+1. Allow kubectl to connect to your EKS cluster by creating a `kube config` file following the instruction [here](https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html)
+
+
 ## 3. Installation Guide 
 Please follow the installation instruction [here](mamba/README.md)
 

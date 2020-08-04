@@ -1,12 +1,14 @@
 import click
 import os
-import settings
+from os.path import expanduser
+from settings import settings
 from utils import hiss
 
 
 def env():
     hiss.rattle('Create environment for network')
-    os.system('./k8s/environment/setup.sh')
+    excute = expanduser('~/.akachain/akc-mamba/mamba/k8s/environment/setup.sh')
+    os.system(excute)
     return True
 
 
