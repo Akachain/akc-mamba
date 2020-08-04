@@ -112,3 +112,6 @@ def init(dotenv_path, set_default):
     global ORGS, DOMAINS
     ORGS = (ORDERER_ORGS+' ' +PEER_ORGS).strip()
     DOMAINS = (ORDERER_DOMAINS+' '+PEER_DOMAINS).strip()
+
+    global DEPLOYMENT_ENV
+    DEPLOYMENT_ENV = os.getenv('DEPLOYMENT_ENV')
