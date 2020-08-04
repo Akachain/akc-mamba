@@ -91,6 +91,7 @@ class KubeHelper:
 
         # Check status
         count = 0 # Use count variable to detect replica
+        msg = '' # Message show the status of the pod
         while True:
             time.sleep(1)
             # Find efs pod
@@ -98,15 +99,17 @@ class KubeHelper:
                 namespace=namespace, keyword=keyword)
             if not pods:
                 if is_delete:
-                    hiss.sub_echo('done')
+                    hiss.sub_echo('Done')
                     break
                 hiss.sub_echo('cannot find tiller pod when check status.. retry')
-                time.sleep(1)
                 continue
 
             if is_delete:
-                hiss.sub_echo('%s terminating' % keyword)
-                time.sleep(3)
+                newMsg =  '%s terminating' % keyword
+                if msg != newMsg:
+                    msg = newMsg
+                    hiss.sub_echo(msg)
+                time.sleep(1)
                 continue
 
             # Check replication
@@ -116,17 +119,24 @@ class KubeHelper:
             while True:
                 resp = self.coreApi.read_namespaced_pod_status(name=pods[count],
                                                         namespace=namespace)
-                hiss.sub_echo('%s %s' % (pods[count], resp.status.phase))
+                
+                # Manage notify display
+                newMsg = '%s %s' % (pods[count], resp.status.phase)
+                if msg != newMsg:
+                    msg = newMsg
+                    hiss.sub_echo(msg)
+
+                # hiss.sub_echo('%s %s' % (pods[count], resp.status.phase))
                 if check_job_success:
                     if resp.status.phase == condition_status:
                         count += 1
                         break
-                    time.sleep(3)
+                    time.sleep(1)
                 else:
                     if resp.status.phase != condition_status:
                         count += 1
                         break
-                    time.sleep(3)
+                    time.sleep(1)
 
     def prereqs(self, namespace):
         # Create temp folder
@@ -135,12 +145,29 @@ class KubeHelper:
         # Create namespace
         settings.k8s.create_namespace(namespace)
 
+    def remove_pvc(self, doc):
+        if "volumeClaimTemplates" in doc['spec']:
+            volume_claim_templates = doc['spec']['volumeClaimTemplates']
+            for vct in volume_claim_templates:
+                vct_name = vct['metadata']['name']
+                
+                # Get containers in doc
+                containers = doc['spec']['template']['spec']['containers']
+                for container in containers:
+                    volume_mounts = container['volumeMounts']
+                    # Find and remove volume mount
+                    volume = next((volume for volume in volume_mounts if volume['name'] == vct_name), None)
+                    volume_mounts.remove(volume)
+
+                # Remove volume claim template
+                volume_claim_templates.remove(vct)
+
     def apply_yaml_from_template(self, namespace, k8s_template_file, dict_env):
         yaml_path, _ = util.load_yaml_config_template(k8s_template_file, dict_env)
         hiss.sub_echo('Create %s successfully' % yaml_path)
 
         # Execute yaml
-        hiss.echo('Apply yaml file')
+        # hiss.echo('Apply yaml file')
         stream = open(yaml_path, 'r')
         docs = yaml.safe_load_all(stream)
 
@@ -149,12 +176,15 @@ class KubeHelper:
             try:
                 if doc['kind'] == 'Service':
                     self.coreApi.create_namespaced_service(namespace, body=doc)
+                    print("Create service successfully!")
                     continue
             except ApiException as e:
                 print("Service already deployed!")
                 continue
             try:
                 if doc['kind'] == 'StatefulSet':
+                    if settings.DEPLOYMENT_ENV == 'develop':
+                        self.remove_pvc(doc)
                     self.appsApi.create_namespaced_stateful_set(
                         namespace, body=doc)
                     self.check_pod_status_by_keyword(keyword=doc['metadata']['name'], namespace=namespace)
@@ -165,6 +195,8 @@ class KubeHelper:
                 if doc['kind'] == 'Job':
                     self.batchApi.create_namespaced_job(namespace, body=doc)
                     self.check_pod_status_by_keyword(keyword=doc['metadata']['name'], namespace=namespace, check_job_success=True)
+                if doc['kind'] == 'ConfigMap':
+                    self.coreApi.create_namespaced_config_map(namespace, body=doc)
             except ApiException as e:
                 print("Exception when apply yaml: %s\n" % e)
                 success = False
@@ -174,14 +206,12 @@ class KubeHelper:
     def create_namespace(self, name):
         hiss.echo('Create Namespace %s' % name)
         ns = Namespace(name)
-        # ns.create()
         if not ns.get():
             hiss.sub_echo('Namespace %s does not exist. Creating...' % name)
             ns.create()
-        else:
-            hiss.sub_echo('Namespace %s already exists' % name)
+        # else:
+        #     hiss.sub_echo('Namespace %s already exists' % name)
 
-        # ns.delete()
 
     def show_all_pods(self):
         ret = self.coreApi.list_pod_for_all_namespaces(watch=False)

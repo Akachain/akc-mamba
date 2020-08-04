@@ -23,8 +23,9 @@ from blockchain.orderer.commands import setup_all_orderer
 from blockchain.peer.commands import setup_all_peer
 from blockchain.gen_artifact.commands import generate_artifact
 from k8s.secret.commands import create_all_docker_secret
-from blockchain.admin.commands import setup_admin
+from blockchain.admin.commands import setup_all_admin
 from blockchain.bootstrap_network.commands import bootstrap_network
+from blockchain.external_chaincode.commands import config_all_peer
 
 
 def start_network():
@@ -34,38 +35,47 @@ def start_network():
     copy_scripts()
 
     # Create a new Root Certificate Authority service
+    hiss.rattle('Create a new Root Certificate Authority service')
     setup_rca()
 
     # Create new Intermediate Certificate Authority services
+    hiss.rattle('Create new Intermediate Certificate Authority services')
     setup_all_ica()
 
     # Run jobs to register organizations
+    hiss.rattle('Run jobs to register organizations')
     reg_all_org()
 
     # Run jobs to register orderers
+    hiss.rattle('Run jobs to register orderers')
     reg_all_orderer()
 
     # Run jobs to register peers
+    hiss.rattle('Run jobs to register peers')
     reg_all_peer()
 
-    # Run jobs to enroll orderers
+    hiss.rattle('Run jobs to enroll orderers')
     enroll_all_orderer()
 
-    # Run jobs to enroll peers
+    hiss.rattle('Run jobs to enroll peers')
     enroll_all_peer()
 
     time.sleep(5)
 
-    # Run job to generate channel.tx, genesis.block
+    hiss.rattle('Run job to generate channel.tx, genesis.block')
     gen_channel_artifact()
 
+    hiss.rattle('Config map for external chaincode')
+    config_all_peer()
+
     #TODO: Auto generate cpp, builder config map and apply external builder config map
+    #TODO: Auto generate connection config file and metadata config of external chaincode
 
-    # # Create new StatefullSet orderers
-    # setup_all_orderer()
+    hiss.rattle('Create new StatefullSet orderers')
+    setup_all_orderer()
 
-    # # Create new StatefullSet peers
-    # setup_all_peer()
+    hiss.rattle('Create new StatefullSet peers')
+    setup_all_peer()
 
     # # Run jobs to generate application artifacts
     # generate_artifact()
@@ -74,9 +84,9 @@ def start_network():
     # if settings.PRIVATE_DOCKER_IMAGE == 'true':
     #     create_all_docker_secret('mamba')
 
-    # # Create new a new Admin service
-    # time.sleep(1)
-    # setup_admin()
+    # Create new a new Admin service
+    time.sleep(1)
+    setup_all_admin()
 
     # # Bootrap network
     # time.sleep(1)
