@@ -21,7 +21,7 @@ from blockchain.zookeeper.commands import terminate_zookeeper
 from blockchain.kafka.commands import terminate_kafka
 from blockchain.orderer.commands import terminate_all_orderer
 from blockchain.peer.commands import terminate_all_peer
-from blockchain.admin.commands import del_admin
+from blockchain.admin.commands import delete_all_admin
 
 def remove_cert():
     ## Find explorer_db pod
@@ -43,7 +43,7 @@ def terminate_network():
 
     result = []
     # Delete job
-    util.smart_append(result, del_admin())
+    util.smart_append(result, delete_all_admin())
     util.smart_append(result, del_bootstrap_network())
     util.smart_append(result, del_gen_channel_artifact())
     util.smart_append(result, del_generate_artifact())
