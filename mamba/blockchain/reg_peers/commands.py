@@ -36,13 +36,13 @@ def del_reg_peer(org):
     return settings.k8s.delete_job(name=jobname, namespace=domain)
 
 def reg_all_peer():
-    orgs = settings.ORGS.split(' ')
+    orgs = settings.PEER_ORGS.split(' ')
     # TODO: Multiprocess
     for org in orgs:
         reg_peer(org)
 
 def del_all_reg_peer():
-    orgs = settings.ORGS.split(' ')
+    orgs = settings.PEER_ORGS.split(' ')
     # TODO: Multiprocess
     for org in orgs:
         del_reg_peer(org)
