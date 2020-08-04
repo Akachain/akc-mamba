@@ -36,6 +36,8 @@ from blockchain.grafana.commands import grafana
 from blockchain.create_org.commands import create_org
 from blockchain.update_channel_config.commands import channel_config
 
+from blockchain.external_chaincode.commands import externalCC
+
 
 @click.group(invoke_without_command=True)
 @click.option('-config', default='config/.env')
@@ -77,6 +79,7 @@ mamba.add_command(grafana)
 mamba.add_command(create_org)
 mamba.add_command(channel_config)
 mamba.add_command(anchor_peer)
+mamba.add_command(externalCC)
 
 if __name__ == '__main__':
     mamba()

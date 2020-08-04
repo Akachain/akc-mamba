@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  namespace: {{ORG_DOMAIN}}
-  name: chaincode-{{CHAINCODE_NAME}}-{{ORG_NAME}}
+  namespace: {{PEER_DOMAIN}}
+  name: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
 spec:
-  serviceName: chaincode-{{CHAINCODE_NAME}}-{{ORG_NAME}}
+  serviceName: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
   replicas: 1
   selector:
     matchLabels:
-      app: chaincode-{{CHAINCODE_NAME}}-{{ORG_NAME}}
-      tier: {{ORG_DOMAIN}}
+      app: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
+      tier: {{PEER_DOMAIN}}
   template:
     metadata:
       labels:
-        app: chaincode-{{CHAINCODE_NAME}}-{{ORG_NAME}}
-        tier: {{ORG_DOMAIN}}
+        app: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
+        tier: {{PEER_DOMAIN}}
     spec:
       containers:
-      - name: chaincode-{{CHAINCODE_NAME}}-{{ORG_NAME}}
+      - name: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
         image: {{CHAINCODE_IMAGE}}
         env:
           - name: CHAINCODE_CCID
