@@ -19,14 +19,14 @@ def terminate_peer(peer, index):
     # Terminate peer stateful set
     res_del_peer =  settings.k8s.delete_stateful(name=name, namespace=domain, delete_pvc=True)
 
-    # couchdb service name
-    name = 'couchdb%s-%s' % (index, peer) 
-
-    # Terminate couchdb stateful set
+    # statedb service name
+    name = '%s%s-%s' % (settings.STATEDB, index, peer) 
+    print(name)
+    # Terminate statedb stateful set
     res_del_db =  settings.k8s.delete_stateful(name=name, namespace=domain, delete_pvc=True)
 
     if res_del_peer.success == True and res_del_db.success == True:
-        hiss.sub_echo('Terminate peer & couchdb success')
+        hiss.sub_echo('Terminate peer & statedb success')
     return res_del_db
 
 def delete_peer(peer, index):
@@ -39,14 +39,14 @@ def delete_peer(peer, index):
     # Delete peer stateful set
     res_del_peer =  settings.k8s.delete_stateful(name=name, namespace=domain)
 
-    # couchdb service name
-    name = 'couchdb%s-%s' % (index, peer) 
-
-    # Delete couchdb stateful set
+    # statedb service name
+    name = '%s%s-%s' % (settings.STATEDB, index, peer) 
+    print(name)
+    # Delete statedb stateful set
     res_del_db =  settings.k8s.delete_stateful(name=name, namespace=domain)
 
     if res_del_peer.success == True and res_del_db.success == True:
-        hiss.sub_echo('Delete peer & couchdb success')
+        hiss.sub_echo('Delete peer & statedb success')
 
 def setup_peer(peer, index):
 
@@ -64,11 +64,22 @@ def setup_peer(peer, index):
         'PEER_ORG': peer,
         'PEER_DOMAIN': domain,
         'PEER_INDEX': index,
+        'PEER_IMAGE': settings.PEER_IMAGE,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND,
         'PVS_PATH': settings.PVS_PATH,
-        'STORAGE_CLASS': storage_class
+        'STORAGE_CLASS': storage_class,
+        'STATEDB': settings.STATEDB,
+        'STATEDB_PORT': settings.STATEDB_PORT,
+        'STATEDB_PORT2': settings.STATEDB_PORT2,
+        'STATEDB_IMAGE': settings.STATEDB_IMAGE,
+        'STATEDB_INIT_USER_NAME': settings.STATEDB_INIT_USER_NAME,
+        'STATEDB_INIT_PASSWORD_NAME': settings.STATEDB_INIT_PASSWORD_NAME,
+        'STATEDB_INIT_SECRET_NAME': settings.STATEDB_INIT_SECRET_NAME,
+        'CORE_LEDGER_STATE_CONFIG_ADDRESS': settings.CORE_LEDGER_STATE_CONFIG_ADDRESS,
+        'CORE_LEDGER_STATE_CONFIG_USERNAME': settings.CORE_LEDGER_STATE_CONFIG_USERNAME,
+        'CORE_LEDGER_STATE_CONFIG_PASSWORD': settings.CORE_LEDGER_STATE_CONFIG_PASSWORD
     }
 
     peer_stateful = '%s/peer-sts/peer-stateful.yaml' % util.get_k8s_template_path()
