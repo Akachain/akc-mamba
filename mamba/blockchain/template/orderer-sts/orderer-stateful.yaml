@@ -75,7 +75,6 @@ spec:
           - name: crypto-config
             mountPath: /shared
           - name: orderer{{ORDERER_INDEX}}-{{ORDERER_DOMAIN}}-pvc-akc
-            mountPath: /var/ledger
             mountPath: /var/ledger/orderer{{ORDERER_INDEX}}
       volumes:
       - name: crypto-config
