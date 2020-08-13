@@ -72,7 +72,7 @@ nodeGroups:
     #amiFamily: Ubuntu1804
 
     #AmazonLinux AMI and Family
-    ami: ami-0d275f57a60281ccc
+    ami: ami-0365ad3c8cfd3cb4c
     amiFamily: AmazonLinux2
     volumeEncrypted: true
     #Isolate nodegroup from the public internet
