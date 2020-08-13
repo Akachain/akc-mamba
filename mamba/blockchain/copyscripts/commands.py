@@ -27,7 +27,7 @@ def copy_scripts():
         exec_command = [
             '/bin/bash',
             '-c',
-            'mkdir -p %s/admin; mkdir -p %s/akc-ca-data' % (settings.EFS_ROOT, settings.EFS_ROOT)]
+            'mkdir -p %s/admin-v2/artifacts; mkdir -p %s/akc-ca-data' % (settings.EFS_ROOT, settings.EFS_ROOT)]
 
         # Create folder in efs
         result_create_folder = settings.k8s.exec_pod(
