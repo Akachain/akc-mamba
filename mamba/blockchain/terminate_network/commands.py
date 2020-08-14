@@ -7,6 +7,7 @@ from shutil import copyfile
 from utils import hiss, util
 
 from blockchain.bootstrap_network.commands import del_bootstrap_network
+from blockchain.generate_ccp.commands import delete_all_ccp
 from blockchain.channel_artifact.commands import del_gen_channel_artifact
 from blockchain.gen_artifact.commands import del_generate_artifact
 from blockchain.reg_orgs.commands import del_all_reg_org
@@ -22,6 +23,7 @@ from blockchain.kafka.commands import terminate_kafka
 from blockchain.orderer.commands import terminate_all_orderer
 from blockchain.peer.commands import terminate_all_peer
 from blockchain.admin.commands import delete_all_admin
+from blockchain.external_chaincode.commands import delete_all_external_cc
 
 def remove_cert():
     ## Find explorer_db pod
@@ -45,6 +47,7 @@ def terminate_network():
     # Delete job
     util.smart_append(result, delete_all_admin())
     util.smart_append(result, del_bootstrap_network())
+    util.smart_append(result, delete_all_ccp())
     util.smart_append(result, del_gen_channel_artifact())
     util.smart_append(result, del_generate_artifact())
     util.smart_append(result, del_all_reg_org())
@@ -70,6 +73,9 @@ def terminate_network():
 
     # Terminate StatefullSet peers
     util.smart_append(result, terminate_all_peer())
+
+    # Terminate External chaincode
+    util.smart_append(result, delete_all_external_cc())
 
     # Remove old cert
     util.smart_append(result, remove_cert())

@@ -24,7 +24,7 @@ spec:
           - name: ORDERER_ADDRESS
             value: orderer0-{{ORDERER_NAME}}.{{ORDERER_DOMAIN}}:7050
           - name: ADMIN_URL
-            value: admin-v2.{{ORG_DOMAIN}}:4001
+            value: admin-v2-{{ORG_NAME}}.{{ORG_DOMAIN}}:4001
         #  command: ["printenv"]
          command: ["sh"]
         #  args:  ["-c", "tail -f /dev/null"]

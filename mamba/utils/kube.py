@@ -240,6 +240,18 @@ class KubeHelper:
             hiss.hiss("Exception when calling Api: %s\n" % e)
         return mypods
 
+    # Find name of the stateful set in a namespace with a specific keyword
+    def find_stateful_set(self, namespace, keyword):
+        mypods = []
+        try:
+            ret = self.appsApi.list_namespaced_stateful_set(namespace)
+            for item in ret.items:
+                if keyword in item.metadata.name:
+                    mypods.append(item.metadata.name)
+        except ApiException as e:
+            hiss.hiss("Exception when calling Api: %s\n" % e)
+        return mypods
+
     # Find name of the persistent volume claim in a namespace with a specific keyword
     def find_pvc(self, namespace, keyword):
         list_pvc = []

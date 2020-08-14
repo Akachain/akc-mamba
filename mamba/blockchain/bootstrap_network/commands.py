@@ -8,21 +8,29 @@ import settings
 
 def bootstrap_network():
 
-    domains = settings.ORDERER_DOMAINS.split(' ')
+    orderer_orgs = settings.ORDERER_ORGS.split(' ')
+    orderer_domains = settings.ORDERER_DOMAINS.split(' ')
+
+    peer_orgs = settings.PEER_ORGS.split(' ')
+    peer_domains = settings.PEER_DOMAINS.split(' ')
+
 
     # Create temp folder & namespace
-    settings.k8s.prereqs(domains[0])
+    settings.k8s.prereqs(orderer_domains[0])
 
     k8s_template_file = '%s/bootstrap-network/fabric-deployment-bootstrap-network.yaml' % util.get_k8s_template_path()
     dict_env = {
-        'ORDERER_DOMAIN': domains[0],
+        'ORDERER_NAME': orderer_orgs[0],
+        'ORDERER_DOMAIN': orderer_domains[0],
+        'ORG_NAME': peer_orgs[0],
+        'ORG_DOMAIN': peer_domains[0],
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND
     }
 
     settings.k8s.apply_yaml_from_template(
-        namespace=domains[0], k8s_template_file=k8s_template_file, dict_env=dict_env)
+        namespace=orderer_domains[0], k8s_template_file=k8s_template_file, dict_env=dict_env)
 
 def del_bootstrap_network():
 

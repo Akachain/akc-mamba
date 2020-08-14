@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source $(dirname "$0")/env.sh
+set -e
 
 function logResult {
   local RESULT=$1
@@ -15,26 +16,41 @@ function logResult {
 }
 
 function main {
-  local ADMIN_URL="http://admin-rca-ica.${ORDERER_DOMAINS}:4001"
-  local ORG=""
+  local ORG="" 
 
-  # Register user for each org
+  # Enroll admin for each org
   for PEER_ORG in $PEER_ORGS
   do
     ORG=$PEER_ORG
-    log "REGISTER USER: $PEER_ORG"
-    REGISTER_USER=$(curl -s -X POST   ${ADMIN_URL}/registerUser   -H "content-type: application/json"   -d '{
-      "orgname":"'"${PEER_ORG}"'"
+    initOrgVars $ORG
+    log "Enroll Admin: $PEER_ORG"
+    ENROLL_ADMIN=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
+      "orgName":"'"${PEER_ORG}"'",
+      "adminName": "'"${INT_CA_ADMIN_USER}"'",
+      "adminPassword": "'"${INT_CA_ADMIN_PASS}"'"
     }');
-    logResult "$REGISTER_USER"
+    logResult "$ENROLL_ADMIN"
+
+    log "Register User: $PEER_ORG"
+    REGISTER_USER=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/registerUser   -H "content-type: application/json"   -d '{
+      "orgName":"'"${PEER_ORG}"'",
+      "affiliation":"'"${PEER_ORG}"'.akc",
+      "affiliation":"'"${PEER_ORG}"'.akc",
+      "userName": "'"${PEER_ORG}"'",
+      "role": "client",
+      "adminName": "'"${INT_CA_ADMIN_USER}"'"
+    }');
+    logResult "$ENROLL_ADMIN"
   done
 
   # Create channel
   log "CREATE CHANNEL: $CHANNEL_NAME"
-  CREATE_CHANNEL_CC=$(curl -s -X POST   ${ADMIN_URL}/channels   -H "content-type: application/json"   -d '{
-    "orgname":"'"${ORG}"'",
+  CREATE_CHANNEL_CC=$(curl -s -X POST   ${ADMIN_URL}/api/v2/channels/create   -H "content-type: application/json"   -d '{
+    "orgName":"'"${ORG}"'",
+    "peerIndex":"0",
     "channelName":"'"${CHANNEL_NAME}"'",
-    "channelConfigPath":"../../../shared/channel.tx"
+    "ordererAddress":"'"${ORDERER_ADDRESS}"'",
+    "channelConfig":"/shared/channel.tx"
   }');
   logResult "$CREATE_CHANNEL_CC"
   sleep 3s
@@ -47,8 +63,9 @@ function main {
     log "Org ${PEER_ORG} join the channel ${CHANNEL_NAME}"
     for (( h=0; h<=$MAX_RETRY; h++ ))
     do
-      JOINCHANNEL=$(curl -s -X POST   ${ADMIN_URL}/joinchannel   -H "content-type: application/json"   -d '{
-        "orgname":"'"${PEER_ORG}"'",
+      JOINCHANNEL=$(curl -s -X POST   ${ADMIN_URL}/api/v2/channels/join   -H "content-type: application/json"   -d '{
+        "orgName":"'"${PEER_ORG}"'",
+        "peerIndex":"0",
         "channelName":"'"${CHANNEL_NAME}"'"
       }');
       logResult "$JOINCHANNEL"
@@ -62,41 +79,41 @@ function main {
     done
   done
 
-  # Install sample chaincode
-  log "INSTALL CHAINCODE"
-  for PEER_ORG in $PEER_ORGS
-  do
-    INSTALL_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/chaincodes   -H "content-type: application/json"   -d '{
-      "orgname":"'"${PEER_ORG}"'",
-      "chaincodePath":"chaincodes/fabcar/",
-      "chaincodeId":"fabcar1",
-      "chaincodeVersion":"v1.0",
-      "chaincodeType":"golang"
-    }');
-    logResult "$INSTALL_CHAINCODE"
-  done
+  # # Install sample chaincode
+  # log "INSTALL CHAINCODE"
+  # for PEER_ORG in $PEER_ORGS
+  # do
+  #   INSTALL_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/chaincodes   -H "content-type: application/json"   -d '{
+  #     "orgname":"'"${PEER_ORG}"'",
+  #     "chaincodePath":"chaincodes/fabcar/",
+  #     "chaincodeId":"fabcar1",
+  #     "chaincodeVersion":"v1.0",
+  #     "chaincodeType":"golang"
+  #   }');
+  #   logResult "$INSTALL_CHAINCODE"
+  # done
 
-  # Init sample chaincode
-  log "INIT CHAINCODE"
-  INIT_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/initchaincodes   -H "content-type: application/json"   -d '{
-    "orgname":"'"${PEER_ORG}"'",
-    "channelName":"'"${CHANNEL_NAME}"'",
-    "chaincodeId":"fabcar1",
-    "chaincodeVersion":"v1.0",
-    "chaincodeType":"golang",
-    "args":[]
-  }');
-  logResult "$INIT_CHAINCODE"
-  sleep 3s
-  # Invoke
-  log "INVOKE CHAINCODE"
-  INVOKE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/invokeChainCode   -H "content-type: application/json"   -d '{
-    "orgname":"'"${PEER_ORG}"'",
-    "channelName":"'"${CHANNEL_NAME}"'",
-    "chaincodeId":"fabcar1",
-    "args": ["CAR1", "a", "b", "c", "d"],
-    "fcn": "createCar"
-  }');
-  logResult "$INVOKE_CHAINCODE"
+  # # Init sample chaincode
+  # log "INIT CHAINCODE"
+  # INIT_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/initchaincodes   -H "content-type: application/json"   -d '{
+  #   "orgname":"'"${PEER_ORG}"'",
+  #   "channelName":"'"${CHANNEL_NAME}"'",
+  #   "chaincodeId":"fabcar1",
+  #   "chaincodeVersion":"v1.0",
+  #   "chaincodeType":"golang",
+  #   "args":[]
+  # }');
+  # logResult "$INIT_CHAINCODE"
+  # sleep 3s
+  # # Invoke
+  # log "INVOKE CHAINCODE"
+  # INVOKE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/invokeChainCode   -H "content-type: application/json"   -d '{
+  #   "orgname":"'"${PEER_ORG}"'",
+  #   "channelName":"'"${CHANNEL_NAME}"'",
+  #   "chaincodeId":"fabcar1",
+  #   "args": ["CAR1", "a", "b", "c", "d"],
+  #   "fcn": "createCar"
+  # }');
+  # logResult "$INVOKE_CHAINCODE"
 }
 main

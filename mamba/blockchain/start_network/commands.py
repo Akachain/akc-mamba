@@ -26,6 +26,8 @@ from k8s.secret.commands import create_all_docker_secret
 from blockchain.admin.commands import setup_all_admin
 from blockchain.bootstrap_network.commands import bootstrap_network
 from blockchain.external_chaincode.commands import config_all_peer
+from blockchain.generate_ccp.commands import generate_all_ccp
+from blockchain.update_anchor_peer.commands import setup_all
 
 
 def start_network():
@@ -69,7 +71,6 @@ def start_network():
     config_all_peer()
 
     #TODO: Auto generate cpp, builder config map and apply external builder config map
-    #TODO: Auto generate connection config file and metadata config of external chaincode
 
     hiss.rattle('Create new StatefullSet orderers')
     setup_all_orderer()
@@ -79,18 +80,22 @@ def start_network():
 
     # # Run jobs to generate application artifacts
     # generate_artifact()
+    generate_all_ccp()
 
-    # # Create secret if use private docker hub
-    # if settings.PRIVATE_DOCKER_IMAGE == 'true':
-    #     create_all_docker_secret('mamba')
+    # Create secret if use private docker hub
+    if settings.PRIVATE_DOCKER_IMAGE == 'true':
+        create_all_docker_secret('mamba')
 
     # Create new a new Admin service
     time.sleep(1)
     setup_all_admin()
+    time.sleep(1)
 
-    # # Bootrap network
-    # time.sleep(1)
-    # bootstrap_network()
+    # Setup anchor peer
+    setup_all()
+
+    # Bootrap network
+    bootstrap_network()
 
     # # cat log
     # domains = settings.ORDERER_DOMAINS.split(' ')

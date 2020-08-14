@@ -59,6 +59,8 @@ spec:
         volumeMounts:
           - name: akc-ca-data
             mountPath: /shared/
+          - name: akc-ca-data
+            mountPath: /data/app/artifacts/src/chaincodes
           - name: artifacts-efs
             mountPath: /data/app/artifacts/
       volumes:
@@ -66,12 +68,16 @@ spec:
         nfs:
           server: {{EFS_SERVER}}
           path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+      - name: chaincodes
+        nfs:
+          server: {{EFS_SERVER}}
+          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin-v2/chaincodes/
       - name: artifacts-efs
         nfs:
           server: {{EFS_SERVER}}
           # TODO: Wait for automation generate cpp
-          path: /pvs/{{EFS_PATH}}/admin-v2/artifacts/
-          # path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/artifacts/
+          # path: /pvs/{{EFS_PATH}}/admin-v2/artifacts/
+          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin-v2/artifacts/
       imagePullSecrets:
       - name: mamba
       

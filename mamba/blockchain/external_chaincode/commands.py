@@ -27,6 +27,17 @@ def deploy_external_cc(peer, cc_name, cc_image, cc_package_id):
     settings.k8s.apply_yaml_from_template(
         namespace=domain, k8s_template_file=chaincode_service, dict_env=dict_env)
 
+def delete_external_cc(peer):
+    ## Find explorer_db pod
+    domain = util.get_domain(peer)
+    list_stateful_set = settings.k8s.find_stateful_set(namespace=domain, keyword="chaincode")
+    # Remove chaincode container of another org
+    for sts in list_stateful_set:
+        if peer not in sts: list_stateful_set.remove(sts)
+    for sts in list_stateful_set:
+        # Delete stateful set
+        return settings.k8s.delete_stateful(name=sts, namespace=domain)
+
 def config_peer(peer):
     # Get domain
     domain = util.get_domain(peer)
@@ -57,6 +68,16 @@ def config_all_peer():
 def del_config():
     print('TODO')
 
+def delete_all_external_cc():
+
+    peers = settings.PEER_ORGS.split(' ')
+    results = []
+    for peer in peers:
+        domain = util.get_domain(peer)
+        results.append(delete_external_cc(peer))
+    return results
+
+
 @click.group()
 
 def externalCC():
@@ -75,6 +96,11 @@ def config():
 def deploy(ccname, ccimage, packageid):
     hiss.rattle('Deploy external chaincode')
     deploy_all_external_cc(ccname, ccimage, packageid)
+
+@externalCC.command('delete', short_help="Delete external chaincode")
+def delete():
+    hiss.rattle('Delete external chaincode')
+    delete_all_external_cc()
 
 @externalCC.command('delConfig', short_help="Delete config map")
 def delete():
