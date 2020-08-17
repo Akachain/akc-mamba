@@ -79,11 +79,42 @@ function main {
     done
   done
 
-  # # Install sample chaincode
+  # # Package sample chaincode
+  # log "PACKAGE CHAINCODE"
+  # PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/packageCC   -H "content-type: application/json"   -d '{
+  #   "orgname":"'"${ORG}"'",
+  #   "chaincodePath":"chaincodes/fabcar",
+  #   "chaincodeId":"fabcar",
+  #   "chaincodeVersion":"1",
+  #   "chaincodeType":"golang",
+  #   "peerIndex": "0"
+  # }');
+  # logResult "$PACKAGE_CHAINCODE"
+
+  # # Install and approve sample chaincode
   # log "INSTALL CHAINCODE"
   # for PEER_ORG in $PEER_ORGS
   # do
-  #   INSTALL_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/chaincodes   -H "content-type: application/json"   -d '{
+  #   INSTALL_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/install   -H "content-type: application/json"   -d '{
+  #     "orgname":"'"${PEER_ORG}"'",
+  #     "chaincodeName":"fabcar",
+  #     "chaincodePath":"fabcar.tar.gz",
+  #     "peerIndex":"0"
+  #   }');
+  #   logResult "$INSTALL_CHAINCODE"
+
+  #   log "APPROVE CHAINCODE"
+  #   QUERY_PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/queryInstalled   -H "content-type: application/json"   -d '{
+  #     "orgname":"'"${PEER_ORG}"'",
+  #     "peerIndex":"0
+  #   }');
+  #   logResult "$INSTALL_CHAINCODE"
+  # done
+  # # Package sample chaincode
+  # log "PACKAGE CHAINCODE"
+  # for PEER_ORG in $PEER_ORGS
+  # do
+  #   PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/packageCC   -H "content-type: application/json"   -d '{
   #     "orgname":"'"${PEER_ORG}"'",
   #     "chaincodePath":"chaincodes/fabcar/",
   #     "chaincodeId":"fabcar1",

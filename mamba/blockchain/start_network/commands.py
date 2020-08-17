@@ -91,11 +91,11 @@ def start_network():
     setup_all_admin()
     time.sleep(1)
 
-    # Setup anchor peer
-    setup_all()
-
     # Bootrap network
     bootstrap_network()
+
+    # Setup anchor peer
+    setup_all()
 
     # # cat log
     # domains = settings.ORDERER_DOMAINS.split(' ')

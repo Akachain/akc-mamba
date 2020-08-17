@@ -16,11 +16,11 @@ def setup_admin(org):
     orderer_domains = settings.ORDERER_DOMAINS.split(' ')
 
     # Create application artifact folder
-    hiss.echo('Create application artifact folder')
-    ## Find efs pod
-    pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
-    if not pods:
-        return hiss.hiss('cannot find tiller pod')
+    # hiss.echo('Create application artifact folder')
+    # ## Find efs pod
+    # pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
+    # if not pods:
+    #     return hiss.hiss('cannot find tiller pod')
 
     # mkdir_cmd = ('mkdir -p '+settings.EFS_ROOT+'/admin/crypto-path;'
     # 'mkdir -p '+settings.EFS_ROOT+'/admin/crypto-store;')

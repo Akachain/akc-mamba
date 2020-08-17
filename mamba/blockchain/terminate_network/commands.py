@@ -24,6 +24,7 @@ from blockchain.orderer.commands import terminate_all_orderer
 from blockchain.peer.commands import terminate_all_peer
 from blockchain.admin.commands import delete_all_admin
 from blockchain.external_chaincode.commands import delete_all_external_cc
+from blockchain.update_anchor_peer.commands import del_all_job
 
 def remove_cert():
     ## Find explorer_db pod
@@ -31,7 +32,7 @@ def remove_cert():
     if not pods:
         return hiss.hiss('cannot find tiller pod')
     
-    remove_cert = 'rm -rf %s/akc-ca-data/*; rm -rf %s/admin/*' % (settings.EFS_ROOT, settings.EFS_ROOT)
+    remove_cert = 'rm -rf %s/*' % (settings.EFS_ROOT)
     exec_command = [
         '/bin/bash',
         '-c',
@@ -55,6 +56,7 @@ def terminate_network():
     util.smart_append(result, del_all_reg_peer())
     util.smart_append(result, del_all_enroll_orderer())
     util.smart_append(result, del_all_enroll_peer())
+    util.smart_append(result, del_all_job())
 
     # Terminate Root Certificate Authority service
     util.smart_append(result, terminate_rca())

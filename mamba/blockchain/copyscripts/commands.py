@@ -22,7 +22,8 @@ def copy_scripts():
 
     result_get_folder = settings.k8s.exec_pod(
         podName=pods[0], namespace="default", command=exec_command)
-    if int(result_get_folder.data) < 1:
+    print(result_get_folder.data)
+    if int(result_get_folder.data) < 3:
         hiss.sub_echo('Folder %s not found. Creating...' % settings.EFS_ROOT)
         exec_command = [
             '/bin/bash',
@@ -76,8 +77,8 @@ def copy_scripts():
     # Copy test chaincode to efs
     hiss.sub_echo('Copy test chaincode to efs')
     artifacts_path = os.path.abspath(os.path.join(
-        __package__, "../blockchain/artifacts"))
-    if not settings.k8s.cp_to_pod(podName=pods[0], namespace='default', source=artifacts_path, target='%s/admin/artifacts' % settings.EFS_ROOT):
+        __package__, "../blockchain/artifacts/src/chaincodes"))
+    if not settings.k8s.cp_to_pod(podName=pods[0], namespace='default', source=artifacts_path, target='%s/admin-v2/chaincodes' % settings.EFS_ROOT):
         return hiss.hiss('connot copy test chaincode to pod %s' % pods[0])
 
     return True

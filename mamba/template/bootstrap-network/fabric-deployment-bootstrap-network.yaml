@@ -5,6 +5,8 @@ metadata:
   namespace: {{ORDERER_DOMAIN}}
   name: bootstrap-network
 spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
   template:
     metadata:
       labels:
@@ -12,7 +14,7 @@ spec:
         tier: {{ORDERER_DOMAIN}}
     spec:
       restartPolicy: "Never"
-      suspend: "true"
+      backoffLimit: "0"
       containers:
       - name: bootstrap-network
         image: alpine:3.12.0
@@ -22,8 +24,8 @@ spec:
           - name: ADMIN_URL
             value: http://admin-v2-{{ORG_NAME}}.{{ORG_DOMAIN}}:4001
         command: ["sh"]
-        args:  ["-c", "apk add bash; apk add curl; tail -f /etc/hosts; ./scripts/bootstrap-network.sh 2>&1;"]
-        # args:  ["-c", "apk add bash; apk add curl; ./scripts/bootstrap-network.sh 2>&1;"]
+        # args:  ["-c", "apk add bash; apk add curl; tail -f /etc/hosts; ./scripts/bootstrap-network.sh 2>&1;"]
+        args:  ["-c", "apk add bash; apk add curl; ./scripts/bootstrap-network.sh 2>&1;"]
         volumeMounts:
           - name: rca-scripts
             mountPath: /scripts
