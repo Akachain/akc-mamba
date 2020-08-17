@@ -15,7 +15,7 @@ spec:
      restartPolicy: "Never"
      containers:
        - name: generate-ccp-{{ORG_NAME}}
-         image: alpine
+         image: alpine:3.12.0
          env:
           - name: ORG
             value: {{ORG_NAME}}

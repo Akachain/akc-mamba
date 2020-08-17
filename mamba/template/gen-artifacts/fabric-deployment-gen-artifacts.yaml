@@ -14,7 +14,7 @@ spec:
       restartPolicy: "Never"
       containers:
       - name: generate-artifacts
-        image: alpine
+        image: alpine:3.12.0
         command: ["sh"]
         # args:  ["-c", "ls -al /scripts/;"]
         args:  ["-c", "apk add bash; ./scripts/gen-network-config.sh 2>&1;"]
