@@ -3,7 +3,6 @@ import datetime
 import json
 import re
 import yaml
-from tika import parser
 from utils import hiss
 import settings
 
@@ -115,9 +114,3 @@ def get_peer_external_domain(peer, index_peer):
             return ''
     else:
         return hiss.hiss('peer: %s does not exists in env file' % peer)
-
-def replace_all_new_line(file_path):
-    parsered = parser.from_file(file_path)
-    content = parsered['content']
-    content = content.replace('\n', '\\n')
-    return content
