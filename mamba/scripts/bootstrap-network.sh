@@ -79,72 +79,72 @@ function main {
     done
   done
 
-  # # Package sample chaincode
-  # log "PACKAGE CHAINCODE"
-  # PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/packageCC   -H "content-type: application/json"   -d '{
-  #   "orgname":"'"${ORG}"'",
-  #   "chaincodePath":"chaincodes/fabcar",
-  #   "chaincodeId":"fabcar",
-  #   "chaincodeVersion":"1",
-  #   "chaincodeType":"golang",
-  #   "peerIndex": "0"
-  # }');
-  # logResult "$PACKAGE_CHAINCODE"
+  # Package sample chaincode
+  log "PACKAGE CHAINCODE"
+  PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/packageCC   -H "content-type: application/json"   -d '{
+    "orgname":"'"${ORG}"'",
+    "chaincodePath":"chaincodes/fabcar",
+    "chaincodeId":"fabcar",
+    "chaincodeVersion":"1",
+    "chaincodeType":"golang",
+    "peerIndex": "0"
+  }');
+  logResult "$PACKAGE_CHAINCODE"
 
-  # # Install and approve sample chaincode
-  # log "INSTALL CHAINCODE"
-  # for PEER_ORG in $PEER_ORGS
-  # do
-  #   INSTALL_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/install   -H "content-type: application/json"   -d '{
-  #     "orgname":"'"${PEER_ORG}"'",
-  #     "chaincodeName":"fabcar",
-  #     "chaincodePath":"fabcar.tar.gz",
-  #     "peerIndex":"0"
-  #   }');
-  #   logResult "$INSTALL_CHAINCODE"
+  # Install and approve sample chaincode
+  log "INSTALL CHAINCODE"
+  for PEER_ORG in $PEER_ORGS
+  do
+    INSTALL_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/install   -H "content-type: application/json"   -d '{
+      "orgname":"'"${PEER_ORG}"'",
+      "chaincodeName":"fabcar",
+      "chaincodePath":"fabcar.tar.gz",
+      "peerIndex":"0"
+    }');
+    logResult "$INSTALL_CHAINCODE"
 
-  #   log "APPROVE CHAINCODE"
-  #   QUERY_PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/queryInstalled   -H "content-type: application/json"   -d '{
-  #     "orgname":"'"${PEER_ORG}"'",
-  #     "peerIndex":"0
-  #   }');
-  #   logResult "$INSTALL_CHAINCODE"
-  # done
-  # # Package sample chaincode
-  # log "PACKAGE CHAINCODE"
-  # for PEER_ORG in $PEER_ORGS
-  # do
-  #   PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/packageCC   -H "content-type: application/json"   -d '{
-  #     "orgname":"'"${PEER_ORG}"'",
-  #     "chaincodePath":"chaincodes/fabcar/",
-  #     "chaincodeId":"fabcar1",
-  #     "chaincodeVersion":"v1.0",
-  #     "chaincodeType":"golang"
-  #   }');
-  #   logResult "$INSTALL_CHAINCODE"
-  # done
+    echo $QUERY_PACKAGE_CHAINCODE
+    log "QUERY PACKAGE CHAINCODE"
+    QUERY_PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/queryInstalled   -H "content-type: application/json"   -d '{
+      "orgname":"'"${PEER_ORG}"'",
+      "peerIndex":"0"
+    }' | jq -r '.data[0].packageId');
+    echo $QUERY_PACKAGE_CHAINCODE
 
-  # # Init sample chaincode
-  # log "INIT CHAINCODE"
-  # INIT_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/initchaincodes   -H "content-type: application/json"   -d '{
-  #   "orgname":"'"${PEER_ORG}"'",
-  #   "channelName":"'"${CHANNEL_NAME}"'",
-  #   "chaincodeId":"fabcar1",
-  #   "chaincodeVersion":"v1.0",
-  #   "chaincodeType":"golang",
-  #   "args":[]
-  # }');
-  # logResult "$INIT_CHAINCODE"
-  # sleep 3s
-  # # Invoke
-  # log "INVOKE CHAINCODE"
-  # INVOKE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/invokeChainCode   -H "content-type: application/json"   -d '{
-  #   "orgname":"'"${PEER_ORG}"'",
-  #   "channelName":"'"${CHANNEL_NAME}"'",
-  #   "chaincodeId":"fabcar1",
-  #   "args": ["CAR1", "a", "b", "c", "d"],
-  #   "fcn": "createCar"
-  # }');
-  # logResult "$INVOKE_CHAINCODE"
+    APPROVE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/approveForMyOrg   -H "content-type: application/json"   -d '{
+      "orgname":"'"${PEER_ORG}"'",
+      "peerIndex":"0",
+      "chaincodeName":"fabcar",
+      "chaincodeVersion":1,
+      "channelName":"'"${CHANNEL_NAME}"'",
+      "packageId":"'"${QUERY_PACKAGE_CHAINCODE}"'",
+      "ordererAddress":"'"${ORDERER_ADDRESS}"'"
+    }');
+    logResult "$APPROVE_CHAINCODE"
+  done
+
+  # Commit chaincode
+  log "COMMIT CHAINCODE"
+  COMMIT_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/commitChaincodeDefinition   -H "content-type: application/json"   -d '{
+    "chaincodeName":"fabcar",
+    "chaincodeVersion":1,
+    "channelName":"'"${CHANNEL_NAME}"'",
+    "target": "'"0 ${ORG}"'",
+    "ordererAddress": "'"${ORDERER_ADDRESS}"'"
+  }');
+  logResult "$COMMIT_CHAINCODE"
+
+  # Invoke sample chaincode
+  log "INVOKE CHAINCODE"
+  INVOKE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/invokeCLI   -H "content-type: application/json"   -d '{
+    "chaincodeName": "fabcar",
+    "channelName": "'"${CHANNEL_NAME}"'",
+    "target": "'"0 ${ORG}"'",
+    "ordererAddress": "'"${ORDERER_ADDRESS}"'",
+    "args": [],
+    "fcn": "initLedger",
+    "isInit": "0"
+  }');
+  logResult "$INVOKE_CHAINCODE"
 }
 main

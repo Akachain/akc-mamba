@@ -16,24 +16,23 @@ def setup_admin(org):
     orderer_domains = settings.ORDERER_DOMAINS.split(' ')
 
     # Create application artifact folder
-    # hiss.echo('Create application artifact folder')
-    # ## Find efs pod
-    # pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
-    # if not pods:
-    #     return hiss.hiss('cannot find tiller pod')
+    hiss.echo('Create wallet folder')
+    ## Find efs pod
+    pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
+    if not pods:
+        return hiss.hiss('cannot find tiller pod')
 
-    # mkdir_cmd = ('mkdir -p '+settings.EFS_ROOT+'/admin/crypto-path;'
-    # 'mkdir -p '+settings.EFS_ROOT+'/admin/crypto-store;')
+    mkdir_cmd = ('mkdir -p '+settings.EFS_ROOT+'/admin-v2/wallet;')
 
-    ## Exec command
-    # exec_command = [
-    #     '/bin/bash',
-    #     '-c',
-    #     '%s'  % (mkdir_cmd)]
+    # Exec command
+    exec_command = [
+        '/bin/bash',
+        '-c',
+        '%s'  % (mkdir_cmd)]
 
-    # result_get_folder = settings.k8s.exec_pod(
-    #     podName=pods[0], namespace="default", command=exec_command)
-    # hiss.sub_echo(result_get_folder.data)
+    result_get_folder = settings.k8s.exec_pod(
+        podName=pods[0], namespace="default", command=exec_command)
+    hiss.sub_echo(result_get_folder.data)
 
     # Create temp folder & namespace
     settings.k8s.prereqs(domain)
