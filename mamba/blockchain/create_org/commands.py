@@ -43,6 +43,8 @@ def create_new_org():
     # Run jobs to register peers
     reg_all_peer()
 
+    time.sleep(1)
+
     # Run jobs to enroll peers
     enroll_all_peer()
 

@@ -28,7 +28,8 @@ def fetch_config(org=None, domain=None):
         'CHANNEL_NAME': settings.CHANNEL_NAME,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
     k8s_template_file = '%s/add-org/2fetch-channel.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(
@@ -43,7 +44,8 @@ def modify_config(domain=None):
         'NEW_ORG_NAME': settings.NEW_ORG_NAME,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
     k8s_template_file = '%s/add-org/3modifyingorgmaterial.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(
@@ -59,7 +61,8 @@ def create_config_update_pb(domain=None):
         'CHANNEL_NAME': settings.CHANNEL_NAME,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
     k8s_template_file = '%s/add-org/4createconfigupdate.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(
@@ -78,7 +81,8 @@ def update_channel_config(org=None, domain=None):
         'ORDERER_DOMAIN': settings.ORDERER_DOMAINS,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
     k8s_template_file = '%s/add-org/6updatechannelconfig.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(
