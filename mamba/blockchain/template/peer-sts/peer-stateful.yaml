@@ -91,7 +91,7 @@ spec:
         command: ["sh", "-c", "peer node start"]
         env:
         - name: CORE_CHAINCODE_BUILDER
-          value: hyperledger/fabric-ccenv:{{FABRIC_TAG}}
+          value: hyperledger/fabric-ccenv:1.4.1
         - name: CORE_PEER_ID
           value: peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}
         - name: CORE_PEER_GOSSIP_BOOTSTRAP

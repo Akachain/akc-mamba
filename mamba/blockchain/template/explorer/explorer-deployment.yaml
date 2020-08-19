@@ -45,16 +45,16 @@ spec:
       - name: crypto-config
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/crypto-config/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/crypto-config/
       - name: explorer-config
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/explorer-config/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/explorer-config/
       - name: crypto-store-efs
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-store/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-store/
       - name: crypto-path-efs
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-path/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-path/
