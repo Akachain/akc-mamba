@@ -2,7 +2,7 @@ import click
 from kubernetes import client
 from os import path
 from utils import hiss, util
-import settings
+from settings import settings
 
 def deploy_external_cc(peer, cc_name, cc_image, cc_package_id):
     # Get domain
