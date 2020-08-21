@@ -39,7 +39,7 @@ def copy_scripts():
     # Copy config to scripts/env
     hiss.sub_echo('Copy config to scripts/env')
     config_file = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
-    env_script_File = expanduser('~/.akachain/akc-mamba/mamba/blockchain/scripts/env-scripts.sh')
+    env_script_File = expanduser('~/.akachain/akc-mamba/mamba/scripts/env-scripts.sh')
     copyfile(config_file, env_script_File)
 
     # Remove old script folder in efs
@@ -56,7 +56,7 @@ def copy_scripts():
 
     # Copy scripts folder to efs
     hiss.sub_echo('Copy scripts folder to efs')
-    script_path = expanduser('~/.akachain/akc-mamba/mamba/blockchain/scripts')
+    script_path = expanduser('~/.akachain/akc-mamba/mamba/scripts')
     if not settings.k8s.cp_to_pod(podName=pods[0], namespace='default', source=script_path, target='%s/akc-ca-scripts' % settings.EFS_ROOT):
         return hiss.hiss('connot copy scripts folder to pod %s' % pods[0])
 

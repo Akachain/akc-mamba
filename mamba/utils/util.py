@@ -57,7 +57,7 @@ def get_temp_path():
 
 
 def get_k8s_template_path():
-    return expanduser('~/.akachain/akc-mamba/mamba/blockchain/template')
+    return expanduser('~/.akachain/akc-mamba/mamba/template')
 
 
 def split_timenow_utc():
