@@ -84,7 +84,7 @@ function main {
   PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/packageCC   -H "content-type: application/json"   -d '{
     "orgname":"'"${ORG}"'",
     "chaincodePath":"chaincodes/fabcar",
-    "chaincodeId":"fabcar",
+    "chaincodeName":"fabcar",
     "chaincodeVersion":"1",
     "chaincodeType":"golang",
     "peerIndex": "0"
@@ -147,4 +147,6 @@ function main {
   }');
   logResult "$INVOKE_CHAINCODE"
 }
+
+apk add jq
 main
