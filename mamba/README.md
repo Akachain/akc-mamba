@@ -2,45 +2,37 @@
 
 ## 1. Installation Instructions
 
-### a. Edit configuration files
-First, copy the content of `config/operator.env-template` to be `config/.env`. This file will contain all modifiable configuration of Mamba.
+### a. Install AKC-Mamba
+Install AKC-Mamba with
 
 ```
-cp ./config/operator.env-template ./config/.env
-```
-
-Update configuration parameters in `config/.env`, the file content is pretty much self-explained.
-
-### b. Install required packages
-Install required Python3 modules with
-
-```
-pip3 install -r requirements.txt
+pip3 install akc-mamba
 ```
 
 We now can use the Mamba tool to prepare required helm and k8s components
 
 ```
 find . -type f -iname "*.sh" -exec chmod +x {} \;
-python3 mamba.py environment
+mamba environment
 ```
+Configuration parameters in `~/.akachain/akc-mamba/mamba/config/.env`, the file content is pretty much self-explained.
 
-### c. Deploy and bootstrap network
+### b. Deploy and bootstrap network
 
 ```
-python3 mamba.py start
+mamba start
 ```
 
 The `mamba start` command executes a series of sub commands that installs various network components. For more information on each command for individual components, please refer to help section
 
 ```
-python3 mamba.py help
+mamba --help
 ```
 
 To terminate the network, just run
 
 ```
-python3 mamba.py terminate
+mamba terminate
 ```
 
 ## 2. Development Guide
@@ -59,13 +51,14 @@ Mamba makes use of [Click_](http://click.palletsprojects.com/en/7.x/), an elegan
 │   ├── kube.py
 │
 ├── mamba.py
-├── settings.py
+├── settings
+├   ├──settings.py
 
 ```
 
 There are 4 main components: 
 - mamba.py : The bootstrap instance module of Mamba 
-- settings.py : Contains global variables that are shared accross all sub modules
+- settings/settings.py : Contains global variables that are shared accross all sub modules
 - command_group : Each command group is separated into its own directory.
 - utils : helper functions that must be initialized via settings.py
 
