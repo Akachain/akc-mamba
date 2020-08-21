@@ -22,7 +22,6 @@ def copy_scripts():
 
     result_get_folder = settings.k8s.exec_pod(
         podName=pods[0], namespace="default", command=exec_command)
-    print(result_get_folder.data)
     if int(result_get_folder.data) < 3:
         hiss.sub_echo('Folder %s not found. Creating...' % settings.EFS_ROOT)
         exec_command = [
