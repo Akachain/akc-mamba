@@ -14,7 +14,7 @@
     ```
 ### b. Manual
 - You should prepare files bellow:
-- ```connection.json```: Connection to the external chaincode service:
+  - ```connection.json```: Connection to the external chaincode service:
     ```
     {
         "address": "chaincode-fabcar-org1.akc:7052",
@@ -26,11 +26,11 @@
         "root_cert": "-----BEGIN CERTIFICATE---- ... -----END CERTIFICATE-----"
     }
     ``` 
-- ```metadata.json```: Includes information of chaincode
+  - ```metadata.json```: Includes information of chaincode
     ```
     {"path":"","type":"external","label":"fabcar"}
     ```
-  - Package: With the Fabric v2.0 chaincode lifecycle, chaincode is packaged and installed in a .tar.gz format.
+- Package: With the Fabric v2.0 chaincode lifecycle, chaincode is packaged and installed in a .tar.gz format.
     ```
     tar cfz code.tar.gz connection.json
     tar cfz fabcar.tgz code.tar.gz metadata.json
