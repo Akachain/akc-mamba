@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORDERER_DOMAIN}}
+  name: channel-artifacts
+spec:
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: orderer
+       org: {{ORDERER_DOMAIN}}
+       name: channel-artifacts
+    spec:
+     restartPolicy: "Never"
+     containers:
+       - name: channel-artifacts
+         image: hyperledger/fabric-tools:{{FABRIC_TAG}}
+         command: ["sh"]
+         args:  ["-c", "/scripts/gen-channel-artifacts.sh 2>&1;"]
+         volumeMounts:
+          - mountPath: /scripts
+            name: rca-scripts
+          - mountPath: /data
+            name: rca-data
+     volumes:
+       - name: rca-scripts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+       - name: rca-data
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/

@@ -1,0 +1,47 @@
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORG_DOMAIN}}
+  name: modifyingorgmaterial
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      name: modifyingorgmaterial
+    spec:
+      restartPolicy: "Never"
+      containers:
+      - name: modifyingorgmaterial
+        image: hyperledger/fabric-tools:{{FABRIC_TAG}}
+        command:
+        - /bin/sh
+        - -c
+        - |
+          set -xe
+          apt-get -y update && apt-get -y install jq;
+          cd /shared;
+          jq -s '.[0] * {"channel_group":{"groups":{"Application":{"groups": {"{{NEW_ORG_NAME}}":.[1]}}}}}' ${OUTPUT_JSON} ${ORG_JSON} > modified-config.json;
+          RETURN_CODE=$?
+          if [ $RETURN_CODE -eq "0" ]
+          then
+            echo 'Success'
+          else
+            echo 'Failed'
+          fi
+        env:
+        - name: NEW_ORG_MSP
+          value: {{NEW_ORG_NAME}}MSP
+        - name: OUTPUT_JSON
+          value: config-channel.json
+        - name: ORG_JSON
+          value: {{NEW_ORG_NAME}}.json
+        volumeMounts:
+          - name: crypto-config
+            mountPath: /shared
+      volumes:
+      - name: crypto-config
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data

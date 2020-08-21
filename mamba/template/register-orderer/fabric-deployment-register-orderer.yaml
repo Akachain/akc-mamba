@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORDERER_DOMAIN}}
+  name: register-o-{{ORDERER_ORG}}
+spec:
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: orderer
+       org: {{ORDERER_DOMAIN}}
+       name: register-o-{{ORDERER_ORG}}
+    spec:
+     restartPolicy: "Never"
+     containers:
+       - name: register-o-{{ORDERER_ORG}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
+         env:
+          - name: ORDERERORG
+            value: {{ORDERER_ORG}}
+         command: ["sh"]
+         args:  ["-c", "/scripts/register-orderer.sh 2>&1;"]
+         volumeMounts:
+          - mountPath: /scripts
+            name: rca-scripts
+          - mountPath: /data
+            name: rca-data
+     volumes:
+       - name: rca-scripts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+       - name: rca-data
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/

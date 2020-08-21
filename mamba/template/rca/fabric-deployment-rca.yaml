@@ -1,0 +1,110 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{ORG}}
+  name: {{RCA_NAME}}
+spec:
+  serviceName: {{RCA_NAME}}
+  replicas: 1
+  selector:
+    matchLabels:
+       app: hyperledger
+       role: ca
+       org: {{ORG}}
+       name: {{RCA_NAME}}
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: ca
+       org: {{ORG}}
+       name: {{RCA_NAME}}
+    spec:
+     containers:
+       - name: {{RCA_NAME}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
+         env:
+         - name:  FABRIC_CA_SERVER_HOME
+           value: /etc/hyperledger/fabric-ca
+         - name:  FABRIC_CA_SERVER_TLS_ENABLED
+           value: "true"
+         - name:  FABRIC_CA_SERVER_CSR_CN
+           value: {{RCA_NAME}}.{{ORG}}
+         - name:  FABRIC_CA_SERVER_CSR_HOSTS
+           value: {{RCA_NAME}}.{{ORG}}
+         - name:  FABRIC_CA_SERVER_DEBUG
+           value: "true"
+         - name:  BOOTSTRAP_USER_PASS
+           value: {{RCA_NAME}}-admin:{{RCA_NAME}}-adminpw
+         - name:  TARGET_CERTFILE
+           value: /data/{{RCA_NAME}}-cert.pem
+         - name:  FABRIC_ORGS
+           value: "{{FABRIC_ORGS}}"
+         ports:
+          - containerPort: 7054
+         command: ["sh"]
+         args:  ["-c", "/scripts/start-root-ca.sh 2>&1"]
+         volumeMounts:
+          - mountPath: /etc/hyperledger/fabric-ca
+            name: {{RCA_NAME}}-pvc
+          - mountPath: /scripts
+            name: rca-scripts
+          - mountPath: /data
+            name: rca-data
+     volumes:
+       - name: rca-scripts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+       - name: rca-data
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+  volumeClaimTemplates:
+  - metadata:
+      name: {{RCA_NAME}}-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{STORAGE_CLASS}}
+      resources:
+        requests:
+          storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ORG}}
+  name: {{RCA_NAME}}
+spec:
+ selector:
+   app: hyperledger
+   role: ca
+   org: {{ORG}}
+   name: {{RCA_NAME}}
+ type: NodePort
+ ports:
+   - name: endpoint
+     protocol: TCP
+     port: 7054
+     targetPort: 7054
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: {{RCA_NAME}}-nlb
+#   namespace: {{ORG}}
+#   annotations:
+#     service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+# spec:
+#   selector:
+#     app: hyperledger
+#     role: ca
+#     org: {{ORG}}
+#     name: {{RCA_NAME}}
+#   ports:
+#   - name: endpoint
+#     protocol: TCP
+#     port: 7054
+#     targetPort: 7054
+#   type: LoadBalancer

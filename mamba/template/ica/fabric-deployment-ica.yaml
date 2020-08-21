@@ -1,0 +1,96 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{ICA_DOMAIN}}
+  name: {{ICA_NAME}}
+spec:
+  serviceName: {{ICA_NAME}}
+  replicas: 1
+  selector:
+    matchLabels:
+       app: hyperledger
+       role: ca
+       org: {{ICA_DOMAIN}}
+       name: {{ICA_NAME}}
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: ca
+       org:  {{ICA_DOMAIN}}
+       name: {{ICA_NAME}}
+    spec:
+     containers:
+       - name: {{ICA_NAME}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
+         env:
+         - name:  FABRIC_CA_SERVER_HOME
+           value: /etc/hyperledger/fabric-ca
+         - name:  FABRIC_CA_SERVER_TLS_ENABLED
+           value: "true"
+         - name:  FABRIC_CA_SERVER_CA_NAME
+           value: {{ICA_NAME}}.{{ICA_DOMAIN}}
+         - name:  FABRIC_CA_SERVER_CSR_HOSTS
+           value: {{ICA_NAME}}.{{ICA_DOMAIN}}
+         - name:  FABRIC_CA_SERVER_DEBUG
+           value: "true"
+         - name:  BOOTSTRAP_USER_PASS
+           value: {{ICA_NAME}}-admin:{{ICA_NAME}}-adminpw
+         - name:  TARGET_CHAINFILE
+           value: /data/{{ICA_NAME}}-ca-chain.pem
+        #  - name:  FABRIC_ORGS
+        #    value: {{FABRIC_ORG}}
+         - name:  FABRIC_CA_SERVER_INTERMEDIATE_TLS_CERTFILES
+           value: /data/{{RCA_NAME}}-cert.pem
+         - name:  PARENT_URL
+           value: https://{{RCA_NAME}}-admin:{{RCA_NAME}}-adminpw@{{RCA_HOST}}:7054
+         - name:  ORG
+           value: {{ORG}}
+         ports:
+          - containerPort: 7054
+         command: ["sh"]
+         args:  ["-c", "/scripts/start-intermediate-ca.sh 2>&1"]
+         volumeMounts:
+          - mountPath: /etc/hyperledger/fabric-ca
+            name: {{ICA_NAME}}-pvc
+          - mountPath: /scripts
+            name: scripts
+          - mountPath: /data
+            name: data
+     volumes:
+       - name: scripts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+       - name: data
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ICA_NAME}}-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{STORAGE_CLASS}}
+      resources:
+        requests:
+          storage: 3Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ICA_DOMAIN}}
+  name: {{ICA_NAME}}
+spec:
+ selector:
+   app: hyperledger
+   role: ca
+   org: {{ICA_DOMAIN}}
+   name: {{ICA_NAME}}
+ type: NodePort
+ ports:
+   - name: endpoint
+     protocol: TCP
+     port: 7054
+     targetPort: 7054
