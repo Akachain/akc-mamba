@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{REG_DOMAIN}}
+  name: register-org-{{ORG}}
+spec:
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: peer
+       org: {{REG_DOMAIN}}
+       name: register-org-{{ORG}}
+    spec:
+     restartPolicy: "Never"
+     containers:
+       - name: register-org-{{ORG}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
+         env:
+          - name: ORG
+            value: {{ORG}}
+         command: ["sh"]
+         args:  ["-c", "/scripts/register-org.sh 2>&1;"]
+         volumeMounts:
+          - mountPath: /scripts
+            name: scripts
+          - mountPath: /data
+            name: data
+     volumes:
+       - name: scripts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+       - name: data
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/

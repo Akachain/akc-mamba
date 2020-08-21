@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORG_DOMAIN}}
+  name: generate-ccp-{{ORG_NAME}}
+spec:
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: peer
+       org: {{ORG_NAME}}
+       name: generate-ccp-{{ORG_NAME}}
+    spec:
+     restartPolicy: "Never"
+     containers:
+       - name: generate-ccp-{{ORG_NAME}}
+         image: alpine:3.12.0
+         env:
+          - name: ORG
+            value: {{ORG_NAME}}
+         command: ["sh"]
+         args:  ["-c", "apk add bash; ./scripts/generate-ccp.sh 2>&1;"]
+         volumeMounts:
+          - mountPath: /scripts
+            name: scripts
+          - mountPath: /data
+            name: data
+          - mountPath: /shared/admin-v2/artifacts
+            name: artifacts
+     volumes:
+       - name: scripts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+       - name: data
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+       - name: artifacts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin-v2/artifacts/

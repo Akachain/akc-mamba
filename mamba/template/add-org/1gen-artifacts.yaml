@@ -1,0 +1,35 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORG_DOMAIN}}
+  name: gen-artifacts
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      name: gen-artifacts
+    spec:
+      restartPolicy: "Never"
+      containers:
+      - name: gen-artifacts
+        image: hyperledger/fabric-tools:{{FABRIC_TAG}}
+        command: 
+        - /bin/sh 
+        - -c 
+        - |
+          set -xe
+          apt-get -y update && apt-get -y install jq; 
+          cd /data;
+          export FABRIC_CFG_PATH=$PWD;
+          cp /data/add-org/{{ORG_DOMAIN}}/configtx.yaml configtx.yaml;
+          configtxgen -printOrg {{ORG_NAME}} > {{ORG_NAME}}.json;
+          cat {{ORG_NAME}}.json;
+        volumeMounts:
+        - mountPath: /data
+          name: sharedvolume
+      volumes:
+      - name: sharedvolume
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data

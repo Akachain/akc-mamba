@@ -17,6 +17,7 @@ def reg_orderer(orderer):
     dict_env = {
         'ORDERER_ORG': orderer,
         'ORDERER_DOMAIN': domain,
+        'FABRIC_CA_TAG': settings.FABRIC_CA_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND,

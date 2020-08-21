@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{ORG_DOMAIN}}
+  name: admin-v2-{{ORG_NAME}}
+spec:
+  serviceName: admin-v2-{{ORG_NAME}}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-v2-{{ORG_NAME}}
+      tier: {{ORG_DOMAIN}}
+  template:
+    metadata:
+      labels:
+        app: admin-v2-{{ORG_NAME}}
+        tier: {{ORG_DOMAIN}}
+    spec:
+      containers:
+      - name: admin-v2-{{ORG_NAME}}
+        image: docker.pkg.github.com/akachain/akc-admin/develop:2.0
+        ports:  
+        - containerPort: 4001
+        imagePullPolicy: Always
+        env:
+        - name: CRYPTO_TYPE
+          value: mamba
+        - name: ORGS
+          value: "{{ORGDERER_NAME}} {{ORG_NAME}}"
+        - name: DOMAINS
+          value: "{{ORDERER_DOMAIN}} {{ORG_DOMAIN}}"
+        - name: NODE_ENV
+          value: development
+        - name: GOPATH
+          value: /go
+        - name: CORE_VM_ENDPOINT
+          value: unix:///host/var/run/docker.sock
+        - name: FABRIC_LOGGING_SPEC
+          value: INFO
+        - name: CORE_PEER_ID
+          value: cli
+        - name: CORE_PEER_ADDRESS
+          value: peer0-{{ORG_NAME}}.{{ORG_DOMAIN}}:7051
+        - name: CORE_PEER_LOCALMSPID
+          value: {{ORG_NAME}}MSP
+        - name: CORE_PEER_TLS_ENABLED
+          value: "true"
+        - name: CORE_PEER_TLS_CERT_FILE
+          value: /shared/crypto-config/{{ORG_NAME}}.{{ORG_DOMAIN}}/peers/peer0-{{ORG_NAME}}.{{ORG_DOMAIN}}/tls/server.crt
+        - name: CORE_PEER_TLS_KEY_FILE
+          value: /shared/crypto-config/{{ORG_NAME}}.{{ORG_DOMAIN}}/peers/peer0-{{ORG_NAME}}.{{ORG_DOMAIN}}/tls/server.key
+        - name: CORE_PEER_TLS_ROOTCERT_FILE
+          value: /shared/crypto-config/{{ORG_NAME}}.{{ORG_DOMAIN}}/peers/peer0-{{ORG_NAME}}.{{ORG_DOMAIN}}/tls/tlsintermediatecerts/tls-ica-{{ORG_NAME}}-{{ORG_DOMAIN}}-7054.pem
+        - name: CORE_PEER_MSPCONFIGPATH
+          value: /shared/crypto-config/{{ORG_NAME}}.{{ORG_DOMAIN}}/users/admin/msp
+        - name: ORDERER_CA
+          value: /shared/crypto-config/{{ORGDERER_NAME}}.{{ORDERER_DOMAIN}}/orderers/orderer0-{{ORGDERER_NAME}}.{{ORDERER_DOMAIN}}/msp/tlsintermediatecerts/ica-{{ORGDERER_NAME}}-{{ORDERER_DOMAIN}}-7054.pem
+        volumeMounts:
+          - name: akc-ca-data
+            mountPath: /shared/
+          - name: chaincodes
+            mountPath: /go/src/chaincodes
+          - name: artifacts-efs
+            mountPath: /data/app/artifacts/
+      volumes:
+      - name: akc-ca-data
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+      - name: chaincodes
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin-v2/chaincodes/
+      - name: artifacts-efs
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin-v2/artifacts/
+      imagePullSecrets:
+      - name: mamba
+      

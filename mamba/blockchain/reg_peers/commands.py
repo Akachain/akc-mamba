@@ -17,6 +17,7 @@ def reg_peer(org):
     dict_env = {
         'PEER_ORG': org,
         'PEER_DOMAIN': domain,
+        'FABRIC_CA_TAG': settings.FABRIC_CA_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND,
@@ -36,13 +37,13 @@ def del_reg_peer(org):
     return settings.k8s.delete_job(name=jobname, namespace=domain)
 
 def reg_all_peer():
-    orgs = settings.ORGS.split(' ')
+    orgs = settings.PEER_ORGS.split(' ')
     # TODO: Multiprocess
     for org in orgs:
         reg_peer(org)
 
 def del_all_reg_peer():
-    orgs = settings.ORGS.split(' ')
+    orgs = settings.PEER_ORGS.split(' ')
     # TODO: Multiprocess
     for org in orgs:
         del_reg_peer(org)

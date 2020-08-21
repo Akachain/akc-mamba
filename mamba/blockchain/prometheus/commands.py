@@ -26,6 +26,7 @@ def generate_prom_config():
     orderers = settings.ORDERER_ORGS.split(' ')
     for orderer in orderers:
         domain = util.get_domain(orderer)
+        settings.k8s.prereqs(domain)
         for peer in range(int(settings.NUM_ORDERERS)):
             if len(prom_target) > 0:
                 prom_target += ','
@@ -92,7 +93,8 @@ def setup_prometheus():
         'DOMAIN': prom_namespace,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
 
     # Deploy prometheus sts

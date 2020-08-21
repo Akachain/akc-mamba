@@ -1,0 +1,101 @@
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORG_DOMAIN}}
+  name: createconfigupdate 
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      name: createconfigupdate 
+    spec:
+      restartPolicy: "Never"
+      containers:
+      - name: createconfigupdate 
+        image: hyperledger/fabric-tools:{{FABRIC_TAG}}
+        command: 
+        - /bin/sh
+        - -c
+        - |
+          set -xe
+          cd /shared/;
+          apt-get -y update && apt-get -y install jq;
+          configtxlator proto_encode --input ${ORIGINAL_JSON} --type common.Config > ${ORIGINAL_PB};
+          RETURN_CODE=$?
+          if [ $RETURN_CODE -eq "0" ]
+          then
+            echo 'Success'
+          else
+            echo 'Failed'
+          fi
+          configtxlator proto_encode --input ${MODIFIED_JSON} --type common.Config > ${MODIFIED_PB};
+          RETURN_CODE1=$?
+          if [ $RETURN_CODE1 -eq "0" ]
+          then
+            echo 'Success1'
+          else
+            echo 'Failed1'
+          fi
+          sleep 1;
+          ls /shared
+          configtxlator compute_update --channel_id ${CHANNEL_NAME} --original ${ORIGINAL_PB} --updated ${MODIFIED_PB} > ${UPDATED_PB};
+          RETURN_CODE2=$?
+          if [ $RETURN_CODE2 -eq "0" ]
+          then
+            echo 'Success2'
+          else
+            echo 'Failed2'
+          fi
+          configtxlator proto_decode --input ${UPDATED_PB}  --type common.ConfigUpdate > ${UPDATED_JSON};
+          RETURN_CODE3=$?
+          if [ $RETURN_CODE3 -eq "0" ]
+          then
+            echo 'Success3'
+          else
+            echo 'Failed3'
+          fi
+          echo '{"payload":{"header":{"channel_header":{"channel_id":"'$CHANNEL_NAME'", "type":2}},"data":{"config_update":'$(cat $UPDATED_JSON)'}}}' | jq . > ${UPDATED_ENVELOPE_JSON};
+          RETURN_CODE4=$?
+          if [ $RETURN_CODE4 -eq "0" ]
+          then
+            echo 'Success4'
+          else
+            echo 'Failed4'
+          fi
+          configtxlator proto_encode --input ${UPDATED_ENVELOPE_JSON} --type common.Envelope > "${UPDATED_ENVELOPE_PB}";
+          RETURN_CODE5=$?
+          if [ $RETURN_CODE5 -eq "0" ]
+          then
+            echo 'Success5'
+          else
+            echo 'Failed5'
+          fi
+        env:
+        - name: CHANNEL_NAME
+          value: {{CHANNEL_NAME}}
+        - name: ORIGINAL_JSON
+          value: config-channel.json
+        - name: ORIGINAL_PB
+          value: original-config.pb
+        - name: MODIFIED_JSON
+          value: modified-config.json
+        - name: MODIFIED_PB
+          value: modified-config.pb
+        - name: UPDATED_PB
+          value: config-update.pb
+        - name: UPDATED_JSON
+          value: config-update.json
+        - name: UPDATED_ENVELOPE_JSON
+          value: config-update-in-envelope.json
+        - name: UPDATED_ENVELOPE_PB
+          value: config-update-in-envelope.pb
+        volumeMounts:
+          - name: crypto-config
+            mountPath: /shared
+      volumes:
+      - name: crypto-config
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data
