@@ -40,4 +40,4 @@ spec:
       - name: prometheus-config
         nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/promconfig/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/promconfig/

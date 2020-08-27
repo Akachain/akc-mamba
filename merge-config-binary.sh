@@ -1,0 +1,1 @@
+git checkout --patch master $(git ls-files '*.yaml' '*.sh' '*.yml')
