@@ -178,5 +178,5 @@ function environment {
 
 # environment
 source ./config/.env
-source ./blockchain/scripts/utilities.sh
+source ./scripts/utilities.sh
 environment
