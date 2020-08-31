@@ -40,21 +40,21 @@ apiVersion: v1
 kind: Service
 metadata:
   namespace: {{PEER_DOMAIN}}
-  name: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}
+  name: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
 spec:
   selector:
     app: hyperledger
-    role: {{STATEDB}}
-    statedb-id: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}
+    role: couchdb
+    couchdb-id: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
     org: {{PEER_DOMAIN}}
     type: stateful
   type: NodePort
   ports:
-  - name: {{STATEDB}}-port
+  - name: couchdb-port
     protocol: TCP
-    port: {{STATEDB_PORT}}
-    targetPort: {{STATEDB_PORT}}
-  - name: {{STATEDB}}2-port
+    port: 5984
+    targetPort: 5984
+  - name: couchdb2-port
     protocol: TCP
-    port: {{STATEDB_PORT2}}
-    targetPort: {{STATEDB_PORT2}}
+    port: 5986
+    targetPort: 5986
