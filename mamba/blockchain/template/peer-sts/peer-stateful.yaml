@@ -1,91 +1,33 @@
 ---
-  # apiVersion: apps/v1
-  # kind: StatefulSet
-  # metadata:
-  #   namespace: {{PEER_DOMAIN}}
-  #   name: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
-  # spec:
-  #   serviceName: couchdb{{PEER_INDEX}}
-  #   replicas: 1
-  #   selector:
-  #     matchLabels:
-  #       app: hyperledger
-  #       role: couchdb
-  #       couchdb-id: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
-  #       org: {{PEER_DOMAIN}}
-  #       type: stateful
-  #   template:
-  #     metadata:
-  #       labels:
-  #         app: hyperledger
-  #         role: couchdb
-  #         couchdb-id: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
-  #         org: {{PEER_DOMAIN}}
-  #         type: stateful
-  #     spec:
-  #       containers:
-  #       - name: couchdb
-  #         image: couchdb:2.3.1
-  #         ports:
-  #           - containerPort: 5984
-  #         # resources:
-  #         #   requests:
-  #         #     # memory: "3000Mi"
-  #         #     # cpu: "2000m"
-  #         #     memory: "150Mi"
-  #         #     cpu: "100m"
-  #         volumeMounts:
-  #         - name: couch{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
-  #           mountPath: /opt/couchdb/data
-  #         env:
-  #         - name: COUCHDB_USER
-  #           value: admin
-  #         - name: COUCHDB_PASSWORD
-  #           value: -pbkdf2-847043acc65626c8eb98da6d78682fbc493a1787,f7b1a3e4b624f4f0bbfe87e96841eda0,10
-  #         - name: COUCHDB_SECRET
-  #           value: 0123456789abcdef0123456789abcdef
-  #         - name: NODENAME
-  #           value: couchdb{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}
-  #   volumeClaimTemplates:
-  #   - metadata:
-  #       name: couch{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
-  #     spec:
-  #       accessModes: [ "ReadWriteOnce" ]
-  #       storageClassName: {{STORAGE_CLASS}}
-  #       resources:
-  #         requests:
-  #           storage: 10Gi
-# ---
-# ---
   apiVersion: apps/v1
   kind: StatefulSet
   metadata:
     namespace: {{PEER_DOMAIN}}
-    name: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}
+    name: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
   spec:
-    serviceName: {{STATEDB}}{{PEER_INDEX}}
+    serviceName: couchdb{{PEER_INDEX}}
     replicas: 1
     selector:
       matchLabels:
         app: hyperledger
-        role: {{STATEDB}}
-        statedb-id: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}
+        role: couchdb
+        couchdb-id: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
         org: {{PEER_DOMAIN}}
         type: stateful
     template:
       metadata:
         labels:
           app: hyperledger
-          role: {{STATEDB}}
-          statedb-id: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}
+          role: couchdb
+          couchdb-id: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
           org: {{PEER_DOMAIN}}
           type: stateful
       spec:
         containers:
-        - name: {{STATEDB}}
-          image: {{STATEDB_IMAGE}}
+        - name: couchdb
+          image: couchdb:2.3.1
           ports:
-            - containerPort: {{STATEDB_PORT}}
+            - containerPort: 5984
           # resources:
           #   requests:
           #     # memory: "3000Mi"
@@ -93,20 +35,20 @@
           #     memory: "150Mi"
           #     cpu: "100m"
           volumeMounts:
-          - name: {{STATEDB}}{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
-            mountPath: /opt/{{STATEDB}}/data
+          - name: couch{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
+            mountPath: /opt/couchdb/data
           env:
-          - name: {{STATEDB_INIT_USER_NAME}}
+          - name: COUCHDB_USER
             value: admin
-          - name: {{STATEDB_INIT_PASSWORD_NAME}}
-            value: passwordtest
-          - name: {{STATEDB_INIT_SECRET_NAME}}
+          - name: COUCHDB_PASSWORD
+            value: -pbkdf2-847043acc65626c8eb98da6d78682fbc493a1787,f7b1a3e4b624f4f0bbfe87e96841eda0,10
+          - name: COUCHDB_SECRET
             value: 0123456789abcdef0123456789abcdef
           - name: NODENAME
-            value: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}
+            value: couchdb{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}
     volumeClaimTemplates:
     - metadata:
-        name: {{STATEDB}}{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
+        name: couch{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
       spec:
         accessModes: [ "ReadWriteOnce" ]
         storageClassName: {{STORAGE_CLASS}}
@@ -140,18 +82,16 @@ spec:
     spec:
       containers:
       - name: peer{{PEER_INDEX}}-{{PEER_ORG}}
-        image: {{PEER_IMAGE}}
+        image: hyperledger/fabric-peer:1.4.1
         # resources:
         #   requests:
         #     # memory: "3000Mi"
         #     memory: "300Mi"
         #     cpu: "200m"
-        # command: ["sh", "-c", "tail -f /etc/hosts"]
         command: ["sh", "-c", "peer node start"]
         env:
-        - name: FABRIC_LOGGING_SPEC
-          #value: info
-          value: DEBUG
+        - name: CORE_CHAINCODE_BUILDER
+          value: hyperledger/fabric-ccenv:{{FABRIC_TAG}}
         - name: CORE_PEER_ID
           value: peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}
         - name: CORE_PEER_GOSSIP_BOOTSTRAP
@@ -185,17 +125,17 @@ spec:
         - name: CORE_PEER_TLS_ROOTCERT_FILE
           value: /shared/peers/peer{{PEER_INDEX}}.{{PEER_DOMAIN}}/tls/tlsca.{{PEER_DOMAIN}}-cert.pem
         - name: CORE_LEDGER_STATE_STATEDATABASE
-          value: {{STATEDB}}
+          value: CouchDB
         - name: FABRIC_CFG_PATH
           value: /etc/hyperledger/fabric/
         - name: GODEBUG
           value: "netdns=go"
-        - name: {{CORE_LEDGER_STATE_CONFIG_ADDRESS}}
-          value: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}:{{STATEDB_PORT}}
-        - name: {{CORE_LEDGER_STATE_CONFIG_USERNAME}}
+        - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+          value: couchdb{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}:5984
+        - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
           value: admin
-        - name: {{CORE_LEDGER_STATE_CONFIG_PASSWORD}}
-          value: passwordtest
+        - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+          value: password
         - name: CORE_PEER_ADDRESSAUTODETECT
           value: "true"
         - name: CORE_OPERATIONS_LISTENADDRESS
@@ -233,3 +173,4 @@ spec:
       resources:
         requests:
           storage: 10Gi
+
