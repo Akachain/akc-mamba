@@ -1,0 +1,35 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORDERER_DOMAIN}}
+  name: generate-artifacts
+spec:
+  template:
+    metadata:
+      labels:
+        app: generate-artifacts
+        tier: {{ORDERER_DOMAIN}}
+    spec:
+      restartPolicy: "Never"
+      containers:
+      - name: generate-artifacts
+        image: alpine:3.12.0
+        command: ["sh"]
+        # args:  ["-c", "ls -al /scripts/;"]
+        args:  ["-c", "apk add bash; ./scripts/gen-network-config.sh 2>&1;"]
+        volumeMounts:
+          - name: rca-scripts
+            mountPath: /scripts
+          - name: artifacts-efs
+            mountPath: /data/app/artifacts/
+      volumes:
+      - name: rca-scripts
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+      - name: artifacts-efs
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/artifacts/
+      

@@ -1,0 +1,109 @@
+---
+  apiVersion: apps/v1beta1
+  kind: StatefulSet
+  metadata:
+    namespace: akctest
+    name: peer1-akctest
+  spec:
+    serviceName: peer1-akctest
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          app: hyperledger
+          role: peer
+          peer-id: peer1-akctest
+          org: akctest
+          type: stateful
+      spec:
+        containers:
+        - name: peer1-akctest
+          image: hyperledger/fabric-peer:1.4.1
+          # resources:
+          #   requests:
+          #     # memory: "3000Mi"
+          #     memory: "300Mi"
+          #     cpu: "200m"
+          command: ["sh", "-c", "peer node start"]
+          env:
+          - name: CORE_PEER_ID
+            value: peer1-akctest.akctest
+          - name: CORE_PEER_GOSSIP_BOOTSTRAP
+            value: peer1-akctest.akctest:7051
+          - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
+            value: peer1-akctest.akctest:7051
+          - name: CORE_PEER_GOSSIP_USELEADERELECTION
+            value: "true"
+          - name: CORE_PEER_GOSSIP_ORGLEADER
+            value: "false"
+          - name: CORE_PEER_COMMITTER_ENABLED
+            value: "true"
+          - name: CORE_PEER_PROFILE_ENABLED
+            value: "true"
+          - name: CORE_VM_ENDPOINT
+            value: unix:///host/var/run/docker.sock
+          - name: CORE_PEER_LOCALMSPID
+            value: akctestMSP
+          - name: CORE_PEER_MSPCONFIGPATH
+            value: /shared/peers/peer1.akctest/msp/
+            #- name: CORE_LOGGING_LEVEL
+            #value: info
+          - name: CORE_LOGGING_GRPC
+            value: debug
+          - name: CORE_PEER_TLS_ENABLED
+            value: "true"
+          - name: CORE_PEER_TLS_CERT_FILE
+            value: /shared/peers/peer1.akctest/tls/server.crt
+          - name: CORE_PEER_TLS_KEY_FILE
+            value: /shared/peers/peer1.akctest/tls/server.key
+          - name: CORE_PEER_TLS_ROOTCERT_FILE
+            value: /shared/peers/peer1.akctest/tls/tlsca.akctest-cert.pem
+          - name: CORE_LEDGER_STATE_STATEDATABASE
+            value: CouchDB
+          - name: FABRIC_CFG_PATH
+            value: /etc/hyperledger/fabric/
+          - name: GODEBUG
+            value: "netdns=go"
+          - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+            value: couchdb1-akctest.akctest:5984
+          - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
+            value: admin
+          - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+            value: password
+          - name: CORE_PEER_ADDRESSAUTODETECT
+            value: "true"
+          - name: CORE_OPERATIONS_LISTENADDRESS
+            value: 0.0.0.0:9443
+          - name: CORE_METRICS_PROVIDER
+            value: prometheus
+          workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          ports:
+          - containerPort: 7051
+          - containerPort: 7052
+          - containerPort: 7053
+          - containerPort: 9443
+  
+          volumeMounts:
+            - name: crypto-config
+              mountPath: /shared
+            - mountPath: /host/var/run/docker.sock
+              name: dockersocket
+            - name: peer1-pvc-akctest
+              mountPath: /var/hyperledger/production
+        volumes:
+        - name: crypto-config
+          nfs:
+            server: fs-53cf5712.efs.ap-southeast-1.amazonaws.com
+            path: /pvs/efs-pvc-9e6bfaee-b412-11e9-8fa9-06bcb76b4a64/cluster-operator-demo/akc-ca-data/crypto-config/peerOrganizations/akctest
+        - name: dockersocket
+          hostPath:
+            path: /var/run/docker.sock
+    volumeClaimTemplates:
+    - metadata:
+        name: peer1-pvc-akctest
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{STORAGE_CLASS}}
+        resources:
+          requests:
+            storage: 5Gi

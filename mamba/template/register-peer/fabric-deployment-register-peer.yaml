@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{PEER_DOMAIN}}
+  name: register-p-{{PEER_ORG}}
+spec:
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: peer
+       org: {{PEER_DOMAIN}}
+       name: register-p-{{PEER_ORG}}
+    spec:
+     restartPolicy: "Never"
+     containers:
+       - name: register-p-{{PEER_ORG}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
+         env:
+          - name: PEERORG
+            value: {{PEER_ORG}}
+        #  command: ["printenv"]
+         command: ["sh"]
+         args:  ["-c", "/scripts/register-peer.sh 2>&1;"]
+         volumeMounts:
+          - mountPath: /scripts
+            name: rca-scripts
+          - mountPath: /data
+            name: rca-data
+     volumes:
+       - name: rca-scripts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+       - name: rca-data
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/

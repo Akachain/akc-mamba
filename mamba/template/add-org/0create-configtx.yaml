@@ -1,0 +1,35 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORG_DOMAIN}}
+  name: create-configtx
+spec:
+  template:
+    metadata:
+      labels:
+        app: create-configtx
+        tier: {{ORG_DOMAIN}}
+    spec:
+      restartPolicy: "Never"
+      containers:
+      - name: create-configtx
+        image: alpine:3.12.0
+        command: ["sh"]
+        # args:  ["-c", "ls -al /scripts/;"]
+        args:  ["-c", "apk add bash; ./scripts/gen-configtx.sh 2>&1;"]
+        volumeMounts:
+          - name: rca-scripts
+            mountPath: /scripts
+          - name: artifacts-efs
+            mountPath: /data/
+      volumes:
+      - name: rca-scripts
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+      - name: artifacts-efs
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+      

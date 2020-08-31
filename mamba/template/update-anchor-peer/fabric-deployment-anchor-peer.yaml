@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORG_DOMAIN}}
+  name: update-anchor-peer-{{ORG_NAME}}-{{CHANNEL_NAME}}
+spec:
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: peer
+       org: {{ORG_DOMAIN}}
+       name: update-anchor-peer-{{ORG_NAME}}-{{CHANNEL_NAME}}
+    spec:
+     restartPolicy: "Never"
+     containers:
+       - name: update-anchor-peer-{{ORG_NAME}}-{{CHANNEL_NAME}}
+         image: hyperledger/fabric-tools:{{FABRIC_TAG}}
+         env:
+          - name: CHANNEL_NAME
+            value: {{CHANNEL_NAME}}
+          - name: ORGS
+            value: {{ORGS}}
+          - name: ORDERER_ADDRESS
+            value: orderer0-{{ORDERER_NAME}}.{{ORDERER_DOMAIN}}:7050
+          - name: ADMIN_URL
+            value: admin-v2-{{ORG_NAME}}.{{ORG_DOMAIN}}:4001
+        #  command: ["printenv"]
+         command: ["sh"]
+        #  args:  ["-c", "tail -f /dev/null"]
+         args:  ["-c", "/scripts/update-anchor-peer.sh 2>&1;"]
+         volumeMounts:
+          - mountPath: /scripts
+            name: rca-scripts
+          - mountPath: /data
+            name: rca-data
+     volumes:
+       - name: rca-scripts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+       - name: rca-data
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/

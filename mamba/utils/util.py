@@ -31,7 +31,7 @@ def load_yaml_config_template(yaml_template_path, dict_env):
     current_time = split_timenow_utc()
 
      # Create yaml_path
-    hiss.echo('Create yaml file')
+    # hiss.echo('Create yaml file')
     yaml_path = '%s/%s/%s_%s' % (get_temp_path(),
                                      current_time[0], current_time[1], new_yaml_file_name)
     # Write yaml -> yaml_path
@@ -57,7 +57,7 @@ def get_temp_path():
 
 
 def get_k8s_template_path():
-    return expanduser('~/.akachain/akc-mamba/mamba/blockchain/template')
+    return expanduser('~/.akachain/akc-mamba/mamba/template')
 
 
 def split_timenow_utc():
@@ -74,12 +74,12 @@ def make_folder(path_folder):
         hiss.sub_echo('Folder %s does not exists. \n\tCreating...' %
                       path_folder)
         os.mkdir(path_folder)
-    else:
-        hiss.sub_echo('Folder temp %s exists.' % path_folder)
+    # else:
+    #     hiss.sub_echo('Folder temp %s exists.' % path_folder)
 
 
 def make_temp_folder():
-    hiss.echo('Create Folder temp')
+    # hiss.echo('Create Folder temp')
     temp_path = get_temp_path()
     make_folder(temp_path)
 

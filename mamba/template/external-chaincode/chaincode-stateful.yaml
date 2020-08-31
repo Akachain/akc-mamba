@@ -1,0 +1,30 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{PEER_DOMAIN}}
+  name: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
+spec:
+  serviceName: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
+      tier: {{PEER_DOMAIN}}
+  template:
+    metadata:
+      labels:
+        app: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
+        tier: {{PEER_DOMAIN}}
+    spec:
+      containers:
+      - name: chaincode-{{CHAINCODE_NAME}}-{{PEER_NAME}}
+        image: {{CHAINCODE_IMAGE}}
+        env:
+          - name: CHAINCODE_CCID
+            value: {{CHAINCODE_PACKAGE_ID}}
+          - name: CHAINCODE_ADDRESS
+            value:  "0.0.0.0:7052"
+        ports:
+        - containerPort: 7052
+        imagePullPolicy: Always

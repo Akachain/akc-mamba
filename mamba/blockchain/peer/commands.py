@@ -64,6 +64,8 @@ def setup_peer(peer, index):
         'PEER_ORG': peer,
         'PEER_DOMAIN': domain,
         'PEER_INDEX': index,
+        'FABRIC_TAG': settings.FABRIC_TAG,
+        'COUCHDB_TAG': settings.COUCHDB_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND,
