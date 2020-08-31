@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{DOMAIN}}
+  name: explorerpod
+spec:
+  serviceName: explorer
+  replicas: 1
+  selector:
+    matchLabels:
+      app: explorer
+      tier: {{DOMAIN}}
+  template:
+    metadata:
+      labels:
+        app: explorer
+        tier: {{DOMAIN}}
+    spec:
+      containers:
+      - name: explorer
+        image: akachain/devtool-explorer
+        env:
+          - name: DATABASE_HOST
+            value: explorer-db.{{DOMAIN}}
+          - name: DATABASE_PORT
+            value: "5432"
+          - name: DATABASE_USERNAME
+            value: postgres
+          - name: DATABASE_PASSWD
+            value: {{DATABASE_PASSWORD}}
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: crypto-config
+            mountPath: /opt/explorer/crypto-config/
+          - name: explorer-config
+            mountPath: /opt/explorer/app/platform/fabric/config/
+          - name: crypto-store-efs
+            mountPath: /tmp/crypto-store/
+          - name: crypto-path-efs
+            mountPath: /opt/explorer/crypto-path/
+      volumes:
+      - name: crypto-config
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/crypto-config/
+      - name: explorer-config
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/explorer-config/
+      - name: crypto-store-efs
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-store/
+      - name: crypto-path-efs
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-path/

@@ -23,12 +23,12 @@ def copy_scripts():
 
     result_get_folder = settings.k8s.exec_pod(
         podName=pods[0], namespace="default", command=exec_command)
-    if int(result_get_folder.data) < 1:
+    if int(result_get_folder.data) < 3:
         hiss.sub_echo('Folder %s not found. Creating...' % settings.EFS_ROOT)
         exec_command = [
             '/bin/bash',
             '-c',
-            'mkdir -p %s/admin; mkdir -p %s/akc-ca-data' % (settings.EFS_ROOT, settings.EFS_ROOT)]
+            'mkdir -p %s/admin-v2/artifacts; mkdir -p %s/akc-ca-data' % (settings.EFS_ROOT, settings.EFS_ROOT)]
 
         # Create folder in efs
         result_create_folder = settings.k8s.exec_pod(
@@ -39,7 +39,7 @@ def copy_scripts():
     # Copy config to scripts/env
     hiss.sub_echo('Copy config to scripts/env')
     config_file = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
-    env_script_File = expanduser('~/.akachain/akc-mamba/mamba/blockchain/scripts/env-scripts.sh')
+    env_script_File = expanduser('~/.akachain/akc-mamba/mamba/scripts/env-scripts.sh')
     copyfile(config_file, env_script_File)
 
     # Remove old script folder in efs
@@ -56,7 +56,7 @@ def copy_scripts():
 
     # Copy scripts folder to efs
     hiss.sub_echo('Copy scripts folder to efs')
-    script_path = expanduser('~/.akachain/akc-mamba/mamba/blockchain/scripts')
+    script_path = expanduser('~/.akachain/akc-mamba/mamba/scripts')
     if not settings.k8s.cp_to_pod(podName=pods[0], namespace='default', source=script_path, target='%s/akc-ca-scripts' % settings.EFS_ROOT):
         return hiss.hiss('connot copy scripts folder to pod %s' % pods[0])
 
@@ -73,8 +73,9 @@ def copy_scripts():
 
     # Copy test chaincode to efs
     hiss.sub_echo('Copy test chaincode to efs')
-    artifacts_path = expanduser('~/.akachain/akc-mamba/mamba/blockchain/artifacts')
-    if not settings.k8s.cp_to_pod(podName=pods[0], namespace='default', source=artifacts_path, target='%s/admin/artifacts' % settings.EFS_ROOT):
+    artifacts_path = os.path.abspath(os.path.join(
+        __package__, "../blockchain/artifacts/src/chaincodes"))
+    if not settings.k8s.cp_to_pod(podName=pods[0], namespace='default', source=artifacts_path, target='%s/admin-v2/chaincodes' % settings.EFS_ROOT):
         return hiss.hiss('connot copy test chaincode to pod %s' % pods[0])
 
     return True

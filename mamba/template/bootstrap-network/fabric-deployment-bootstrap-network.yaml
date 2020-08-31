@@ -1,0 +1,35 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ORDERER_DOMAIN}}
+  name: bootstrap-network
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: bootstrap-network
+        tier: {{ORDERER_DOMAIN}}
+    spec:
+      restartPolicy: "Never"
+      containers:
+      - name: bootstrap-network
+        image: alpine:3.12.0
+        env:
+          - name: ORDERER_ADDRESS
+            value: orderer0-{{ORDERER_NAME}}.{{ORDERER_DOMAIN}}:7050
+          - name: ADMIN_URL
+            value: http://admin-v2-{{ORG_NAME}}.{{ORG_DOMAIN}}:4001
+        command: ["sh"]
+        # args:  ["-c", "apk add bash; apk add curl; tail -f /etc/hosts; ./scripts/bootstrap-network.sh 2>&1;"]
+        args:  ["-c", "apk add bash; apk add curl; ./scripts/bootstrap-network.sh 2>&1;"]
+        volumeMounts:
+          - name: rca-scripts
+            mountPath: /scripts
+      volumes:
+      - name: rca-scripts
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+

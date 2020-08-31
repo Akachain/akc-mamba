@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{DOMAIN}}
+  name: prometheus
+spec:
+  serviceName: prometheus
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hyperledger
+      role: prometheus
+      type: stateful
+  template:
+    metadata:
+      labels:
+        app: hyperledger
+        role: prometheus
+        type: stateful
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus
+        # resources:
+        #   requests:
+        #     memory: "150Mi"
+        #     cpu: "350m"
+        #   limits:
+        #     memory: "3000Mi"
+        #     cpu: "2"
+        command: ["sh", "-c", "prometheus --config.file=/etc/prometheus.yml"]
+        ports:
+        - containerPort: 9090
+
+        volumeMounts:
+          - name: prometheus-config
+            mountPath: /etc/
+      volumes:
+      - name: prometheus-config
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/promconfig/

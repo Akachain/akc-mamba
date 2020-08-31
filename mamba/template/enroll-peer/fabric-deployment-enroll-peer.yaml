@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{PEER_DOMAIN}}
+  name: enroll-p{{PEER_INDEX}}-{{PEER}}
+spec:
+  template:
+    metadata:
+      labels:
+       app: hyperledger
+       role: peer
+       org: {{PEER_DOMAIN}}
+       name: enroll-p{{PEER_INDEX}}-{{PEER}}
+    spec:
+     restartPolicy: "Never"
+     containers:
+       - name: enroll-p{{PEER_INDEX}}-{{PEER}}
+         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
+         env:
+          - name: CORE_PEER_TLS_CERT_FILE
+            value: /opt/gopath/src/github.com/hyperledger/fabric/peer/tls/server.crt
+          - name: CORE_PEER_TLS_KEY_FILE
+            value: /opt/gopath/src/github.com/hyperledger/fabric/peer/tls/server.key
+          - name: CORE_PEER_MSPCONFIGPATH
+            value: /opt/gopath/src/github.com/hyperledger/fabric/peer/msp
+          - name: CORE_PEER_ID
+            value: peer{{PEER_INDEX}}-{{PEER}}
+          - name: FABRIC_CA_CLIENT_HOME
+            value: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          - name: FABRIC_CA_CLIENT_TLS_CERTFILES
+            value: /data/ica-{{PEER}}-ca-chain.pem
+          - name: PEER_HOME
+            value: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          - name: PEERORG
+            value: {{PEER}}
+          - name: PEER_NAME
+            value: peer{{PEER_INDEX}}-{{PEER}}
+          - name: PEER_HOST
+            value: peer{{PEER_INDEX}}-{{PEER}}.{{PEER_DOMAIN}}
+          - name: EXTERNAL_PEER_HOST
+            value: {{EXTERNAL_PEER_HOST}}
+         command: ["sh"]
+         args:  ["-c", "/scripts/enroll-peer.sh {{PEER_INDEX}} 2>&1;"]
+         volumeMounts:
+          - mountPath: /scripts
+            name: rca-scripts
+          - mountPath: /data
+            name: rca-data
+     volumes:
+       - name: rca-scripts
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+       - name: rca-data
+         nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/

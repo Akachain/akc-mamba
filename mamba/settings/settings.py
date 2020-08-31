@@ -23,7 +23,7 @@ def init(dotenv_path, set_default):
         mamba_path = expanduser('~/.akachain')
         if not os.path.isdir(mamba_path):
             os.makedirs(mamba_path)
-            git.Git(mamba_path).clone('https://github.com/Akachain/akc-mamba.git', branch='binary-config')
+            git.Git(mamba_path).clone('https://github.com/Akachain/akc-mamba.git', branch='binary-config-v2')
             env_template_path = expanduser('~/.akachain/akc-mamba/mamba/config/operator.env-template')
             shutil.copy(env_template_path, default_path)
             bashCommand = 'sudo vi ' + default_path
@@ -116,8 +116,10 @@ def init(dotenv_path, set_default):
     PRIVATE_DOCKER_PASSWORD = os.getenv('PRIVATE_DOCKER_PASSWORD')
     PRIVATE_DOCKER_EMAIL = os.getenv('PRIVATE_DOCKER_EMAIL')
 
-    global FABRIC_TAG
+    global FABRIC_TAG, FABRIC_CA_TAG, COUCHDB_TAG
     FABRIC_TAG = os.getenv('FABRIC_TAG')
+    FABRIC_CA_TAG = os.getenv('FABRIC_CA_TAG')
+    COUCHDB_TAG = os.getenv('COUCHDB_TAG')
 
     global EXTERNAL_ORDERER_ADDRESSES, EXTERNAL_ORG_PEER0_ADDRESSES
     global EXTERNAL_ORG_PEER1_ADDRESSES, EXTERNAL_RCA_ADDRESSES
@@ -132,3 +134,6 @@ def init(dotenv_path, set_default):
     global ORGS, DOMAINS
     ORGS = (ORDERER_ORGS+' ' +PEER_ORGS).strip()
     DOMAINS = (ORDERER_DOMAINS+' '+PEER_DOMAINS).strip()
+
+    global DEPLOYMENT_ENV
+    DEPLOYMENT_ENV = os.getenv('DEPLOYMENT_ENV')

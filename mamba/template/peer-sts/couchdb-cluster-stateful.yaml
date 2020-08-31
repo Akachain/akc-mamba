@@ -1,0 +1,64 @@
+---
+  apiVersion: apps/v1beta1
+  kind: StatefulSet
+  metadata:
+    namespace: akctest
+    name: couchdb1-akctest
+  spec:
+    serviceName: "couch-service"
+    replicas: 6
+    template:
+      metadata:
+        labels:
+          app: hyperledger
+          role: couchdb
+          couchdb-id: couchdb1-akctest
+          org: akctest
+          type: stateful
+          name: couchdb
+      spec:
+        containers:
+        - name: couchdb
+          image: couchdb:2.3.1
+          ports:
+          - name: couchdb
+            containerPort: 5984
+          - name: epmd
+            containerPort: 4369
+          - containerPort: 9100
+          resources:
+            requests:
+              # memory: "3000Mi"
+              # cpu: "2000m"
+              memory: "512Mi"
+              cpu: "512m"
+          volumeMounts:
+          - name: couch1-0-pvc-akctest
+            mountPath: /opt/couchdb/data
+          env:
+          - name: NODE_NETBIOS_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: COUCHDB_USER
+            value: admin
+          - name: COUCHDB_PASSWORD
+            value: password
+          - name: COUCHDB_SECRET
+            value: akachain
+          - name: NODENAME
+            value: $(NODE_NETBIOS_NAME).couch-service
+          - name: ERL_FLAGS
+            value: "-name couchdb@$(NODENAME)"
+          - name: ERL_FLAGS
+            value: "-setcookie akachain" #   the “password” used when nodes connect to each other.
+    volumeClaimTemplates:
+    - metadata:
+        name: couch1-0-pvc-akctest
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{STORAGE_CLASS}}
+        resources:
+          requests:
+            storage: 5Gi
+  
