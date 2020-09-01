@@ -83,7 +83,7 @@ function main {
   log "PACKAGE CHAINCODE"
   PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/packageCC   -H "content-type: application/json"   -d '{
     "orgname":"'"${ORG}"'",
-    "chaincodePath":"chaincodes/fabcar",
+    "chaincodePath":"/chaincodes/fabcar",
     "chaincodeName":"fabcar",
     "chaincodeVersion":"1",
     "chaincodeType":"golang",
