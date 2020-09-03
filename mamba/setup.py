@@ -10,7 +10,7 @@ with open('requirements.txt', 'r') as f:
 
 setuptools.setup(
   name='akc-mamba',
-  version='1.1.1',
+  version='2.0.2',
   entry_points={'console_scripts': ['mamba = cli.mamba:mamba'] },
   author="akaChain",
   author_email="admin@akachain.io",
