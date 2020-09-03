@@ -22,6 +22,7 @@ from blockchain.orderer.commands import orderer
 from blockchain.update_folder.commands import updatefolder
 from blockchain.channel_artifact.commands import channel_artifact
 from blockchain.peer.commands import peer
+from blockchain.update_anchor_peer.commands import anchor_peer
 from blockchain.gen_artifact.commands import gen_artifact
 from blockchain.admin.commands import admin
 from blockchain.bootstrap_network.commands import bootstrap
@@ -36,3 +37,5 @@ from blockchain.grafana.commands import grafana
 from blockchain.create_org.commands import create_org
 from blockchain.update_channel_config.commands import channel_config
 
+from blockchain.external_chaincode.commands import externalCC
+from blockchain.generate_ccp.commands import ccp

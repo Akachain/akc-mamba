@@ -37,6 +37,9 @@ mamba.add_command(prometheus)
 mamba.add_command(grafana)
 mamba.add_command(create_org)
 mamba.add_command(channel_config)
+mamba.add_command(anchor_peer)
+mamba.add_command(externalCC)
+mamba.add_command(ccp)
 
 if __name__ == '__main__':
     mamba()
