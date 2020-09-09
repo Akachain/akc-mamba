@@ -90,6 +90,8 @@ spec:
         #     cpu: "200m"
         command: ["sh", "-c", "peer node start"]
         env:
+        - name: FABRIC_LOGGING_SPEC
+          value: info:msp,gossip=warning:chaincode=info:core.comm=panic:endorser,comm.grpc.server=warning
         - name: CORE_CHAINCODE_BUILDER
           value: hyperledger/fabric-ccenv:1.4.1
         - name: CORE_PEER_ID
