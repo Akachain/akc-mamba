@@ -1,0 +1,41 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: default
+  name: creategentx
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      name: creategentx
+    spec:
+      restartPolicy: "Never"
+      volumes:
+      - name: sharedvolume
+        persistentVolumeClaim:
+          claimName: efs
+      - name: data
+        nfs:
+          server: {{EFS_SERVER}}
+          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data
+      containers:
+      - name: creategentx
+        image: hyperledger/fabric-tools:1.4.1
+        command: 
+        - /bin/sh 
+        - -c 
+        - |
+          set -xe
+          echo 'Cryptogen Starts';
+          export FABRIC_CFG_PATH=/shared/{{EFS_EXTEND}}/akc-ca-data/;
+          configtxgen -profile OrgsChannel -outputCreateChannelTx /shared/{{EFS_EXTEND}}/akc-ca-data/${CHANNEL_NAME}.tx -channelID ${CHANNEL_NAME};
+          #configtxgen -profile OrgsChannel -outputAnchorPeersUpdate /shared/VPID-PreProduct/akc-ca-data/${ORG_NAME}MSP-${CHANNEL_NAME}-anchors.tx -channelID ${CHANNEL_NAME} -asOrg ${ORG_NAME}MSP;
+        env:
+        - name: CHANNEL_NAME
+          value: {{CHANNEL_NAME}}
+        volumeMounts:
+        - mountPath: /shared
+          name: sharedvolume
+        - mountPath: /data
+          name: data
