@@ -1,3 +1,9 @@
+## 1. Add new channel information to network-config.yaml
+- Open network-config.yaml in efs: /tmp/artifact/$CLUSTER_NAME/admin/artifacts/network-config.yaml
+- In ```channels``` section, add config of the new channel
+## 2. Create and apply job to create new channel.tx
+Template:
+```yaml template
 ---
 apiVersion: batch/v1
 kind: Job
@@ -39,3 +45,18 @@ spec:
           name: sharedvolume
         - mountPath: /data
           name: data
+
+```
+## 3. Call admin api to create and join new channel
+```
+curl -s -X POST http://admin-rca-ica.orderer:4001/channels -H "content-type: application/json"   -d '{
+  "channelName":"newonemgchannel",
+  "channelConfigPath":"../../../shared/newonemgchannel.tx",
+  "orgname":"akc"
+}'
+
+curl -s -X POST http://admin-rca-ica.orderer:4001/joinchannel -H "content-type: application/json"   -d '{
+  "orgname":"akc",
+  "channelName":"newonemgchannel"
+}'
+```
