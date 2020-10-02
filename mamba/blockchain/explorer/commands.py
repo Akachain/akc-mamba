@@ -64,110 +64,110 @@ def generate_explorer_config():
     with open(config_template_path, 'r') as f:
         explorer_config = json.load(f)
 
-    # Update config
-    orgs = settings.PEER_ORGS.split(' ')
-    orgs_msp = []
-    for org in orgs:
-        orgs_msp.append('%sMSP' % org)
+    # # Update config
+    # orgs = settings.PEER_ORGS.split(' ')
+    # orgs_msp = []
+    # for org in orgs:
+    #     orgs_msp.append('%sMSP' % org)
 
-    client = {
-        orgs[0]: {
-            'tlsEnable': True,
-            'organization': orgs_msp[0],
-            'channel': settings.CHANNEL_NAME,
-            'credentialStore': {
-                'path': '/opt/explorer/crypto-path/fabric-client-kv-%s' % orgs[0],
-                'cryptoStore': {
-                    'path': '/tmp/crypto-store/fabric-client-kv-%s' % orgs[0]
-                }
-            }
-        }
-    }
-    explorer_config['network-configs']['network-1']['clients'] = client
+    # client = {
+    #     orgs[0]: {
+    #         'tlsEnable': True,
+    #         'organization': orgs_msp[0],
+    #         'channel': settings.CHANNEL_NAME,
+    #         'credentialStore': {
+    #             'path': '/opt/explorer/crypto-path/fabric-client-kv-%s' % orgs[0],
+    #             'cryptoStore': {
+    #                 'path': '/tmp/crypto-store/fabric-client-kv-%s' % orgs[0]
+    #             }
+    #         }
+    #     }
+    # }
+    # explorer_config['network-configs']['network-1']['clients'] = client
 
-    channel_peers = {}
-    for x in range(len(orgs)):
-        domain = util.get_domain(orgs[x])
-        for y in range(int(settings.NUM_PEERS)):
-            peer_name = 'peer%s-%s.%s' % (y, orgs[x], domain)
-            channel_peers[peer_name] = {}
-    explorer_config['network-configs']['network-1']['channels'] = {
-        '%s' % settings.CHANNEL_NAME: {
-            'peers': channel_peers,
-            'connection': {
-                'timeout': {
-                    'peer': {
-                        "endorser": "6000",
-                        "eventReg": "6000",
-                        "eventHub": "6000"
-                    }
-                }
-            }
-        }
-    }
+    # channel_peers = {}
+    # for x in range(len(orgs)):
+    #     domain = util.get_domain(orgs[x])
+    #     for y in range(int(settings.NUM_PEERS)):
+    #         peer_name = 'peer%s-%s.%s' % (y, orgs[x], domain)
+    #         channel_peers[peer_name] = {}
+    # explorer_config['network-configs']['network-1']['channels'] = {
+    #     '%s' % settings.CHANNEL_NAME: {
+    #         'peers': channel_peers,
+    #         'connection': {
+    #             'timeout': {
+    #                 'peer': {
+    #                     "endorser": "6000",
+    #                     "eventReg": "6000",
+    #                     "eventHub": "6000"
+    #                 }
+    #             }
+    #         }
+    #     }
+    # }
 
-    orgs_config = {}
-    # org
-    for i in range(len(orgs)):
-        domain = util.get_domain(orgs[i])
-        p_config = {
-            'mspid': '%s' % orgs_msp[i],
-            'fullpath': False,
-            'adminPrivateKey': {
-                'path': '/opt/explorer/crypto-config/peerOrganizations/%s/users/admin/msp/keystore' % domain
-            },
-            'signedCert': {
-                'path': '/opt/explorer/crypto-config/peerOrganizations/%s/users/admin/msp/signcerts' % domain
-            }
-        }
-        orgs_config[orgs_msp[i]] = p_config
-    # orderer
-    orderers = settings.ORDERER_ORGS.split(' ')
-    domain = util.get_domain(orderers[0])
-    o_config = {
-        'mspid': '%sMSP' % orderers[0],
-        'adminPrivateKey': {
-            'path': '/opt/explorer/crypto-config/ordererOrganizations/'+domain+'/users/admin/msp/keystore'
-        }
-    }
-    orgs_config['%sMSP' % settings.ORDERER_ORGS] = o_config
-    explorer_config['network-configs']['network-1']['organizations'] = orgs_config
+    # orgs_config = {}
+    # # org
+    # for i in range(len(orgs)):
+    #     domain = util.get_domain(orgs[i])
+    #     p_config = {
+    #         'mspid': '%s' % orgs_msp[i],
+    #         'fullpath': False,
+    #         'adminPrivateKey': {
+    #             'path': '/opt/explorer/crypto-config/peerOrganizations/%s/users/admin/msp/keystore' % domain
+    #         },
+    #         'signedCert': {
+    #             'path': '/opt/explorer/crypto-config/peerOrganizations/%s/users/admin/msp/signcerts' % domain
+    #         }
+    #     }
+    #     orgs_config[orgs_msp[i]] = p_config
+    # # orderer
+    # orderers = settings.ORDERER_ORGS.split(' ')
+    # domain = util.get_domain(orderers[0])
+    # o_config = {
+    #     'mspid': '%sMSP' % orderers[0],
+    #     'adminPrivateKey': {
+    #         'path': '/opt/explorer/crypto-config/ordererOrganizations/'+domain+'/users/admin/msp/keystore'
+    #     }
+    # }
+    # orgs_config['%sMSP' % settings.ORDERER_ORGS] = o_config
+    # explorer_config['network-configs']['network-1']['organizations'] = orgs_config
     
-    # peers
-    peers_config = {}
-    for x in range(len(orgs)):
-        domain = util.get_domain(orgs[x])
-        for y in range(int(settings.NUM_PEERS)):
-            peer_name = 'peer%s-%s.%s' % (y, orgs[x], domain)
-            config = {
-                'tlsCACerts': {
-                    'path': '/opt/explorer/crypto-config/peerOrganizations/'+domain+'/peers/peer%s.%s' % (y, domain)+'/tls/tlsca.mambatest-cert.pem'
-                },
-                'url':  'grpcs://%s:7051' % peer_name,
-                'eventUrl': 'grpcs://%s:7053' % peer_name,
-                'grpcOptions': {
-                    'ssl-target-name-override': peer_name
-                }
-            }
-            peers_config[peer_name] = config
-    explorer_config['network-configs']['network-1']['peers'] = peers_config
-    # orderers
-    orderers_config = {}
-    for x in range(len(orderers)):
-        domain = util.get_domain(orderers[x])
-        for y in range(int(settings.NUM_ORDERERS)):
-            orderer_name = 'orderer%s-%s.%s' % (y, orderers[y], domain)
-            config = {
-                'url': 'grpcs://%s:7050' % orderer_name,
-                'grpcOptions': {
-                    'ssl-target-name-override': orderer_name
-                },
-                'tlsCACerts': {
-                    'path': '/opt/explorer/crypto-config/ordererOrganizations/'+domain+'/orderers/orderer%s.%s' % (y, domain)+'/tls/tlsca.ordererhai-cert.pem'
-                }
-            }
-            orderers_config[orderer_name] = config
-    explorer_config['network-configs']['network-1']['orderers'] = orderers_config
+    # # peers
+    # peers_config = {}
+    # for x in range(len(orgs)):
+    #     domain = util.get_domain(orgs[x])
+    #     for y in range(int(settings.NUM_PEERS)):
+    #         peer_name = 'peer%s-%s.%s' % (y, orgs[x], domain)
+    #         config = {
+    #             'tlsCACerts': {
+    #                 'path': '/opt/explorer/crypto-config/peerOrganizations/'+domain+'/peers/peer%s.%s' % (y, domain)+'/tls/tlsca.mambatest-cert.pem'
+    #             },
+    #             'url':  'grpcs://%s:7051' % peer_name,
+    #             'eventUrl': 'grpcs://%s:7053' % peer_name,
+    #             'grpcOptions': {
+    #                 'ssl-target-name-override': peer_name
+    #             }
+    #         }
+    #         peers_config[peer_name] = config
+    # explorer_config['network-configs']['network-1']['peers'] = peers_config
+    # # orderers
+    # orderers_config = {}
+    # for x in range(len(orderers)):
+    #     domain = util.get_domain(orderers[x])
+    #     for y in range(int(settings.NUM_ORDERERS)):
+    #         orderer_name = 'orderer%s-%s.%s' % (y, orderers[y], domain)
+    #         config = {
+    #             'url': 'grpcs://%s:7050' % orderer_name,
+    #             'grpcOptions': {
+    #                 'ssl-target-name-override': orderer_name
+    #             },
+    #             'tlsCACerts': {
+    #                 'path': '/opt/explorer/crypto-config/ordererOrganizations/'+domain+'/orderers/orderer%s.%s' % (y, domain)+'/tls/tlsca.ordererhai-cert.pem'
+    #             }
+    #         }
+    #         orderers_config[orderer_name] = config
+    # explorer_config['network-configs']['network-1']['orderers'] = orderers_config
 
     return json.dumps(explorer_config)
 
