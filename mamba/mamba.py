@@ -25,6 +25,7 @@ from blockchain.peer.commands import peer
 from blockchain.update_anchor_peer.commands import anchor_peer
 from blockchain.gen_artifact.commands import gen_artifact
 from blockchain.admin.commands import admin
+from blockchain.admin_v1.commands import adminv1
 from blockchain.bootstrap_network.commands import bootstrap
 from blockchain.start_network.commands import start
 from blockchain.delete_network.commands import delete
@@ -70,6 +71,7 @@ mamba.add_command(peer)
 mamba.add_command(gen_artifact)
 mamba.add_command(channel_artifact)
 mamba.add_command(admin)
+mamba.add_command(adminv1)
 mamba.add_command(secret)
 mamba.add_command(bootstrap)
 mamba.add_command(start)
