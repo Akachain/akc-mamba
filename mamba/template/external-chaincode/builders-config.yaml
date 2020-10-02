@@ -527,7 +527,7 @@ data:
             name:
 
         # Generic builder environment, suitable for most chaincode types
-        builder: $(DOCKER_NS)/fabric-ccenv:$(TWO_DIGIT_VERSION)
+        builder: hyperledger/fabric-ccenv:$(TWO_DIGIT_VERSION)
 
         # Enables/disables force pulling of the base docker images (listed below)
         # during user chaincode instantiation.
@@ -536,7 +536,7 @@ data:
 
         golang:
             # golang will never need more than baseos
-            runtime: $(DOCKER_NS)/fabric-baseos:$(TWO_DIGIT_VERSION)
+            runtime: hyperledger/fabric-baseos:$(TWO_DIGIT_VERSION)
 
             # whether or not golang chaincode should be linked dynamically
             dynamicLink: false
@@ -546,11 +546,11 @@ data:
             # tools added for java shim layer packaging.
             # This image is packed with shim layer libraries that are necessary
             # for Java chaincode runtime.
-            runtime: $(DOCKER_NS)/fabric-javaenv:$(TWO_DIGIT_VERSION)
+            runtime: hyperledger/fabric-javaenv:$(TWO_DIGIT_VERSION)
 
         node:
             # This is an image based on node:$(NODE_VER)-alpine
-            runtime: $(DOCKER_NS)/fabric-nodeenv:$(TWO_DIGIT_VERSION)
+            runtime: hyperledger/fabric-nodeenv:$(TWO_DIGIT_VERSION)
 
         # List of directories to treat as external builders and launchers for
         # chaincode. The external builder detection processing will iterate over the
@@ -671,7 +671,27 @@ data:
           # of 32 MB, the peer would round the size to the next multiple of 32 MB.
           # To disable the cache, 0 MB needs to be assigned to the cacheSize.
           cacheSize: 64
-
+        mongoDBConfig:
+          # The variable can be covered on environment
+          # Default connection Url of MongoDB
+          mongoDBAddress: 127.0.0.1:27017
+          # This username must have read and write authority on MongoDB
+          username:
+          # The password is recommended to pass as an environment variable
+          # during start up (eg CORE_LEDGER_STATE_MONGODBCONFIG_PASSWORD).
+          # If it is stored here, the file must be access control protected
+          # to prevent unintended users from discovering the password.
+          password:
+          # Number of retries for MongoDB errors
+          maxRetries: 3
+          # Number of retries for MongoDB errors during peer startup
+          maxRetriesOnStartup: 12
+          # The default collectionName for MongoDB.
+          collectionName: state
+          # MongoDB request timeout.
+          requestTimeout: 60s
+          # Limit on the number of records to return per query
+          queryLimit: 10000
       history:
         # enableHistoryDatabase - options are true or false
         # Indicates if the history of key updates should be stored.

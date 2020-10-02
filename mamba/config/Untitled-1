@@ -1,0 +1,260 @@
+2020-08-24 03:49:15.978 UTC [cscc] Invoke -> DEBU 397 Invoke function: JoinChain
+2020-08-24 03:49:15.979 UTC [common.channelconfig] NewStandardValues -> DEBU 398 Initializing protos for *channelconfig.ChannelProtos
+2020-08-24 03:49:15.979 UTC [common.channelconfig] initializeProtosStruct -> DEBU 399 Processing field: HashingAlgorithm
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 39a Processing field: BlockDataHashingStructure
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 39b Processing field: OrdererAddresses
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 39c Processing field: Consortium
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 39d Processing field: Capabilities
+2020-08-24 03:49:15.980 UTC [common.channelconfig] NewStandardValues -> DEBU 39e Initializing protos for *channelconfig.OrdererProtos
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 39f Processing field: ConsensusType
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3a0 Processing field: BatchSize
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3a1 Processing field: BatchTimeout
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3a2 Processing field: KafkaBrokers
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3a3 Processing field: ChannelRestrictions
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3a4 Processing field: Capabilities
+2020-08-24 03:49:15.980 UTC [common.channelconfig] NewStandardValues -> DEBU 3a5 Initializing protos for *channelconfig.OrdererOrgProtos
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3a6 Processing field: Endpoints
+2020-08-24 03:49:15.980 UTC [common.channelconfig] NewStandardValues -> DEBU 3a7 Initializing protos for *channelconfig.OrganizationProtos
+2020-08-24 03:49:15.980 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3a8 Processing field: MSP
+2020-08-24 03:49:15.980 UTC [common.channelconfig] validateMSP -> DEBU 3a9 Setting up MSP for org orderer
+2020-08-24 03:49:15.980 UTC [msp] newBccspMsp -> DEBU 3aa Creating BCCSP-based MSP instance
+2020-08-24 03:49:15.980 UTC [msp] New -> DEBU 3ab Creating Cache-MSP instance
+2020-08-24 03:49:15.980 UTC [msp] Setup -> DEBU 3ac Setting up MSP instance ordererMSP
+2020-08-24 03:49:15.980 UTC [msp.identity] newIdentity -> DEBU 3ad Creating identity instance for cert -----BEGIN CERTIFICATE-----
+MIICFDCCAbugAwIBAgIUBNmybI40QGoyoLq2og2Il336RYgwCgYIKoZIzj0EAwIw
+ZzELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRgwFgYDVQQDEw9yY2EtYWtj
+LnRoaWVubGswHhcNMjAwODI0MDMzNjAwWhcNMzUwODIxMDMzNjAwWjBnMQswCQYD
+VQQGEwJVUzEXMBUGA1UECBMOTm9ydGggQ2Fyb2xpbmExFDASBgNVBAoTC0h5cGVy
+bGVkZ2VyMQ8wDQYDVQQLEwZGYWJyaWMxGDAWBgNVBAMTD3JjYS1ha2MudGhpZW5s
+azBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABL3Yig1rWP7cxh49SGMCKni0U6wM
+rkHUgLhOteUvYKbkzd0JTrvXOiVeN4WJ2txD1+G8LbKCG5aS/hDk808Qj8ejRTBD
+MA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEBMB0GA1UdDgQWBBSA
+CcBDXStwBsunrnsjF+3ioquwVDAKBggqhkjOPQQDAgNHADBEAiBOAFSgSVOkldgO
+HtcaNpfiR0zNoMADkktWe4LisL/dQwIgOzDeElbH9Yw+rfTCSMpd5FHRBLm3Q3PA
+roDTkzRUluE=
+-----END CERTIFICATE-----
+2020-08-24 03:49:15.981 UTC [msp.identity] newIdentity -> DEBU 3ae Creating identity instance for cert -----BEGIN CERTIFICATE-----
+MIICNDCCAdqgAwIBAgIUQGy5UGVVz9Ni1NRkmCjMln7V2A8wCgYIKoZIzj0EAwIw
+ZzELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRgwFgYDVQQDEw9yY2EtYWtj
+LnRoaWVubGswHhcNMjAwODI0MDMzNzAwWhcNMjUwODIzMDM0MjAwWjBlMQswCQYD
+VQQGEwJVUzEXMBUGA1UECBMOTm9ydGggQ2Fyb2xpbmExFDASBgNVBAoTC0h5cGVy
+bGVkZ2VyMQ8wDQYDVQQLEwZjbGllbnQxFjAUBgNVBAMTDXJjYS1ha2MtYWRtaW4w
+WTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARuN0esaZHpDZCaveKfC02vavsnjpfL
+2N/MsPTAuemjgJHc0ofVCms6thAyXD4yQz5GsPT9jGUnfWtM/nKWM9WIo2YwZDAO
+BgNVHQ8BAf8EBAMCAQYwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQU6z5Y
+NiE0UZMA0l9njOhDsveT+hIwHwYDVR0jBBgwFoAUgAnAQ10rcAbLp657Ixft4qKr
+sFQwCgYIKoZIzj0EAwIDSAAwRQIhAP2ZyagtnNhkrFMvFWRrByrfyLXOxcB3EDov
+Rxo3ZpueAiBRd3/Dc0g6xhbnv952z5SZfxP81Cdk93uBdVanl8QEpA==
+-----END CERTIFICATE-----
+2020-08-24 03:49:15.984 UTC [common.channelconfig] NewStandardValues -> DEBU 3af Initializing protos for *channelconfig.ApplicationProtos
+2020-08-24 03:49:15.984 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3b0 Processing field: ACLs
+2020-08-24 03:49:15.984 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3b1 Processing field: Capabilities
+2020-08-24 03:49:15.984 UTC [common.channelconfig] NewStandardValues -> DEBU 3b2 Initializing protos for *channelconfig.ApplicationOrgProtos
+2020-08-24 03:49:15.984 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3b3 Processing field: AnchorPeers
+2020-08-24 03:49:15.984 UTC [common.channelconfig] NewStandardValues -> DEBU 3b4 Initializing protos for *channelconfig.OrganizationProtos
+2020-08-24 03:49:15.984 UTC [common.channelconfig] initializeProtosStruct -> DEBU 3b5 Processing field: MSP
+2020-08-24 03:49:15.984 UTC [common.channelconfig] Validate -> DEBU 3b6 Anchor peers for org thienlk are 
+2020-08-24 03:49:15.984 UTC [common.channelconfig] validateMSP -> DEBU 3b7 Setting up MSP for org thienlk
+2020-08-24 03:49:15.984 UTC [msp] newBccspMsp -> DEBU 3b8 Creating BCCSP-based MSP instance
+2020-08-24 03:49:15.984 UTC [msp] New -> DEBU 3b9 Creating Cache-MSP instance
+2020-08-24 03:49:15.984 UTC [msp] Setup -> DEBU 3ba Setting up MSP instance thienlkMSP
+2020-08-24 03:49:15.984 UTC [msp.identity] newIdentity -> DEBU 3bb Creating identity instance for cert -----BEGIN CERTIFICATE-----
+MIICFDCCAbugAwIBAgIUBNmybI40QGoyoLq2og2Il336RYgwCgYIKoZIzj0EAwIw
+ZzELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRgwFgYDVQQDEw9yY2EtYWtj
+LnRoaWVubGswHhcNMjAwODI0MDMzNjAwWhcNMzUwODIxMDMzNjAwWjBnMQswCQYD
+VQQGEwJVUzEXMBUGA1UECBMOTm9ydGggQ2Fyb2xpbmExFDASBgNVBAoTC0h5cGVy
+bGVkZ2VyMQ8wDQYDVQQLEwZGYWJyaWMxGDAWBgNVBAMTD3JjYS1ha2MudGhpZW5s
+azBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABL3Yig1rWP7cxh49SGMCKni0U6wM
+rkHUgLhOteUvYKbkzd0JTrvXOiVeN4WJ2txD1+G8LbKCG5aS/hDk808Qj8ejRTBD
+MA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEBMB0GA1UdDgQWBBSA
+CcBDXStwBsunrnsjF+3ioquwVDAKBggqhkjOPQQDAgNHADBEAiBOAFSgSVOkldgO
+HtcaNpfiR0zNoMADkktWe4LisL/dQwIgOzDeElbH9Yw+rfTCSMpd5FHRBLm3Q3PA
+roDTkzRUluE=
+-----END CERTIFICATE-----
+2020-08-24 03:49:15.985 UTC [msp.identity] newIdentity -> DEBU 3bc Creating identity instance for cert -----BEGIN CERTIFICATE-----
+MIICMzCCAdqgAwIBAgIUSD6ve8/0YMM4dUsWDIPJ4eFAm/EwCgYIKoZIzj0EAwIw
+ZzELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRgwFgYDVQQDEw9yY2EtYWtj
+LnRoaWVubGswHhcNMjAwODI0MDMzNzAwWhcNMjUwODIzMDM0MjAwWjBlMQswCQYD
+VQQGEwJVUzEXMBUGA1UECBMOTm9ydGggQ2Fyb2xpbmExFDASBgNVBAoTC0h5cGVy
+bGVkZ2VyMQ8wDQYDVQQLEwZjbGllbnQxFjAUBgNVBAMTDXJjYS1ha2MtYWRtaW4w
+WTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARcIPcI8jzQffmFfWtq5MkH73G3n8VI
+8PBsjLO2eU3AXJyLFS0Ai8wGw3coMMJYyXVnRS1K0JDCaaBWzUcHYLZBo2YwZDAO
+BgNVHQ8BAf8EBAMCAQYwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUpqJp
+sr1U0ZOaduwx5302lQM75dkwHwYDVR0jBBgwFoAUgAnAQ10rcAbLp657Ixft4qKr
+sFQwCgYIKoZIzj0EAwIDRwAwRAIgL/WfR6tf23GiCX68igL2DVmzK0mm6887Z+ro
+BSyOqrkCIG7mfPy9nkPfmrgIbOGFQV/Q0RO+6pWwmaYjIkybV/mh
+-----END CERTIFICATE-----
+2020-08-24 03:49:16.002 UTC [msp] Setup -> DEBU 3bd Setting up the MSP manager (2 msps)
+2020-08-24 03:49:16.002 UTC [msp] Setup -> DEBU 3be MSP manager setup complete, setup 2 msps
+2020-08-24 03:49:16.002 UTC [common.capabilities] Supported -> DEBU 3bf Channel capability V2_0 is supported and is enabled
+2020-08-24 03:49:16.002 UTC [common.capabilities] Supported -> DEBU 3c0 Application capability V2_0 is supported and is enabled
+2020-08-24 03:49:16.002 UTC [msp] satisfiesPrincipalInternalV142 -> DEBU 3c1 Checking if identity has been named explicitly as an admin for thienlkMSP
+2020-08-24 03:49:16.002 UTC [msp] satisfiesPrincipalInternalV142 -> DEBU 3c2 Checking if identity carries the admin ou for thienlkMSP
+2020-08-24 03:49:16.002 UTC [msp] Validate -> DEBU 3c3 MSP thienlkMSP validating identity
+2020-08-24 03:49:16.002 UTC [msp] hasOURole -> DEBU 3c4 MSP thienlkMSP checking if the identity is a client
+2020-08-24 03:49:16.002 UTC [msp] getCertificationChain -> DEBU 3c5 MSP thienlkMSP getting certification chain
+2020-08-24 03:49:16.003 UTC [msp.identity] Verify -> DEBU 3c6 Verify: digest = 00000000  e3 98 bd 00 20 43 ca d3  81 70 3a f7 d4 a1 09 fe  |.... C...p:.....|
+00000010  31 49 f2 ee 5b c1 7e 6c  b3 e7 5a ae e2 d6 be 67  |1I..[.~l..Z....g|
+2020-08-24 03:49:16.007 UTC [msp.identity] Verify -> DEBU 3c7 Verify: sig = 00000000  30 45 02 21 00 dd ea a7  f4 3d e2 f6 47 fb 8a b6  |0E.!.....=..G...|
+00000010  eb e4 81 5f 4d 19 6b 5e  bf 14 00 37 ee f2 7e 19  |..._M.k^...7..~.|
+00000020  89 d1 02 86 27 02 20 1e  95 ed 26 41 ec 9f a3 e6  |....'. ...&A....|
+00000030  ed f3 b4 c5 43 ad c4 75  d0 95 fa 4b b5 a0 00 38  |....C..u...K...8|
+00000040  1a 35 1f d8 60 0d 36                              |.5..`.6|
+2020-08-24 03:49:16.008 UTC [ledgermgmt] CreateLedger -> INFO 3c8 Creating ledger [akctestchannel] with genesis block
+2020-08-24 03:49:16.013 UTC [blkstorage] newBlockfileMgr -> DEBU 3c9 newBlockfileMgr() initializing file-based block storage for ledger: akctestchannel 
+2020-08-24 03:49:16.013 UTC [kvledger.util] CreateDirIfMissing -> DEBU 3ca CreateDirIfMissing [/var/hyperledger/production/ledgersData/chains/chains/akctestchannel/]
+2020-08-24 03:49:16.013 UTC [kvledger.util] logDirStatus -> DEBU 3cb Before creating dir - [/var/hyperledger/production/ledgersData/chains/chains/akctestchannel/] does not exist
+2020-08-24 03:49:16.013 UTC [kvledger.util] logDirStatus -> DEBU 3cc After creating dir - [/var/hyperledger/production/ledgersData/chains/chains/akctestchannel/] exists
+2020-08-24 03:49:16.014 UTC [blkstorage] newBlockfileMgr -> INFO 3cd Getting block information from block storage
+2020-08-24 03:49:16.014 UTC [blkstorage] constructBlockfilesInfo -> DEBU 3ce constructing BlockfilesInfo
+2020-08-24 03:49:16.014 UTC [blkstorage] retrieveLastFileSuffix -> DEBU 3cf retrieveLastFileSuffix()
+2020-08-24 03:49:16.014 UTC [blkstorage] retrieveLastFileSuffix -> DEBU 3d0 retrieveLastFileSuffix() - biggestFileNum = -1
+2020-08-24 03:49:16.014 UTC [blkstorage] constructBlockfilesInfo -> DEBU 3d1 Last file number found = -1
+2020-08-24 03:49:16.014 UTC [blkstorage] constructBlockfilesInfo -> DEBU 3d2 No block file found
+2020-08-24 03:49:16.014 UTC [blkstorage] newBlockfileMgr -> DEBU 3d3 Info constructed by scanning the blocks dir = (*blkstorage.blockfilesInfo)(0xc00052d060)(latestFileNumber=[0], latestFileSize=[0], noBlockFiles=[true], lastPersistedBlock=[0])
+2020-08-24 03:49:16.016 UTC [blkstorage] newBlockIndex -> DEBU 3d4 newBlockIndex() - indexItems:[[BlockHash BlockNum TxID BlockNumTranNum]]
+2020-08-24 03:49:16.016 UTC [blkstorage] syncIndex -> DEBU 3d5 No block files present. This happens when there has not been any blocks added to the ledger yet
+2020-08-24 03:49:16.017 UTC [pvtdatastorage] OpenStore -> DEBU 3d6 Pvtdata store opened. Initial state: isEmpty [true], lastCommittedBlock [0]
+2020-08-24 03:49:16.017 UTC [mongodb] createMongoCollection -> DEBU 3d7 createMongoCollection dbName statedb, collectionName akctestchannel_
+2020-08-24 03:49:16.017 UTC [mongodb] newVersionedDB -> DEBU 3d8 chain [akctestchannel]: checking for redolog record
+2020-08-24 03:49:16.017 UTC [mongodb] readDoc -> DEBU 3d9 Database Name : [statedb] Collection Name : [akctestchannel_] Entering readDoc()  id=[statedb_savepoint]
+2020-08-24 03:49:16.017 UTC [pvtdatastorage] processCollElgEvents -> DEBU 3da Starting to process collection eligibility events
+2020-08-24 03:49:16.018 UTC [leveldbhelper] GetIterator -> DEBU 3db Getting iterator for range [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x0, 0x6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}] - [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x0, 0x6, 0x8}]
+2020-08-24 03:49:16.018 UTC [pvtdatastorage] processCollElgEvents -> DEBU 3dc Converted [0] ineligible missing data entries to eligible
+2020-08-24 03:49:16.018 UTC [pvtdatastorage] func1 -> DEBU 3dd Waiting for collection eligibility event
+2020-08-24 03:49:16.023 UTC [mongodb] readDoc -> ERRO 3de res.Err() : [mongo: no documents in result]
+2020-08-24 03:49:16.023 UTC [mongodb] readDoc -> DEBU 3df Database Name : [statedb] Collection Name : [akctestchannel_] Document not found
+2020-08-24 03:49:16.024 UTC [mongodb] saveDoc -> DEBU 3e0 Database Name : [statedb] Collection Name : [akctestchannel_] Entering saveDoc() id=[channel_metadata]
+2020-08-24 03:49:16.024 UTC [mongodb] readDoc -> DEBU 3e1 Database Name : [statedb] Collection Name : [akctestchannel_] Entering readDoc()  id=[channel_metadata]
+2020-08-24 03:49:16.036 UTC [mongodb] readDoc -> ERRO 3e2 res.Err() : [mongo: no documents in result]
+2020-08-24 03:49:16.036 UTC [mongodb] readDoc -> DEBU 3e3 Database Name : [statedb] Collection Name : [akctestchannel_] Document not found
+2020-08-24 03:49:16.051 UTC [mongodb] saveDoc -> DEBU 3e4 Database Name : [statedb] Collection Name : [akctestchannel_] Revision: [1] Exiting saveDoc()
+2020-08-24 03:49:16.051 UTC [mongodb] newVersionedDB -> DEBU 3e5 chain [akctestchannel]: No redo-record or save point present
+2020-08-24 03:49:16.051 UTC [leveldbhelper] GetIterator -> DEBU 3e6 Getting iterator for range [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x2f, 0x31, 0x0}] - [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x2f, 0x31, 0x1}]
+2020-08-24 03:49:16.051 UTC [kvledger] newKVLedger -> DEBU 3e7 Creating KVLedger ledgerID=akctestchannel: 
+2020-08-24 03:49:16.052 UTC [lockbasedtxmgr] newQueryExecutor -> DEBU 3e8 constructing new query executor txid = []
+2020-08-24 03:49:16.053 UTC [mongodb] GetStateRangeScanIteratorWithPagination -> DEBU 3e9 Entering GetStateRangeScanIteratorWithPagination namespace: _lifecycle  startKey: namespaces/metadata/  endKey: namespaces/metadata/  pageSize: 0
+2020-08-24 03:49:16.053 UTC [mongodb] getNamespaceDBHandle -> DEBU 3ea [akctestchannel] add namespaceDBInfo for namespace _lifecycle
+2020-08-24 03:49:16.053 UTC [mongodb] saveDoc -> DEBU 3eb Database Name : [statedb] Collection Name : [akctestchannel_] Entering saveDoc() id=[channel_metadata]
+2020-08-24 03:49:16.053 UTC [mongodb] readDoc -> DEBU 3ec Database Name : [statedb] Collection Name : [akctestchannel_] Entering readDoc()  id=[channel_metadata]
+2020-08-24 03:49:16.061 UTC [mongodb] readDoc -> DEBU 3ed Database Name : [statedb] Collection Name : [akctestchannel_] Exiting readDoc()
+2020-08-24 03:49:16.064 UTC [mongodb] saveDoc -> DEBU 3ee Database Name : [statedb] Collection Name : [akctestchannel_] Revision: [2] Exiting saveDoc()
+2020-08-24 03:49:16.064 UTC [mongodb] createMongoCollection -> DEBU 3ef createMongoCollection dbName statedb, collectionName akctestchannel__lifecycle
+2020-08-24 03:49:16.064 UTC [mongodb] readDocRange -> DEBU 3f0 Database Name : [statedb] Collection Name : [akctestchannel__lifecycle] Entering readDocRange()  startKey=namespaces/metadata/, endKey=namespaces/metadata/
+2020-08-24 03:49:16.072 UTC [mongodb] readDocRange -> DEBU 3f1 Database Name : [statedb] Collection Name : [akctestchannel__lifecycle] Total Rows: 0
+2020-08-24 03:49:16.072 UTC [mongodb] readDocRange -> DEBU 3f2 Database Name : [statedb] Collection Name : [akctestchannel__lifecycle] Exiting readDocRange()
+2020-08-24 03:49:16.072 UTC [lockbasedtxmgr] Done -> DEBU 3f3 Done with transaction simulation / query execution []
+2020-08-24 03:49:16.072 UTC [kvledger] lastPersistedCommitHash -> DEBU 3f4 Chain is empty
+2020-08-24 03:49:16.072 UTC [kvledger] newKVLedger -> DEBU 3f5 Register state db for chaincode lifecycle events: true
+2020-08-24 03:49:16.072 UTC [kvledger] recoverDBs -> DEBU 3f6 Entering recoverDB()
+2020-08-24 03:49:16.072 UTC [kvledger] syncStateAndHistoryDBWithBlockstore -> DEBU 3f7 Block storage is empty.
+2020-08-24 03:49:16.072 UTC [kvledger] applyValidTxPvtDataOfOldBlocks -> DEBU 3f8 [akctestchannel:] Filtering pvtData of invalidation transactions
+2020-08-24 03:49:16.072 UTC [kvledger] applyValidTxPvtDataOfOldBlocks -> DEBU 3f9 [akctestchannel:] Committing pvtData of [0] old blocks to the stateDB
+2020-08-24 03:49:16.072 UTC [lockbasedtxmgr] RemoveStaleAndCommitPvtDataOfOldBlocks -> DEBU 3fa Waiting for purge mgr to finish the background job of computing expirying keys for the block
+2020-08-24 03:49:16.072 UTC [lockbasedtxmgr] RemoveStaleAndCommitPvtDataOfOldBlocks -> DEBU 3fb lock acquired on oldBlockCommit for committing pvtData of old blocks to state database
+2020-08-24 03:49:16.072 UTC [lockbasedtxmgr] RemoveStaleAndCommitPvtDataOfOldBlocks -> DEBU 3fc Constructing unique pvtData by removing duplicate entries
+2020-08-24 03:49:16.073 UTC [kvledger] CommitLegacy -> DEBU 3fd [akctestchannel] Validating state for block [0]
+2020-08-24 03:49:16.074 UTC [lockbasedtxmgr] ValidateAndPrepare -> DEBU 3fe Waiting for purge mgr to finish the background job of computing expirying keys for the block
+2020-08-24 03:49:16.074 UTC [lockbasedtxmgr] ValidateAndPrepare -> DEBU 3ff lock acquired on oldBlockCommit for validating read set version against the committed version
+2020-08-24 03:49:16.074 UTC [lockbasedtxmgr] ValidateAndPrepare -> DEBU 400 Validating new block with num trans = [1]
+2020-08-24 03:49:16.074 UTC [validation] ValidateAndPrepareBatch -> DEBU 401 ValidateAndPrepareBatch() for block number = [0]
+2020-08-24 03:49:16.074 UTC [validation] ValidateAndPrepareBatch -> DEBU 402 preprocessing ProtoBlock...
+2020-08-24 03:49:16.074 UTC [validation] preprocessProtoBlock -> DEBU 403 txType=CONFIG
+2020-08-24 03:49:16.075 UTC [validation] processNonEndorserTx -> DEBU 404 Performing custom processing for transaction [txid=], [txType=CONFIG]
+2020-08-24 03:49:16.075 UTC [validation] processNonEndorserTx -> DEBU 405 Processor for custom tx processing:&peer.ConfigTxProcessor{}
+2020-08-24 03:49:16.075 UTC [lockbasedtxmgr] NewTxSimulator -> DEBU 406 constructing new tx simulator
+2020-08-24 03:49:16.075 UTC [lockbasedtxmgr] newQueryExecutor -> DEBU 407 constructing new query executor txid = []
+2020-08-24 03:49:16.075 UTC [lockbasedtxmgr] newTxSimulator -> DEBU 408 constructing new tx simulator txid = []
+2020-08-24 03:49:16.075 UTC [peer] GenerateSimulationResults -> DEBU 409 Processing CONFIG
+2020-08-24 03:49:16.075 UTC [lockbasedtxmgr] GetTxSimulationResults -> DEBU 40a Simulation completed, getting simulation results
+2020-08-24 03:49:16.075 UTC [lockbasedtxmgr] Done -> DEBU 40b Done with transaction simulation / query execution []
+2020-08-24 03:49:16.080 UTC [validation] validateAndPrepareBatch -> DEBU 40c Block [0] Transaction index [0] TxId [] marked as valid by state validator. ContainsPostOrderWrites [true]
+2020-08-24 03:49:16.081 UTC [validation] applyWriteSet -> DEBU 40d txops=validation.txOps{validation.compositeKey{ns:"", coll:"", key:"CHANNEL_CONFIG_ENV_BYTES"}:(*validation.keyOps)(0xc00052fc80)}
+2020-08-24 03:49:16.081 UTC [validation] ValidateAndPrepareBatch -> DEBU 40e validating rwset...
+2020-08-24 03:49:16.081 UTC [validation] ValidateAndPrepareBatch -> DEBU 40f postprocessing ProtoBlock...
+2020-08-24 03:49:16.081 UTC [validation] ValidateAndPrepareBatch -> DEBU 410 ValidateAndPrepareBatch() complete
+2020-08-24 03:49:16.081 UTC [kvledger] CommitLegacy -> DEBU 411 [akctestchannel] Adding CommitHash to the block [0]
+2020-08-24 03:49:16.082 UTC [kvledger] CommitLegacy -> DEBU 412 [akctestchannel] Committing pvtdata and block [0] to storage
+2020-08-24 03:49:16.082 UTC [kvledger] commitToPvtAndBlockStore -> DEBU 413 Writing block [0] to pvt data store
+2020-08-24 03:49:16.082 UTC [pvtdatastorage] Commit -> DEBU 414 Committing private data for block [0]
+2020-08-24 03:49:16.084 UTC [pvtdatastorage] Commit -> DEBU 415 Committed private data for block [0]
+2020-08-24 03:49:16.090 UTC [pvtdatastorage] func1 -> DEBU 416 Purger started: Purging expired private data till block number [0]
+2020-08-24 03:49:16.090 UTC [pvtdatastorage] retrieveExpiryEntries -> DEBU 417 retrieveExpiryEntries(): startKey=[]byte{0x3, 0x0, 0x0}, endKey=[]byte{0x3, 0x1, 0x1, 0x0}
+2020-08-24 03:49:16.090 UTC [leveldbhelper] GetIterator -> DEBU 418 Getting iterator for range [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x0, 0x3, 0x0, 0x0}] - [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x0, 0x3, 0x1, 0x1, 0x0}]
+2020-08-24 03:49:16.090 UTC [pvtdatastorage] func1 -> DEBU 419 Purger finished
+2020-08-24 03:49:16.090 UTC [blkstorage] indexBlock -> DEBU 41a Indexing block [blockNum=0, blockHash=[]byte{0x13, 0xbe, 0x29, 0xcf, 0xa4, 0xff, 0xbc, 0xda, 0xc8, 0x21, 0xda, 0x72, 0xc8, 0x43, 0xae, 0x45, 0x70, 0x60, 0xd8, 0x6c, 0x5c, 0xd1, 0xa2, 0x74, 0x86, 0x38, 0x90, 0xeb, 0xde, 0x81, 0xf0, 0xc7} txOffsets=
+txId=046a6f5979733657153c4ef9e5c362e8abbb11a158c272fc8793d1b74f9d3b58 locPointer=offset=39, bytesLength=22356
+]
+2020-08-24 03:49:16.090 UTC [blkstorage] indexBlock -> DEBU 41b Adding txLoc [fileSuffixNum=0, offset=39, bytesLength=22356] for tx ID: [046a6f5979733657153c4ef9e5c362e8abbb11a158c272fc8793d1b74f9d3b58] to txid-index
+2020-08-24 03:49:16.091 UTC [blkstorage] indexBlock -> DEBU 41c Adding txLoc [fileSuffixNum=0, offset=39, bytesLength=22356] for tx number:[0] ID: [046a6f5979733657153c4ef9e5c362e8abbb11a158c272fc8793d1b74f9d3b58] to blockNumTranNum index
+2020-08-24 03:49:16.098 UTC [blkstorage] updateBlockfilesInfo -> DEBU 41d Broadcasting about update blockfilesInfo: latestFileNumber=[0], latestFileSize=[22402], noBlockFiles=[false], lastPersistedBlock=[0]
+2020-08-24 03:49:16.098 UTC [kvledger] CommitLegacy -> DEBU 41e [akctestchannel] Committing block [0] transactions to state database
+2020-08-24 03:49:16.098 UTC [lockbasedtxmgr] Commit -> DEBU 41f lock acquired on oldBlockCommit for committing regular updates to state database
+2020-08-24 03:49:16.098 UTC [pvtstatepurgemgmt] prepareWorkingsetFor -> DEBU 420 Preparing potential purge list working-set for expiringAtBlk [0]
+2020-08-24 03:49:16.098 UTC [leveldbhelper] GetIterator -> DEBU 421 Getting iterator for range [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x2f, 0x30, 0x0, 0x31, 0x0, 0x0}] - [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x2f, 0x30, 0x0, 0x31, 0x1, 0x1, 0x0}]
+2020-08-24 03:49:16.098 UTC [mongodb] executeBatches -> DEBU 422 Executing batches = []
+2020-08-24 03:49:16.098 UTC [mongodb] LoadCommittedVersions -> DEBU 423 missingKeys=map[]
+2020-08-24 03:49:16.098 UTC [mongodb] LoadCommittedVersions -> DEBU 424 nsMetadataMap=map[]
+2020-08-24 03:49:16.098 UTC [pvtstatepurgemgmt] prepareWorkingsetFor -> DEBU 425 No expiry entry found for expiringAtBlk [0]
+2020-08-24 03:49:16.098 UTC [lockbasedtxmgr] Commit -> DEBU 426 Committing updates to state database
+2020-08-24 03:49:16.098 UTC [pvtstatepurgemgmt] buildExpirySchedule -> DEBU 427 Building the expiry schedules based on the update batch
+2020-08-24 03:49:16.098 UTC [lockbasedtxmgr] Commit -> DEBU 428 Write lock acquired for committing updates to state database
+2020-08-24 03:49:16.098 UTC [privacyenabledstate] ApplyPrivacyAwareUpdates -> DEBU 429 ApplyPrivacyAwareUpdates &{%!s(*statemongodb.mongoInstance=&{0xc0004e9900 0xc000456e00 0xc0009f50c0}) %!s(*statemongodb.mongoDatabase=&{0xc0009cce20 statedb akctestchannel_}) akctestchannel map[_lifecycle:%!s(*statemongodb.mongoDatabase=&{0xc0009cce20 statedb akctestchannel__lifecycle})] %!s(*statemongodb.channelMetadata=&{akctestchannel map[_lifecycle:0xc002b0cca0]}) %!s(*statemongodb.versionsCache=&{map[] map[]}) {{%!s(int32=0) %!s(uint32=0)} %!s(uint32=0) %!s(uint32=0) %!s(int32=0) %!s(int32=0)} {{%!s(int32=0) %!s(uint32=0)} %!s(uint32=0) %!s(uint32=0) %!s(int32=0) %!s(int32=0)} %!s(*statemongodb.redoLogger=&{ 0xc002b21300}) %!s(*statemongodb.cache=&{0xc002a90000 <nil> [_lifecycle lscc]})}
+2020-08-24 03:49:16.106 UTC [mongodb] ApplyUpdates -> DEBU 42a ApplyUpdates call applyUpdates: &{%!s(*statemongodb.mongoInstance=&{0xc0004e9900 0xc000456e00 0xc0009f50c0}) %!s(*statemongodb.mongoDatabase=&{0xc0009cce20 statedb akctestchannel_}) akctestchannel map[_lifecycle:%!s(*statemongodb.mongoDatabase=&{0xc0009cce20 statedb akctestchannel__lifecycle})] %!s(*statemongodb.channelMetadata=&{akctestchannel map[_lifecycle:0xc002b0cca0]}) %!s(*statemongodb.versionsCache=&{map[] map[]}) {{%!s(int32=0) %!s(uint32=0)} %!s(uint32=0) %!s(uint32=0) %!s(int32=0) %!s(int32=0)} {{%!s(int32=0) %!s(uint32=0)} %!s(uint32=0) %!s(uint32=0) %!s(int32=0) %!s(int32=0)} %!s(*statemongodb.redoLogger=&{ 0xc002b21300}) %!s(*statemongodb.cache=&{0xc002a90000 <nil> [_lifecycle lscc]})}
+2020-08-24 03:49:16.122 UTC [mongodb] getNamespaceDBHandle -> DEBU 42b [akctestchannel] add namespaceDBInfo for namespace 
+2020-08-24 03:49:16.122 UTC [mongodb] saveDoc -> DEBU 42c Database Name : [statedb] Collection Name : [akctestchannel_] Entering saveDoc() id=[channel_metadata]
+2020-08-24 03:49:16.122 UTC [mongodb] readDoc -> DEBU 42d Database Name : [statedb] Collection Name : [akctestchannel_] Entering readDoc()  id=[channel_metadata]
+2020-08-24 03:49:16.125 UTC [mongodb] readDoc -> DEBU 42e Database Name : [statedb] Collection Name : [akctestchannel_] Exiting readDoc()
+2020-08-24 03:49:16.135 UTC [mongodb] saveDoc -> DEBU 42f Database Name : [statedb] Collection Name : [akctestchannel_] Revision: [3] Exiting saveDoc()
+2020-08-24 03:49:16.135 UTC [mongodb] createMongoCollection -> DEBU 430 createMongoCollection dbName statedb, collectionName akctestchannel_
+2020-08-24 03:49:16.135 UTC [mongodb] addMissingRevisionsFromDB -> DEBU 431 Pulling revisions for the [1] keys for namsespace [statedb] that were not part of the readset
+2020-08-24 03:49:16.135 UTC [mongodb] executeBatches -> DEBU 432 Executing batches = [subNsMetadataRetriever:ns=, num keys=1]
+2020-08-24 03:49:16.136 UTC [mongodb] batchRetrieveDocumentMetadata -> DEBU 433 Database Name : [statedb] Collection Name : [akctestchannel_] Entering batchRetrieveDocumentMetadata()  keys=[CHANNEL_CONFIG_ENV_BYTES]
+2020-08-24 03:49:16.137 UTC [mongodb] batchRetrieveDocumentMetadata -> DEBU 434 [statedb] Exiting batchRetrieveDocumentMetadata()
+2020-08-24 03:49:16.137 UTC [mongodb] applyUpdates -> DEBU 435 stage 2 -- executeCommitter executes each committer to push the changes to the DB &{%!s(*statemongodb.mongoInstance=&{0xc0004e9900 0xc000456e00 0xc0009f50c0}) %!s(*statemongodb.mongoDatabase=&{0xc0009cce20 statedb akctestchannel_}) akctestchannel map[:%!s(*statemongodb.mongoDatabase=&{0xc0009cce20 statedb akctestchannel_}) _lifecycle:%!s(*statemongodb.mongoDatabase=&{0xc0009cce20 statedb akctestchannel__lifecycle})] %!s(*statemongodb.channelMetadata=&{akctestchannel map[:0xc002b41400 _lifecycle:0xc002b0cca0]}) %!s(*statemongodb.versionsCache=&{map[] map[]}) {{%!s(int32=0) %!s(uint32=0)} %!s(uint32=0) %!s(uint32=0) %!s(int32=0) %!s(int32=0)} {{%!s(int32=0) %!s(uint32=0)} %!s(uint32=0) %!s(uint32=0) %!s(int32=0) %!s(int32=0)} %!s(*statemongodb.redoLogger=&{ 0xc002b21300}) %!s(*statemongodb.cache=&{0xc002a90000 <nil> [_lifecycle lscc]})}
+2020-08-24 03:49:16.139 UTC [mongodb] batchUpdateDocuments -> DEBU 436 batchUpdateDocuments =[[0xc000a4a700]]
+2020-08-24 03:49:16.139 UTC [mongodb] printDocumentIds -> DEBU 437 docMetadata jsonValue =[{"_id":"CHANNEL_CONFIG_ENV_BYTES","~version":"CgIAAA=="}]
+2020-08-24 03:49:16.139 UTC [mongodb] printDocumentIds -> DEBU 438 docMetadata =[&{CHANNEL_CONFIG_ENV_BYTES CgIAAA==}]
+2020-08-24 03:49:16.139 UTC [mongodb] batchUpdateDocuments -> DEBU 439 Database Name : [statedb] Collection Name : [akctestchannel_] Entering batchUpdateDocuments()  document ids=[CHANNEL_CONFIG_ENV_BYTES]
+2020-08-24 03:49:16.143 UTC [mongodb] batchUpdateDocuments -> DEBU 43a Database Name : [statedb] Collection Name : [akctestchannel_] Exiting batchUpdateDocuments()  response=[
+ ID : [] Rev : [%!d(string=)] Error : [] Reason : [] 
+]
+2020-08-24 03:49:16.143 UTC [mongodb] commitUpdates -> DEBU 43b commitUpdates resp.Error :
+2020-08-24 03:49:16.144 UTC [mongodb] commitUpdates -> DEBU 43c updateRevisionInCacheUpdate rev :
+2020-08-24 03:49:16.144 UTC [mongodb] recordSavepoint -> DEBU 43d recordSavepoint
+2020-08-24 03:49:16.144 UTC [mongodb] saveDoc -> DEBU 43e Database Name : [statedb] Collection Name : [akctestchannel_] Entering saveDoc() id=[statedb_savepoint]
+2020-08-24 03:49:16.144 UTC [mongodb] readDoc -> DEBU 43f Database Name : [statedb] Collection Name : [akctestchannel_] Entering readDoc()  id=[statedb_savepoint]
+2020-08-24 03:49:16.145 UTC [mongodb] readDoc -> ERRO 440 res.Err() : [mongo: no documents in result]
+2020-08-24 03:49:16.145 UTC [mongodb] readDoc -> DEBU 441 Database Name : [statedb] Collection Name : [akctestchannel_] Document not found
+2020-08-24 03:49:16.147 UTC [mongodb] saveDoc -> DEBU 442 Database Name : [statedb] Collection Name : [akctestchannel_] Revision: [1] Exiting saveDoc()
+2020-08-24 03:49:16.147 UTC [mongodb] recordSavepoint -> DEBU 443 exit recordSavepoint
+2020-08-24 03:49:16.147 UTC [mongodb] ClearCachedVersions -> DEBU 444 Clear Cache
+2020-08-24 03:49:16.147 UTC [lockbasedtxmgr] Commit -> DEBU 445 Updates committed to state database and the write lock is released
+2020-08-24 03:49:16.147 UTC [pvtstatepurgemgmt] prepareWorkingsetFor -> DEBU 446 Preparing potential purge list working-set for expiringAtBlk [1]
+2020-08-24 03:49:16.147 UTC [leveldbhelper] GetIterator -> DEBU 447 Getting iterator for range [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x2f, 0x30, 0x0, 0x31, 0x1, 0x1, 0x0}] - [[]byte{0x61, 0x6b, 0x63, 0x74, 0x65, 0x73, 0x74, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x2f, 0x30, 0x0, 0x31, 0x1, 0x2, 0x0}]
+2020-08-24 03:49:16.147 UTC [mongodb] executeBatches -> DEBU 448 Executing batches = []
+2020-08-24 03:49:16.148 UTC [mongodb] LoadCommittedVersions -> DEBU 449 missingKeys=map[]
+2020-08-24 03:49:16.148 UTC [mongodb] LoadCommittedVersions -> DEBU 44a nsMetadataMap=map[]
+2020-08-24 03:49:16.151 UTC [pvtstatepurgemgmt] prepareWorkingsetFor -> DEBU 44c No expiry entry found for expiringAtBlk [1]
+2020-08-24 03:49:16.148 UTC [lockbasedtxmgr] func1 -> DEBU 44b launched the background routine for preparing keys to purge with the next block
+2020-08-24 03:49:16.151 UTC [kvledger] CommitLegacy -> DEBU 44d [akctestchannel] Committing block [0] transactions to history database
+2020-08-24 03:49:16.151 UTC [history] Commit -> DEBU 44e Channel [akctestchannel]: Updating history database for blockNo [0] with [1] transactions
+2020-08-24 03:49:16.152 UTC [history] Commit -> DEBU 44f Skipping transaction [0] since it is not an endorsement transaction
+2020-08-24 03:49:16.154 UTC [history] Commit -> DEBU 450 Channel [akctestchannel]: Updates committed to history database for blockNo [0]
+2020-08-24 03:49:16.154 UTC [kvledger] CommitLegacy -> INFO 451 [akctestchannel] Committed block [0] with 1 transaction(s) in 80ms (state_validation=7ms block_and_pvtdata_commit=16ms state_commit=53ms) commitHash=[]
+2020-08-24 03:49:16.159 UTC [ledgermgmt] CreateLedger -> INFO 452 Created ledger [akctestchannel] with genesis block
+2020-08-24 03:49:16.159 UTC [lockbasedtxmgr] newQueryExecutor -> DEBU 453 constructing new query executor txid = [9feafe5b-7702-45da-adff-1b5a4cce4fdc]
+2020-08-24 03:49:16.159 UTC [mongodb] GetState -> DEBU 454 GetState(). ns=, key=CHANNEL_CONFIG_ENV_BYTES
+2020-08-24 03:49:16.159 UTC [mongodb] readDoc -> DEBU 455 Database Name : [statedb] Collection Name : [akctestchannel_] Entering readDoc()  id=[CHANNEL_CONFIG_ENV_BYTES]
+2020-08-24 03:49:16.161 UTC [mongodb] readDoc -> DEBU 456 Database Name : [statedb] Collection Name : [akctestchannel_] Exiting readDoc()
+2020-08-24 03:49:16.161 UTC [lockbasedtxmgr] Done -> DEBU 457 Done with transaction simulation / query execution [9feafe5b-7702-45da-adff-1b5a4cce4fdc]
+2020-08-24 03:49:16.162 UTC [chaincode] handleMessage -> DEBU 458 [e1a1a7bd] Fabric side handling ChaincodeMessage of type: COMPLETED in state ready
+2020-08-24 03:49:16.162 UTC [chaincode] Notify -> DEBU 459 [e1a1a7bd] notifying Txid:e1a1a7bdb5d85f681d3b5383121aa98ae839fb1c432adf849b16af3eb7e183bf, channelID:
+2020-08-24 03:49:16.162 UTC [chaincode] Execute -> DEBU 45a Exit
+2020-08-24 03:49:16.162 UTC [endorser] callChaincode -> INFO 45b finished chaincode: cscc duration: 183ms channel= txID=e1a1a7bd
+2020-08-24 03:49:16.163 UTC [comm.grpc.server] 1 -> INFO 45c unary call completed grpc.service=protos.Endorser grpc.method=ProcessProposal grpc.peer_address=192.168.106.107:33182 grpc.code=OK grpc.call_duration=188.8246ms
+2020-08-24 03:49:16.165 UTC [grpc] warningf -> DEBU 45d transport: http2Server.HandleStreams failed to read frame: read tcp 192.168.105.124:7051->192.168.106.107:33182: read: connection reset by peer

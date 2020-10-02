@@ -8,13 +8,15 @@ from utils import hiss, util
 import settings
 
 def create_docker_secret(namespace, name):
+    print(name)
+    print(namespace)
     create_cmd = ('kubectl create secret docker-registry '+name+
     ' --docker-server='+settings.PRIVATE_DOCKER_SEVER+
     ' --docker-username='+settings.PRIVATE_DOCKER_USER+
     ' --docker-password='+settings.PRIVATE_DOCKER_PASSWORD+
     ' --docker-email='+settings.PRIVATE_DOCKER_EMAIL+
     ' -n '+namespace)
-    # print(create_cmd)
+    print(create_cmd)
     res = os.system(create_cmd)
     return True if res == 0 else False
 

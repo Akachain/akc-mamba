@@ -3,31 +3,31 @@
   kind: StatefulSet
   metadata:
     namespace: {{PEER_DOMAIN}}
-    name: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
+    name: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}
   spec:
-    serviceName: couchdb{{PEER_INDEX}}
+    serviceName: {{STATEDB}}{{PEER_INDEX}}
     replicas: 1
     selector:
       matchLabels:
         app: hyperledger
-        role: couchdb
-        couchdb-id: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
+        role: {{STATEDB}}
+        statedb-id: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}
         org: {{PEER_DOMAIN}}
         type: stateful
     template:
       metadata:
         labels:
           app: hyperledger
-          role: couchdb
-          couchdb-id: couchdb{{PEER_INDEX}}-{{PEER_ORG}}
+          role: {{STATEDB}}
+          statedb-id: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}
           org: {{PEER_DOMAIN}}
           type: stateful
       spec:
         containers:
-        - name: couchdb
-          image: couchdb:{{COUCHDB_TAG}}
+        - name: {{STATEDB}}
+          image: {{STATEDB_IMAGE}}
           ports:
-            - containerPort: 5984
+            - containerPort: {{STATEDB_PORT}}
           # resources:
           #   requests:
           #     # memory: "3000Mi"
@@ -35,26 +35,25 @@
           #     memory: "150Mi"
           #     cpu: "100m"
           volumeMounts:
-          - name: couch{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
-            mountPath: /opt/couchdb/data
+          - name: {{STATEDB}}{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
+            mountPath: /opt/{{STATEDB}}/data
           env:
-          - name: COUCHDB_USER
+          - name: {{STATEDB_INIT_USER_NAME}}
             value: admin
-          - name: COUCHDB_PASSWORD
-            value: -pbkdf2-847043acc65626c8eb98da6d78682fbc493a1787,f7b1a3e4b624f4f0bbfe87e96841eda0,10
-          - name: COUCHDB_SECRET
+          - name: {{STATEDB_INIT_PASSWORD_NAME}}
+            value: passwordtest
+          - name: {{STATEDB_INIT_SECRET_NAME}}
             value: 0123456789abcdef0123456789abcdef
           - name: NODENAME
-            value: couchdb{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}
+            value: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}
     volumeClaimTemplates:
     - metadata:
-        name: couch{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
+        name: {{STATEDB}}{{PEER_INDEX}}-pvc-{{PEER_DOMAIN}}
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: gp2
         resources:
           requests:
-            storage: 5Gi
+            storage: 10Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -82,12 +81,13 @@ spec:
     spec:
       containers:
       - name: peer{{PEER_INDEX}}-{{PEER_ORG}}
-        image: hyperledger/fabric-peer:{{FABRIC_TAG}}
+        image: {{PEER_IMAGE}}
         # resources:
         #   requests:
         #     # memory: "3000Mi"
         #     memory: "300Mi"
         #     cpu: "200m"
+        imagePullPolicy: Always
         command: ["sh", "-c", "peer node start"]
         env:
         - name: CORE_CHAINCODE_BUILDER
@@ -125,17 +125,17 @@ spec:
         - name: CORE_PEER_TLS_ROOTCERT_FILE
           value: /shared/peers/peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}/tls/tlscacerts/tls-ica-{{PEER_ORG}}-{{PEER_DOMAIN}}-7054.pem
         - name: CORE_LEDGER_STATE_STATEDATABASE
-          value: CouchDB
+          value: {{STATEDB}}
         - name: FABRIC_CFG_PATH
           value: /etc/hyperledger/fabric/
         - name: GODEBUG
           value: "netdns=go"
-        - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
-          value: couchdb{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}:5984
-        - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
+        - name: {{CORE_LEDGER_STATE_CONFIG_ADDRESS}}
+          value: {{STATEDB}}{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}:{{STATEDB_PORT}}
+        - name: {{CORE_LEDGER_STATE_CONFIG_USERNAME}}
           value: admin
-        - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
-          value: password
+        - name: {{CORE_LEDGER_STATE_CONFIG_PASSWORD}}
+          value: passwordtest
         - name: CORE_PEER_ADDRESSAUTODETECT
           value: "true"
         - name: CORE_OPERATIONS_LISTENADDRESS
@@ -145,8 +145,6 @@ spec:
         # Allow more time for chaincode container to build on install.
         - name: CORE_CHAINCODE_EXECUTETIMEOUT
           value: 300s
-        - name: FABRIC_LOGGING_SPEC
-          value: INFO
         workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         ports:
         - containerPort: 7051
