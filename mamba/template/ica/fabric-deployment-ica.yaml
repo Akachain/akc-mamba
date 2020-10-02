@@ -62,20 +62,20 @@ spec:
        - name: scripts
          nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
        - name: data
          nfs:
           server: {{EFS_SERVER}}
-          path: /pvs/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
   volumeClaimTemplates:
   - metadata:
       name: {{ICA_NAME}}-pvc
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: gp2
+      storageClassName: {{STORAGE_CLASS}}
       resources:
         requests:
-          storage: 5Gi
+          storage: 3Gi
 ---
 apiVersion: v1
 kind: Service

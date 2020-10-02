@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-efs
+  namespace: default
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: test-efs
+  template:
+    metadata:
+      labels:
+        app: test-efs
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: test-pod
+        image: nginx
+        command:
+          - /bin/sh
+          - -c 
+          - |
+            set -xe
+            apt-get update;
+            apt-get install -y telnet;
+            apt-get install -y curl;
+            apt-get install -y vim;
+            tail -f /etc/hosts;
+        volumeMounts:
+          - name: nfs-pvc
+            mountPath: "/tmp/artifact"
+      volumes:
+        - name: nfs-pvc
+          persistentVolumeClaim:
+            claimName: nfs
+    

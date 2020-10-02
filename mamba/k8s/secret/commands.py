@@ -5,7 +5,7 @@ import os
 from kubernetes import client
 from os import path
 from utils import hiss, util
-import settings
+from settings import settings
 
 def create_docker_secret(namespace, name):
     print(name)

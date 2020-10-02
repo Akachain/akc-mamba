@@ -6,7 +6,7 @@ from kubernetes import client
 from kubernetes.client.rest import ApiException
 from os import path
 
-import settings
+from settings import settings
 from utils import util, hiss
 
 

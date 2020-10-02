@@ -1,7 +1,7 @@
 import click
 import os
 import time
-import settings
+from settings import settings
 from os import path
 
 from shutil import copyfile
@@ -43,6 +43,8 @@ def create_new_org():
     # Run jobs to register peers
     reg_all_peer()
 
+    time.sleep(1)
+
     # Run jobs to enroll peers
     enroll_all_peer()
 
@@ -79,7 +81,8 @@ def create_new_org():
         'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
 
     # Create configtx

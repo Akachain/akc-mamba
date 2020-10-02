@@ -103,7 +103,7 @@
         name: peer1-pvc-akctest
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: gp2
+        storageClassName: {{STORAGE_CLASS}}
         resources:
           requests:
             storage: 5Gi

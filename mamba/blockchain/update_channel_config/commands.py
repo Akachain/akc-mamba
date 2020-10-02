@@ -1,7 +1,7 @@
 import click
 import os
 import time
-import settings
+from settings import settings
 from os import path
 
 from utils import hiss, util
@@ -29,7 +29,8 @@ def fetch_config(org=None, domain=None):
         'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
     k8s_template_file = '%s/add-org/2fetch-channel.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(
@@ -45,7 +46,8 @@ def modify_config(domain=None):
         'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
     k8s_template_file = '%s/add-org/3modifyingorgmaterial.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(
@@ -62,7 +64,8 @@ def create_config_update_pb(domain=None):
         'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
     k8s_template_file = '%s/add-org/4createconfigupdate.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(
@@ -82,7 +85,8 @@ def update_channel_config(org=None, domain=None):
         'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
     k8s_template_file = '%s/add-org/6updatechannelconfig.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(

@@ -30,8 +30,8 @@
             requests:
               # memory: "3000Mi"
               # cpu: "2000m"
-              # memory: "512Mi"
-              # cpu: "512m"
+              memory: "512Mi"
+              cpu: "512m"
           volumeMounts:
           - name: couch1-0-pvc-akctest
             mountPath: /opt/couchdb/data
@@ -57,7 +57,7 @@
         name: couch1-0-pvc-akctest
       spec:
         accessModes: [ "ReadWriteOnce" ]
-        storageClassName: gp2
+        storageClassName: {{STORAGE_CLASS}}
         resources:
           requests:
             storage: 5Gi

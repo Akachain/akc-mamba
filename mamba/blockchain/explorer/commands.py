@@ -7,7 +7,7 @@ import time
 from kubernetes import client
 from os import path
 from utils import hiss, util
-import settings
+from settings import settings
 
 def get_namespace():
     # Get domain
@@ -207,7 +207,8 @@ def setup_explorer():
         'DATABASE_PASSWORD': 'Akachain',
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
 
     # Deploy explorer db sts

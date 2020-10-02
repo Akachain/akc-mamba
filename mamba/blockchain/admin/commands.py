@@ -4,7 +4,7 @@ import re
 from kubernetes import client
 from os import path
 from utils import hiss, util
-import settings
+from settings import settings
 
 def setup_admin(org):
 
@@ -43,7 +43,8 @@ def setup_admin(org):
         'ORGDERER_NAME': orderer_names[0],
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
 
     # Apply deployment

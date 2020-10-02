@@ -1,7 +1,7 @@
 import click
 import os
 import time
-import settings
+from settings import settings
 from os import path
 
 from utils import hiss, util
@@ -23,7 +23,8 @@ def update_anchor_peer(org):
         'FABRIC_TAG': settings.FABRIC_TAG,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
     k8s_template_file = '%s/update-anchor-peer/fabric-deployment-anchor-peer.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(

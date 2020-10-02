@@ -6,7 +6,7 @@ from kubernetes import client
 from os import path
 from kubernetes.client.rest import ApiException
 from utils import hiss, util
-import settings
+from settings import settings
 
 
 def terminate_peer(peer, index):
@@ -55,6 +55,11 @@ def setup_peer(peer, index):
     # Create temp folder & namespace
     settings.k8s.prereqs(domain)
 
+    if settings.K8S_TYPE == 'minikube':
+        storage_class = 'standard'
+    else:
+        storage_class = 'gp2'
+
     dict_env = {
         'PEER_ORG': peer,
         'PEER_DOMAIN': domain,
@@ -75,6 +80,8 @@ def setup_peer(peer, index):
         'CORE_LEDGER_STATE_CONFIG_ADDRESS': settings.CORE_LEDGER_STATE_CONFIG_ADDRESS,
         'CORE_LEDGER_STATE_CONFIG_USERNAME': settings.CORE_LEDGER_STATE_CONFIG_USERNAME,
         'CORE_LEDGER_STATE_CONFIG_PASSWORD': settings.CORE_LEDGER_STATE_CONFIG_PASSWORD
+        'PVS_PATH': settings.PVS_PATH,
+        'STORAGE_CLASS': storage_class
     }
 
     peer_stateful = '%s/peer-sts/peer-stateful.yaml' % util.get_k8s_template_path()

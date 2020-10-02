@@ -4,7 +4,7 @@ import re
 from kubernetes import client
 from os import path
 from utils import hiss, util
-import settings
+from settings import settings
 
 def generate_ccp(org):
 
@@ -20,7 +20,8 @@ def generate_ccp(org):
         'ORG_DOMAIN': domain,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
-        'EFS_EXTEND': settings.EFS_EXTEND
+        'EFS_EXTEND': settings.EFS_EXTEND,
+        'PVS_PATH': settings.PVS_PATH
     }
 
     settings.k8s.apply_yaml_from_template(
