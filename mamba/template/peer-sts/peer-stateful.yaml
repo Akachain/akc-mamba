@@ -137,6 +137,8 @@ spec:
           value: admin
         - name: {{CORE_LEDGER_STATE_CONFIG_PASSWORD}}
           value: passwordtest
+        - name: REQUESTTIMEOUT
+          value: 35000
         - name: CORE_PEER_ADDRESSAUTODETECT
           value: "true"
         - name: CORE_OPERATIONS_LISTENADDRESS
