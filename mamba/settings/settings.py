@@ -8,7 +8,7 @@ import yaml
 import shutil
 from utils.kube import KubeHelper
 from dotenv import load_dotenv
-from utils import util
+from utils import util, hiss
 import git
 import subprocess
 
@@ -18,7 +18,7 @@ def init(dotenv_path, set_default):
         shutil.copy(dotenv_path, default_path)
         load_dotenv(default_path)
     else:
-        print('Loading config from akachain git repo...')
+        hiss.rattle('Loading config from akachain git repo...')
         # clone repo akc-mamba to load config
         mamba_path = expanduser('~/.akachain')
         if not os.path.isdir(mamba_path):
@@ -29,7 +29,7 @@ def init(dotenv_path, set_default):
             bashCommand = 'sudo vi ' + default_path
             subprocess.call(bashCommand, shell=True)
 
-        print("%s", dotenv_path)
+        print(dotenv_path)
         load_dotenv(dotenv_path)
 
     global PVS_PATH
