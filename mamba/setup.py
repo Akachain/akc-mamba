@@ -26,5 +26,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    keywords='mamba akc-mamba hyperledger fabric blockchain network'
+    keywords='mamba akc-mamba hyperledger fabric blockchain network',
 )

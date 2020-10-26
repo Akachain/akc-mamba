@@ -87,3 +87,4 @@ python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps examp
 
 ## References
 https://packaging.python.org/tutorials/
+https://setuptools.readthedocs.io/en/latest/pkg_resources.html#resourcemanager-api

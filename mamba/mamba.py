@@ -1,3 +1,4 @@
+import os
 from os.path import expanduser
 import click
 from settings import settings
@@ -42,17 +43,10 @@ from blockchain.external_chaincode.commands import externalCC
 from blockchain.generate_ccp.commands import ccp
 
 
-@click.group(invoke_without_command=True)
-@click.option('-config', default=expanduser('~/.akachain/akc-mamba/mamba/config/.env'))
-@click.option('--set-default/--no-default', default=False)
-def mamba(config, set_default):
+@click.group()
+def mamba():
     # Setup all shared global utilities in settings module
-    settings.init(config, set_default)
-    if mamba.invoke_without_command:
-        hiss.rattle('Initialize mamba')
-        hiss.echo('Successfully with \'%s\' on the %s!' %
-                  (config, settings.EKS_CLUSTER_NAME))
-
+    settings.init()
 
 mamba.add_command(environment)
 mamba.add_command(vpn)

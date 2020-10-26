@@ -9,28 +9,34 @@ import shutil
 from utils.kube import KubeHelper
 from dotenv import load_dotenv
 from utils import util, hiss
-import git
-import subprocess
 
-def init(dotenv_path, set_default):
+import config
+
+def init():
+
+    # Extract config
+    mamba_config = expanduser('~/.akachain/akc-mamba/mamba/config')
     default_path = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
-    if set_default:
+    if not os.path.isdir(mamba_config):
+        dotenv_path = util.get_package_resource('config', '.env')
+        os.makedirs(mamba_config)
         shutil.copy(dotenv_path, default_path)
-        load_dotenv(default_path)
-    else:
-        hiss.rattle('Loading config from akachain git repo...')
-        # clone repo akc-mamba to load config
-        mamba_path = expanduser('~/.akachain')
-        if not os.path.isdir(mamba_path):
-            os.makedirs(mamba_path)
-            git.Git(mamba_path).clone('https://github.com/Akachain/akc-mamba.git', branch='binary-config-v2')
-            env_template_path = expanduser('~/.akachain/akc-mamba/mamba/config/operator.env-template')
-            shutil.copy(env_template_path, default_path)
-            bashCommand = 'sudo vi ' + default_path
-            subprocess.call(bashCommand, shell=True)
 
-        print(dotenv_path)
-        load_dotenv(dotenv_path)
+    # Extract scripts
+    default_scripts_path = expanduser('~/.akachain/akc-mamba/mamba/scripts')
+    if not os.path.isdir(default_scripts_path):
+        script_path = util.get_package_resource('', 'scripts')
+        shutil.copytree(script_path, default_scripts_path)
+
+    # Extract template
+    default_template_path = expanduser('~/.akachain/akc-mamba/mamba/template')
+    if not os.path.isdir(default_template_path):
+        template_path = util.get_package_resource('', 'template')
+        shutil.copytree(template_path, default_template_path)
+
+    # Load env
+    load_dotenv(default_path)
+    print(default_path)
 
     global PVS_PATH
     global K8S_TYPE

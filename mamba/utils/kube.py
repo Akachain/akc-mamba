@@ -1,11 +1,9 @@
 import os
 import yaml
-import re
 import time
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
 from kubernetes.stream import stream
-from pprint import pprint
 from utils import hiss, util
 from k8s.namespace import Namespace
 from settings import settings
@@ -23,18 +21,20 @@ class KubeHelper:
         if not pods:
             msg = 'Pod %s not found!' % name
             return util.Result(success=False, msg=msg)
-        
+
         for pod in pods:
             try:
-                api_response = self.coreApi.read_namespaced_pod_log(pod, namespace)
+                api_response = self.coreApi.read_namespaced_pod_log(
+                    pod, namespace)
                 print(api_response)
             except ApiException as e:
-                print("Exception when calling CoreV1Api->read_namespaced_pod_log: %s\n" % e)
-
+                print(
+                    "Exception when calling CoreV1Api->read_namespaced_pod_log: %s\n" % e)
 
     def read_stateful_set(self, name, namespace):
         try:
-            api_response = self.appsApi.read_namespaced_stateful_set(name, namespace)
+            api_response = self.appsApi.read_namespaced_stateful_set(
+                name, namespace)
             return util.Result(success=True, data=api_response)
         except ApiException as e:
             msg = "Exception when calling AppsV1Api->read_namespaced_stateful_set: %s\n" % e
@@ -43,8 +43,10 @@ class KubeHelper:
     def delete_job(self, name, namespace):
         try:
             body = client.V1DeleteOptions(propagation_policy='Background')
-            api_response = self.batchApi.delete_namespaced_job(name, namespace, body=body)
-            hiss.echo('Delete job %s on namespace %s success' % (name, namespace))
+            api_response = self.batchApi.delete_namespaced_job(
+                name, namespace, body=body)
+            hiss.echo('Delete job %s on namespace %s success' %
+                      (name, namespace))
             return util.Result(success=True, data=api_response)
         except ApiException as e:
             err_msg = "Exception when calling BatchV1Api->delete_namespaced_job: %s\n" % e
@@ -52,7 +54,8 @@ class KubeHelper:
 
     def delete_persistent_volume_claim(self, name, namespace):
         try:
-            api_response = self.coreApi.delete_namespaced_persistent_volume_claim(name=name, namespace=namespace)
+            api_response = self.coreApi.delete_namespaced_persistent_volume_claim(
+                name=name, namespace=namespace)
             return util.Result(success=True, data=api_response)
         except ApiException as e:
             err_msg = "Exception when calling CoreV1Api->delete_namespaced_persistent_volume_claim: %s\n" % e
@@ -72,26 +75,30 @@ class KubeHelper:
                     list_pvc = self.find_pvc(namespace, keyword=pvt_name)
                     for pvc in list_pvc:
                         hiss.echo('Delete pvc %s ' % pvc)
-                        self.delete_persistent_volume_claim(name=pvc, namespace=namespace)
+                        self.delete_persistent_volume_claim(
+                            name=pvc, namespace=namespace)
 
         try:
             body = client.V1DeleteOptions(propagation_policy='Background')
-            api_response = self.appsApi.delete_namespaced_stateful_set(name, namespace, body=body)
-            self.check_pod_status_by_keyword(keyword=name, namespace=namespace, is_delete=True)
-            hiss.echo('%s stateful set %s on namespace %s success' % (action, name, namespace))
+            api_response = self.appsApi.delete_namespaced_stateful_set(
+                name, namespace, body=body)
+            self.check_pod_status_by_keyword(
+                keyword=name, namespace=namespace, is_delete=True)
+            hiss.echo('%s stateful set %s on namespace %s success' %
+                      (action, name, namespace))
             return util.Result(success=True, data=api_response)
         except ApiException as e:
             err_msg = "Exception when calling AppsV1Api->delete_namespaced_stateful_set: %s\n" % e
             return util.Result(success=hiss.hiss(err_msg), msg=err_msg)
 
     def check_pod_status_by_keyword(self, keyword, namespace, is_delete=False, check_job_success=False):
-        
+
         condition_status = 'Running' if is_delete else 'Pending'
         condition_status = 'Succeeded' if check_job_success else condition_status
 
         # Check status
-        count = 0 # Use count variable to detect replica
-        msg = '' # Message show the status of the pod
+        count = 0  # Use count variable to detect replica
+        msg = ''  # Message show the status of the pod
         while True:
             time.sleep(1)
             # Find efs pod
@@ -101,11 +108,12 @@ class KubeHelper:
                 if is_delete:
                     hiss.sub_echo('Done')
                     break
-                hiss.sub_echo('cannot find tiller pod when check status.. retry')
+                hiss.sub_echo(
+                    'cannot find tiller pod when check status.. retry')
                 continue
 
             if is_delete:
-                newMsg =  '%s terminating' % keyword
+                newMsg = '%s terminating' % keyword
                 if msg != newMsg:
                     msg = newMsg
                     hiss.sub_echo(msg)
@@ -118,8 +126,8 @@ class KubeHelper:
             # Check status
             while True:
                 resp = self.coreApi.read_namespaced_pod_status(name=pods[count],
-                                                        namespace=namespace)
-                
+                                                               namespace=namespace)
+
                 # Manage notify display
                 newMsg = '%s %s' % (pods[count], resp.status.phase)
                 if msg != newMsg:
@@ -150,26 +158,28 @@ class KubeHelper:
             volume_claim_templates = doc['spec']['volumeClaimTemplates']
             for vct in volume_claim_templates:
                 vct_name = vct['metadata']['name']
-                
+
                 # Get containers in doc
                 containers = doc['spec']['template']['spec']['containers']
                 for container in containers:
                     volume_mounts = container['volumeMounts']
                     # Find and remove volume mount
-                    volume = next((volume for volume in volume_mounts if volume['name'] == vct_name), None)
+                    volume = next(
+                        (volume for volume in volume_mounts if volume['name'] == vct_name), None)
                     volume_mounts.remove(volume)
 
                 # Remove volume claim template
                 volume_claim_templates.remove(vct)
 
     def apply_yaml_from_template(self, namespace, k8s_template_file, dict_env):
-        yaml_path, _ = util.load_yaml_config_template(k8s_template_file, dict_env)
+        yaml_path, _ = util.load_yaml_config_template(
+            k8s_template_file, dict_env)
         hiss.sub_echo('Create %s successfully' % yaml_path)
 
         # Execute yaml
         # hiss.echo('Apply yaml file')
-        stream = open(yaml_path, 'r')
-        docs = yaml.safe_load_all(stream)
+        stream_file = open(yaml_path, 'r')
+        docs = yaml.safe_load_all(stream_file)
 
         success = True
         for doc in docs:
@@ -187,16 +197,20 @@ class KubeHelper:
                         self.remove_pvc(doc)
                     self.appsApi.create_namespaced_stateful_set(
                         namespace, body=doc)
-                    self.check_pod_status_by_keyword(keyword=doc['metadata']['name'], namespace=namespace)
+                    self.check_pod_status_by_keyword(
+                        keyword=doc['metadata']['name'], namespace=namespace)
                 if doc['kind'] == 'Deployment':
                     self.appsApi.create_namespaced_deployment(
                         namespace, body=doc)
-                    self.check_pod_status_by_keyword(keyword=doc['metadata']['name'], namespace=namespace)
+                    self.check_pod_status_by_keyword(
+                        keyword=doc['metadata']['name'], namespace=namespace)
                 if doc['kind'] == 'Job':
                     self.batchApi.create_namespaced_job(namespace, body=doc)
-                    self.check_pod_status_by_keyword(keyword=doc['metadata']['name'], namespace=namespace, check_job_success=True)
+                    self.check_pod_status_by_keyword(
+                        keyword=doc['metadata']['name'], namespace=namespace, check_job_success=True)
                 if doc['kind'] == 'ConfigMap':
-                    self.coreApi.create_namespaced_config_map(namespace, body=doc)
+                    self.coreApi.create_namespaced_config_map(
+                        namespace, body=doc)
             except ApiException as e:
                 print("Exception when apply yaml: %s\n" % e)
                 success = False
@@ -209,9 +223,6 @@ class KubeHelper:
         if not ns.get():
             hiss.sub_echo('Namespace %s does not exist. Creating...' % name)
             ns.create()
-        # else:
-        #     hiss.sub_echo('Namespace %s already exists' % name)
-
 
     def show_all_pods(self):
         ret = self.coreApi.list_pod_for_all_namespaces(watch=False)
@@ -256,7 +267,8 @@ class KubeHelper:
     def find_pvc(self, namespace, keyword):
         list_pvc = []
         try:
-            ret = self.coreApi.list_namespaced_persistent_volume_claim(namespace)
+            ret = self.coreApi.list_namespaced_persistent_volume_claim(
+                namespace)
             for item in ret.items:
                 if keyword in item.metadata.name:
                     list_pvc.append(item.metadata.name)
@@ -280,7 +292,8 @@ class KubeHelper:
             sourcePath = source
             if os.path.isdir(sourcePath):
                 sourcePath = '%s/.' % source
-            cmd = 'kubectl cp %s -n %s %s:%s' % (sourcePath, namespace, podName, target)
+            cmd = 'kubectl cp %s -n %s %s:%s' % (
+                sourcePath, namespace, podName, target)
             copyResult = os.system(cmd)
             if copyResult != 0:
                 return hiss.hiss('cannot copy to pod')
