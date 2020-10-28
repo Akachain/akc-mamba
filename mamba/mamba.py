@@ -8,6 +8,7 @@ from utils import hiss
 from k8s.vpn.commands import vpn
 from k8s.secret.commands import secret
 from k8s.environment.commands import environment
+from k8s.config.commands import extract_config
 
 from blockchain.copyscripts.commands import copyscripts
 from blockchain.reg_orgs.commands import reg_orgs
@@ -48,6 +49,7 @@ def mamba():
     # Setup all shared global utilities in settings module
     settings.init()
 
+mamba.add_command(extract_config)
 mamba.add_command(environment)
 mamba.add_command(vpn)
 mamba.add_command(copyscripts)

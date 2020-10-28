@@ -4,44 +4,19 @@
 # https://stackoverflow.com/questions/13034496/using-global-variables-between-files
 import os
 from os.path import expanduser
-import yaml
 import shutil
 from utils.kube import KubeHelper
 from dotenv import load_dotenv
 from utils import util, hiss
-
-import config
+from k8s.config import commands
 
 def init():
 
-    # Extract config
-    mamba_config = expanduser('~/.akachain/akc-mamba/mamba/config')
-    default_config_path = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
-    if not os.path.isdir(mamba_config):
-        dotenv_path = util.get_package_resource('config', '.env')
-        os.makedirs(mamba_config)
-        shutil.copy(dotenv_path, default_config_path)
-
-    # Extract scripts
-    default_scripts_path = expanduser('~/.akachain/akc-mamba/mamba/scripts')
-    if not os.path.isdir(default_scripts_path):
-        script_path = util.get_package_resource('', 'scripts')
-        shutil.copytree(script_path, default_scripts_path)
-
-    # Extract template
-    default_template_path = expanduser('~/.akachain/akc-mamba/mamba/template')
-    if not os.path.isdir(default_template_path):
-        template_path = util.get_package_resource('', 'template')
-        shutil.copytree(template_path, default_template_path)
-
-    # Extract other
-    default_path = expanduser('~/.akachain/akc-mamba/mamba/k8s/')
-    if not os.path.isdir(default_path):
-        other_path = util.get_package_resource('k8s', '')
-        shutil.copytree(other_path, default_path)
+    DEFAULT_CONFIG_PATH = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
+    commands.extract(False, False, False, False, False)
 
     # Load env
-    load_dotenv(default_config_path)
+    load_dotenv(DEFAULT_CONFIG_PATH)
 
     global PVS_PATH
     global K8S_TYPE
