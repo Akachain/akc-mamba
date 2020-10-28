@@ -60,8 +60,8 @@ def get_package_resource(package_or_requirement: str, resource_name: str):
 def get_temp_path():
     return expanduser('~/.akachain/akc-mamba/mamba/_temp')
 
-def get_k8s_template_path(file_name: str):
-    return get_package_resource('template', file_name)
+def get_k8s_template_path():
+    return expanduser('~/.akachain/akc-mamba/mamba/template')
 
 def split_timenow_utc():
     # Get current datetime (UTC)

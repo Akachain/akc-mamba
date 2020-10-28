@@ -16,37 +16,50 @@ function logResult {
 }
 
 function main {
-  local ORG="" 
 
-  # Enroll admin for each org
+  # Setup default environment
+  local DEFAULT_ORG_NAME=""
+  local DEFAULT_ORG_DOMAIN="" 
+  local DEFAULT_ADMIN_URL=""
   for PEER_ORG in $PEER_ORGS
   do
-    ORG=$PEER_ORG
-    initOrgVars $ORG
-    log "Enroll Admin: $PEER_ORG"
-    ENROLL_ADMIN=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
-      "orgName":"'"${PEER_ORG}"'",
-      "adminName": "'"${INT_CA_ADMIN_USER}"'",
-      "adminPassword": "'"${INT_CA_ADMIN_PASS}"'"
-    }');
-    logResult "$ENROLL_ADMIN"
-
-    log "Register User: $PEER_ORG"
-    REGISTER_USER=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/registerUser   -H "content-type: application/json"   -d '{
-      "orgName":"'"${PEER_ORG}"'",
-      "affiliation":"'"${PEER_ORG}"'.akc",
-      "affiliation":"'"${PEER_ORG}"'.akc",
-      "userName": "'"${PEER_ORG}"'",
-      "role": "client",
-      "adminName": "'"${INT_CA_ADMIN_USER}"'"
-    }');
-    logResult "$ENROLL_ADMIN"
+    if [ "$DEFAULT_ORG_DOMAIN" == "" ]; then
+      DEFAULT_ORG_NAME=$PEER_ORG
+      getDomain $DEFAULT_ORG_NAME
+      DEFAULT_ORG_DOMAIN=$DOMAIN
+      DEFAULT_ADMIN_URL="http://admin-v2-${DEFAULT_ORG_NAME}.${DEFAULT_ORG_DOMAIN}:4001"
+    fi
   done
+
+  # # Enroll admin for each org
+  # for PEER_ORG in $PEER_ORGS
+  # do
+  #   getDomain $PEER_ORG
+  #   ADMIN_URL="http://admin-v2-${PEER_ORG}.${DOMAIN}:4001"
+  #   initOrgVars $PEER_ORG
+  #   log "Enroll Admin: $PEER_ORG"
+  #   ENROLL_ADMIN=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
+  #     "orgName":"'"${PEER_ORG}"'",
+  #     "adminName": "'"${INT_CA_ADMIN_USER}"'",
+  #     "adminPassword": "'"${INT_CA_ADMIN_PASS}"'"
+  #   }');
+  #   logResult "$ENROLL_ADMIN"
+
+  #   log "Register User: $PEER_ORG"
+  #   REGISTER_USER=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/registerUser   -H "content-type: application/json"   -d '{
+  #     "orgName":"'"${PEER_ORG}"'",
+  #     "affiliation":"'"${PEER_ORG}"'.akc",
+  #     "userName": "'"${PEER_ORG}"'",
+  #     "role": "client",
+  #     "adminName": "'"${INT_CA_ADMIN_USER}"'"
+  #   }');
+  #   logResult "$ENROLL_ADMIN"
+  # done
 
   # Create channel
   log "CREATE CHANNEL: $CHANNEL_NAME"
-  CREATE_CHANNEL_CC=$(curl -s -X POST   ${ADMIN_URL}/api/v2/channels/create   -H "content-type: application/json"   -d '{
-    "orgName":"'"${ORG}"'",
+  CREATE_CHANNEL_CC=$(curl -s -X POST   ${DEFAULT_ADMIN_URL}/api/v2/channels/create   -H "content-type: application/json"   -d '{
+    "orgName":"'"${DEFAULT_ORG_NAME}"'",
     "peerIndex":"0",
     "channelName":"'"${CHANNEL_NAME}"'",
     "ordererAddress":"'"${ORDERER_ADDRESS}"'",
@@ -60,6 +73,8 @@ function main {
   local DELAY=3
   for PEER_ORG in $PEER_ORGS
   do
+    getDomain $PEER_ORG
+    ADMIN_URL="http://admin-v2-${PEER_ORG}.${DOMAIN}:4001"
     log "Org ${PEER_ORG} join the channel ${CHANNEL_NAME}"
     for (( h=0; h<=$MAX_RETRY; h++ ))
     do
@@ -79,22 +94,25 @@ function main {
     done
   done
 
-  # Package sample chaincode
-  log "PACKAGE CHAINCODE"
-  PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/packageCC   -H "content-type: application/json"   -d '{
-    "orgname":"'"${ORG}"'",
-    "chaincodePath":"chaincodes/fabcar",
-    "chaincodeName":"fabcar",
-    "chaincodeVersion":"1",
-    "chaincodeType":"golang",
-    "peerIndex": "0"
-  }');
-  logResult "$PACKAGE_CHAINCODE"
-
   # Install and approve sample chaincode
   log "INSTALL CHAINCODE"
   for PEER_ORG in $PEER_ORGS
   do
+    getDomain $PEER_ORG
+    ADMIN_URL="http://admin-v2-${PEER_ORG}.${DOMAIN}:4001"
+
+    # Package sample chaincode
+    log "PACKAGE CHAINCODE"
+    PACKAGE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/packageCC   -H "content-type: application/json"   -d '{
+      "orgname":"'"${PEER_ORG}"'",
+      "chaincodePath":"/chaincodes/fabcar",
+      "chaincodeName":"fabcar",
+      "chaincodeVersion":"1",
+      "chaincodeType":"golang",
+      "peerIndex": "0"
+    }');
+    logResult "$PACKAGE_CHAINCODE"
+
     INSTALL_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/install   -H "content-type: application/json"   -d '{
       "orgname":"'"${PEER_ORG}"'",
       "chaincodeName":"fabcar",
@@ -121,25 +139,26 @@ function main {
       "ordererAddress":"'"${ORDERER_ADDRESS}"'"
     }');
     logResult "$APPROVE_CHAINCODE"
+
   done
 
   # Commit chaincode
-  log "COMMIT CHAINCODE"
-  COMMIT_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/commitChaincodeDefinition   -H "content-type: application/json"   -d '{
-    "chaincodeName":"fabcar",
-    "chaincodeVersion":1,
-    "channelName":"'"${CHANNEL_NAME}"'",
-    "target": "'"0 ${ORG}"'",
-    "ordererAddress": "'"${ORDERER_ADDRESS}"'"
-  }');
-  logResult "$COMMIT_CHAINCODE"
+    log "COMMIT CHAINCODE"
+    COMMIT_CHAINCODE=$(curl -s -X POST   ${DEFAULT_ADMIN_URL}/api/v2/chaincodes/commitChaincodeDefinition   -H "content-type: application/json"   -d '{
+      "chaincodeName":"fabcar",
+      "chaincodeVersion":1,
+      "channelName":"'"${CHANNEL_NAME}"'",
+      "target": "'"0 ${DEFAULT_ORG_NAME}"'",
+      "ordererAddress": "'"${ORDERER_ADDRESS}"'"
+    }');
+    logResult "$COMMIT_CHAINCODE"
 
   # Invoke sample chaincode
   log "INVOKE CHAINCODE"
-  INVOKE_CHAINCODE=$(curl -s -X POST   ${ADMIN_URL}/api/v2/chaincodes/invokeCLI   -H "content-type: application/json"   -d '{
+  INVOKE_CHAINCODE=$(curl -s -X POST   ${DEFAULT_ADMIN_URL}/api/v2/chaincodes/invokeCLI   -H "content-type: application/json"   -d '{
     "chaincodeName": "fabcar",
     "channelName": "'"${CHANNEL_NAME}"'",
-    "target": "'"0 ${ORG}"'",
+    "target": "'"0 ${DEFAULT_ORG_NAME}"'",
     "ordererAddress": "'"${ORDERER_ADDRESS}"'",
     "args": [],
     "fcn": "initLedger",

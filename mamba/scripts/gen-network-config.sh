@@ -130,9 +130,9 @@ function printOrgs {
       - $INT_CA_NAME
 
     adminPrivateKey:
-      path: /shared/crypto-config/peerOrganizations/$DOMAIN/users/admin/msp/keystore/key.pem
+      path: /shared/crypto-config-v1/peerOrganizations/$DOMAIN/users/admin/msp/keystore/key.pem
     signedCert:
-      path: /shared/crypto-config/peerOrganizations/$DOMAIN/users/admin/msp/signcerts/cert.pem
+      path: /shared/crypto-config-v1/peerOrganizations/$DOMAIN/users/admin/msp/signcerts/cert.pem
     "
 }
 function printNetworkConfig {

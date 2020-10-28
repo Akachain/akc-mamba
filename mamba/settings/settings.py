@@ -16,11 +16,11 @@ def init():
 
     # Extract config
     mamba_config = expanduser('~/.akachain/akc-mamba/mamba/config')
-    default_path = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
+    default_config_path = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
     if not os.path.isdir(mamba_config):
         dotenv_path = util.get_package_resource('config', '.env')
         os.makedirs(mamba_config)
-        shutil.copy(dotenv_path, default_path)
+        shutil.copy(dotenv_path, default_config_path)
 
     # Extract scripts
     default_scripts_path = expanduser('~/.akachain/akc-mamba/mamba/scripts')
@@ -34,9 +34,14 @@ def init():
         template_path = util.get_package_resource('', 'template')
         shutil.copytree(template_path, default_template_path)
 
+    # Extract other
+    default_path = expanduser('~/.akachain/akc-mamba/mamba/k8s/')
+    if not os.path.isdir(default_path):
+        other_path = util.get_package_resource('k8s', '')
+        shutil.copytree(other_path, default_path)
+
     # Load env
-    load_dotenv(default_path)
-    print(default_path)
+    load_dotenv(default_config_path)
 
     global PVS_PATH
     global K8S_TYPE
