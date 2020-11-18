@@ -32,30 +32,30 @@ function main {
   done
 
   # Enroll admin for each org
-  for PEER_ORG in $PEER_ORGS
-  do
-    getDomain $PEER_ORG
-    ADMIN_URL="http://admin-v2-${PEER_ORG}.${DOMAIN}:4001"
-    initOrgVars $PEER_ORG
-    log "Enroll Admin: $PEER_ORG"
-    ENROLL_ADMIN=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
-      "orgName":"'"${PEER_ORG}"'",
-      "adminName": "'"${INT_CA_ADMIN_USER}"'",
-      "adminPassword": "'"${INT_CA_ADMIN_PASS}"'"
-    }');
-    logResult "$ENROLL_ADMIN"
+  # for PEER_ORG in $PEER_ORGS
+  # do
+  #   getDomain $PEER_ORG
+  #   ADMIN_URL="http://admin-v2-${PEER_ORG}.${DOMAIN}:4001"
+  #   initOrgVars $PEER_ORG
+  #   log "Enroll Admin: $PEER_ORG"
+  #   ENROLL_ADMIN=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
+  #     "orgName":"'"${PEER_ORG}"'",
+  #     "adminName": "'"${INT_CA_ADMIN_USER}"'",
+  #     "adminPassword": "'"${INT_CA_ADMIN_PASS}"'"
+  #   }');
+  #   logResult "$ENROLL_ADMIN"
 
-    log "Register User: $PEER_ORG"
-    REGISTER_USER=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/registerUser   -H "content-type: application/json"   -d '{
-      "orgName":"'"${PEER_ORG}"'",
-      "affiliation":"'"${PEER_ORG}"'.akc",
-      "affiliation":"'"${PEER_ORG}"'.akc",
-      "userName": "'"${PEER_ORG}"'",
-      "role": "client",
-      "adminName": "'"${INT_CA_ADMIN_USER}"'"
-    }');
-    logResult "$ENROLL_ADMIN"
-  done
+  #   log "Register User: $PEER_ORG"
+  #   REGISTER_USER=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/registerUser   -H "content-type: application/json"   -d '{
+  #     "orgName":"'"${PEER_ORG}"'",
+  #     "affiliation":"'"${PEER_ORG}"'.akc",
+  #     "affiliation":"'"${PEER_ORG}"'.akc",
+  #     "userName": "'"${PEER_ORG}"'",
+  #     "role": "client",
+  #     "adminName": "'"${INT_CA_ADMIN_USER}"'"
+  #   }');
+  #   logResult "$ENROLL_ADMIN"
+  # done
 
   # Create channel
   log "CREATE CHANNEL: $CHANNEL_NAME"
