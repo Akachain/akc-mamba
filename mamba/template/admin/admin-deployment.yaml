@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: admin-v2-{{ORG_NAME}}
-        image: akachain/akc-admin:amd64-2.2.0-fabric-sp-mongodb
+        image: akachain/akc-admin:v2.2.0-fabric-sp-mongodb
         ports:  
         - containerPort: 4001
         imagePullPolicy: Always
