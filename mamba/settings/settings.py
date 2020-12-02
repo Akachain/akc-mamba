@@ -10,10 +10,12 @@ from dotenv import load_dotenv
 from utils import util, hiss
 from k8s.config import commands
 
+
 def init():
 
     DEFAULT_CONFIG_PATH = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
-    commands.extract(False, False, False, False, False)
+    commands.extract(force_all=False, force_config=False,
+                     force_script=False, force_template=False, force_other=False, dev_mode=False)
 
     # Load env
     load_dotenv(DEFAULT_CONFIG_PATH)
@@ -53,7 +55,8 @@ def init():
     EFS_ROOT = os.getenv('EFS_ROOT')
     EFS_POD = os.getenv('EFS_POD')
     EFS_EXTEND = os.getenv('EFS_EXTEND')
-    EFS_SERVER_ID = os.getenv('EFS_SERVER_ID')
+    if EFS_SERVER:
+        EFS_SERVER_ID = EFS_SERVER.split('.')[0]
 
     global RCA_NAME
     global RCA_DOMAIN
@@ -118,7 +121,7 @@ def init():
     NEW_ORG_NAME = os.getenv('NEW_ORG_NAME')
 
     global ORGS, DOMAINS
-    ORGS = (ORDERER_ORGS+' ' +PEER_ORGS).strip()
+    ORGS = (ORDERER_ORGS+' ' + PEER_ORGS).strip()
     DOMAINS = (ORDERER_DOMAINS+' '+PEER_DOMAINS).strip()
 
     global DEPLOYMENT_ENV
