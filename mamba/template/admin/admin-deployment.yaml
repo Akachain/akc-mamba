@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: admin-v2-{{ORG_NAME}}
-        image: docker.pkg.github.com/akachain/akc-admin/master:2.0.1
+        image: akachain/akc-admin:2.0.1
         ports:  
         - containerPort: 4001
         imagePullPolicy: Always
