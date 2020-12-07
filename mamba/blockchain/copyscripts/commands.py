@@ -19,7 +19,7 @@ def copy_scripts():
     exec_command = [
         '/bin/bash',
         '-c',
-        'test -d %s && echo "1" || echo "0"'  % (settings.EFS_ROOT)]
+        'test -d %s/akc-ca-data && echo "1" || echo "0"'  % (settings.EFS_ROOT)]
 
     result_get_folder = settings.k8s.exec_pod(
         podName=pods[0], namespace="default", command=exec_command)
