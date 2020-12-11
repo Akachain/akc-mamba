@@ -74,7 +74,7 @@ function getCACerts {
     echo "## Generate the user msp"
     echo
     set -x
-    fabric-ca-client enroll https://${USER_NAME}:$USER_PASS@$CA_HOST:7054 -M ${FABRIC_CA_CLIENT_HOME}/users/${USER_NAME}/msp
+    fabric-ca-client enroll -u https://${USER_NAME}:$USER_PASS@$CA_HOST:7054 -M ${FABRIC_CA_CLIENT_HOME}/users/${USER_NAME}/msp
     set +x
 }
 

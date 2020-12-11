@@ -40,12 +40,30 @@ spec:
           value: /shared/
         - name: ORDERER_GENERAL_LEDGERTYPE
           value: file
+        # Location: The directory to store the blocks in.
         - name: ORDERER_FILELEDGER_LOCATION
-          value: /var/ledger/orderer{{ORDERER_INDEX}}
+          value: /var/ledger/orderer{{ORDERER_INDEX}}/orderer
+        # WALDir specifies the location at which Write Ahead Logs for etcd/raft are
+        # stored. Each channel will have its own subdir named after channel ID.
+        - name: ORDERER_CONSENSUS_WALDIR
+          value: /var/ledger/orderer{{ORDERER_INDEX}}/etcdraft/wal
+        # SnapDir specifies the location at which snapshots for etcd/raft are
+        # stored. Each channel will have its own subdir named after channel ID.
+        - name: ORDERER_CONSENSUS_SNAPDIR
+          value: /var/ledger/orderer{{ORDERER_INDEX}}/etcdraft/snapshot
+        # Listen address: The IP on which to bind to listen.
         - name: ORDERER_GENERAL_LISTENADDRESS
           value: 0.0.0.0
+        # LocalMSPDir is where to find the private crypto material needed by the
+        # orderer. It is set relative here as a default for dev environments but
+        # should be changed to the real location in production.
         - name: ORDERER_GENERAL_LOCALMSPDIR
           value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/msp
+        # LocalMSPID is the identity to register the local MSP material with the MSP
+        # manager. IMPORTANT: The local MSP ID of an orderer needs to match the MSP
+        # ID of one of the organizations defined in the orderer system channel's
+        # /Channel/Orderer configuration. The sample organization defined in the
+        # sample configuration provided has an MSP ID of "SampleOrg".
         - name: ORDERER_GENERAL_LOCALMSPID
           value: ordererMSP
         - name: ORDERER_GENERAL_GENESISMETHOD
@@ -58,9 +76,17 @@ spec:
           value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/server.key
         - name: ORDERER_GENERAL_TLS_CERTIFICATE
           value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/server.crt
+        - name: ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY
+          value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/server.key
+        - name: ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE
+          value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/server.crt
         # THIS IS BROKEN: * 'General.TLS.RootCAs': source data must be an array or slice, got string
         - name: ORDERER_GENERAL_TLS_ROOTCAS
           value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/tlscacerts/tls-ica-{{ORDERER}}-{{ORDERER_DOMAIN}}-7054.pem
+        - name: ORDERER_GENERAL_CLUSTER_ROOTCAS
+          value: /shared/crypto-config/{{ORDERER}}.{{ORDERER_DOMAIN}}/orderers/orderer{{ORDERER_INDEX}}-{{ORDERER}}.{{ORDERER_DOMAIN}}/tls/tlscacerts/tls-ica-{{ORDERER}}-{{ORDERER_DOMAIN}}-7054.pem
+        # - name: ORDERER_GENERAL_LISTENPORT
+        #   value: "7050"
         - name: GODEBUG
           value: netdns=go
         - name: ORDERER_OPERATIONS_LISTENADDRESS
