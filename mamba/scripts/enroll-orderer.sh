@@ -11,7 +11,7 @@ log "Enrolling orderer $COUNT for $ORDERERORG ..."
 initOrdererVars $ORDERERORG $COUNT
 ENROLLMENT_URL="https://$ORDERER_NAME_PASS@$CA_HOST:7054"
 
-export FABRIC_CA_CLIENT_HOME=/$DATA/crypto-config/orderer.$DOMAIN
+export FABRIC_CA_CLIENT_HOME=/$DATA/crypto-config/$ORDERERORG.$DOMAIN
 mkdir -p $FABRIC_CA_CLIENT_HOME
 export FABRIC_CA_CLIENT_TLS_CERTFILES=$CA_CHAINFILE
 
@@ -55,10 +55,10 @@ cp ${TLS_CONFIG_PATH}/signcerts/*  ${TLS_CONFIG_PATH}/server.crt
 cp ${TLS_CONFIG_PATH}/keystore/*  ${TLS_CONFIG_PATH}/server.key
 
 mkdir -p ${MSPCONFIGPATH}/tlscacerts
-cp ${TLS_CONFIG_PATH}/tlscacerts/* ${MSPCONFIGPATH}/tlscacerts/tlsca.orderer.$DOMAIN-cert.pem
+cp ${TLS_CONFIG_PATH}/tlscacerts/* ${MSPCONFIGPATH}/tlscacerts/tlsca.$ORDERERORG.$DOMAIN-cert.pem
 
 mkdir -p ${FABRIC_CA_CLIENT_HOME}/msp/tlscacerts
-cp ${TLS_CONFIG_PATH}/tlscacerts/* ${FABRIC_CA_CLIENT_HOME}/msp/tlscacerts/tlsca.orderer.$DOMAIN-cert.pem
+cp ${TLS_CONFIG_PATH}/tlscacerts/* ${FABRIC_CA_CLIENT_HOME}/msp/tlscacerts/tlsca.$ORDERERORG.$DOMAIN-cert.pem
 set +x
 # mkdir -p ${FABRIC_CA_CLIENT_HOME}/ca
 # cp ${MSPCONFIGPATH}/cacerts/* ${FABRIC_CA_CLIENT_HOME}/ca/ca.$PEERORG.$DOMAIN-cert.pem
