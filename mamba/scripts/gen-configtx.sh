@@ -31,7 +31,7 @@ Organizations:
     ID: ${ORG}MSP
 
     # MSPDir is the filesystem path which contains the MSP configuration
-    MSPDir: /data/orgs/${ORG}/msp
+    MSPDir: /data/crypto-config/${ORG}.${DOMAIN}/msp
 
     AdminPrincipal: Role.ADMIN
 

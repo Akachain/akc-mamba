@@ -37,9 +37,9 @@ spec:
         - name: CORE_PEER_LOCALMSPNAME
           value: {{ORGMSP}}
         - name: CORE_PEER_TLS_ROOTCERT_FILE
-          value: /shared/crypto-config/peerOrganizations/{{ORGDOMAIN}}/peers/peer0.{{ORGDOMAIN}}/tls/ca.crt
+          value: /shared/crypto-config/{{ORGNAME}}.{{ORGDOMAIN}}/peers/peer0-{{ORGNAME}}.{{ORGDOMAIN}}/tls/tlsintermediatecerts/tls-ica-{{ORGNAME}}-{{ORGDOMAIN}}-7054.pem
         - name: CORE_PEER_MSPCONFIGPATH
-          value: /shared/crypto-config/peerOrganizations/{{ORGDOMAIN}}/users/admin/msp/
+          value: /shared/crypto-config/{{ORGNAME}}.{{ORGDOMAIN}}/users/admin/msp/
         - name: CORE_PEER_ADDRESS
           value: peer0-{{ORGNAME}}.{{ORGDOMAIN}}:7051
         - name: CORE_VM_ENDPOINT
