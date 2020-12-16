@@ -2,94 +2,75 @@
 
 ## I. Installation Instructions
 
-### 1. Install from pip package
-
+### 1. Prerequisites
+Before you begin, you should confirm that you have installed all the prerequisites below on the platform where you will be running AKC-Mamba.
 #### a. Install pip3
+If you have not installed `pip3`, use the following command to install:
 
-  If you have not installed `pip3`, use the following command to install:
+```bash
+curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+python3 get-pip.py --user
+```
+For checking version :
+```bash
+pip3 --version
+```
 
-  ```bash
-  curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
-  python3 get-pip.py --user
-  ```
+### 2. Install AKC-Mamba
+#### a. Install AKC-Mamba from pip package
 
-  For checking version :
+You can use the following command:
+```python
+pip3 install akc-mamba
+```
+After install successfuly, you can get help by command:
 
-  ```bash
-  pip3 --version
-  ```
+```bash
+mamba --help
+```
 
-#### b. Install AKC-Mamba from pip package
+#### b. Install and run from source code
 
-  You can use the following command:
+Install required Python3 modules with
 
-  ```python
-  pip3 install akc-mamba
-  ```
+```bash
+pip3 install -r requirements.txt
+```
 
-  After install successfuly, you can get help by command:
-  
-  ```bash
-  mamba --help
-  ```
+Use akc-mamba using python3 command:
+```bash
+python3 mamba.py --help
+```
 
-#### c. Deploy and bootstrap network with CLI
-
-- Init mamba evironment:
+### 3. Deploy and bootstrap network with CLI
+#### a. Prepare environment
+We now can use the Mamba tool to prepare required helm and k8s components
 
 ```bash
 mamba environment
 ```
 
-- Deploy your network:
-
-```python
-mamba start
-```
-
-### 2. Install and run from source code
-
-#### a. Edit configuration files
-
-  First, copy the content of `config/operator.env-template` to be `config/.env`. This file will contain all modifiable configuration of Mamba.
-
-  ```bash
-  cp ./config/operator.env-template ./config/.env
-  ```
-
-  Update configuration parameters in `config/.env`, the file content is pretty much self-explained.
-
-#### b. Install required packages
-
-  Install required Python3 modules with
-
-  ```bash
-  pip3 install -r requirements.txt
-  ```
-
-  We now can use the Mamba tool to prepare required helm and k8s components
-
-  ```bash
-  find . -type f -iname "*.sh" -exec chmod +x {} \;
-  python3 mamba.py environment
-  ```
-
-#### c. Deploy and bootstrap network
+After running this command, the program will ask you to fill in some of the most necessary information of creating a blockchain network:
+- `Cluster name`: The name of the cluster network you created in step [Setup an AWS EKS cluster](../README.md). Default: `cluster-mamba-example`
+- `Kubenetes type`: Currently `akc-mamba` is supporting kubenetes of two types: `eks` and `minikube`. The default is `eks`
+- `EFS infomation`: After you have entered the `Kubenetes type`,` mamba` will automatically search your k8s network for information about `efs`. If you have `EFS` installed before, the system will automatically update the config file located at `~/.akachain/akc-mamba/mamba/config/.env`. If not, you need to fill in the information `EFS SERVER` based on the installation step [Setup a Network File System](../README.md). If the k8s type is `minikube` then you do not need to enter this information.
+- Important Note: You can check and update configuration parameters in `~/.akachain/akc-mamba/mamba/config/.env`, the file content is pretty much self-explained.
+#### b. Deploy and bootstrap network
 
   ```python
-  python3 mamba.py start
+  mamba start
   ```
 
   The `mamba start` command executes a series of sub commands that installs various network components. For more information on each command for individual components, please refer to help section
 
   ```python
-  python3 mamba.py help
+  mamba --help
   ```
 
   To terminate the network, just run
 
   ```python
-  python3 mamba.py terminate
+  mamba terminate
   ```
 
 ## II. Development Guide
