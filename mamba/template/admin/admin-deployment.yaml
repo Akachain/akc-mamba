@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: admin-v2-{{ORG_NAME}}
-        image: akachain/akc-admin:2.0.1
+        image: akachain/akc-admin:2.0.2
         ports:  
         - containerPort: 4001
         imagePullPolicy: Always
@@ -27,9 +27,9 @@ spec:
         - name: CRYPTO_TYPE
           value: mamba
         - name: ORGS
-          value: "{{ORGDERER_NAME}} {{ORG_NAME}}"
+          value: "{{ORGDERER_NAME}} {{PEER_NAMES}}"
         - name: DOMAINS
-          value: "{{ORDERER_DOMAIN}} {{ORG_DOMAIN}}"
+          value: "{{ORDERER_DOMAIN}} {{PEER_DOMAINS}}"
         - name: NODE_ENV
           value: development
         - name: GOPATH
