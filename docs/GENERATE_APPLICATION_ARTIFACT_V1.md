@@ -1,3 +1,8 @@
+- Run admin-v1
+```
+python3 mamba.py adminv1 setup
+```
+
 - Generate artifact
 ```
 python3 mamba.py gen-artifact setup
@@ -6,11 +11,6 @@ python3 mamba.py gen-artifact setup
 - Generate folder crypto-config v1
 ```
 python3 mamba.py updatefolder
-```
-
-- Run admin-v1
-```
-python3 mamba.py adminv1 setup
 ```
 
 - Create User
