@@ -6,6 +6,7 @@ import shutil
 import click
 from dotenv import load_dotenv
 from utils import util, hiss
+from utils.kube import KubeHelper
 
 DEFAULT_CONFIG_PATH = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
 DEFAULT_SCRIPT_PATH = expanduser('~/.akachain/akc-mamba/mamba/scripts')
@@ -16,6 +17,45 @@ DEFAULT_OTHER_PATH = expanduser('~/.akachain/akc-mamba/mamba/k8s/')
 def get_template_env():
     return util.get_package_resource('config', 'operator.env-template')
 
+def detect_deployed_efs_server(k8s_type):
+    hiss.echo('Looking for deployed efs server...')
+    efs_server = ''
+    if k8s_type == 'eks':
+        # Find efs-efs-provisioner pod
+        pods = KubeHelper().find_pod(namespace="default", keyword="efs-efs-provisioner")
+        if not pods:
+            return efs_server
+        efs_server_cmd = 'kubectl describe deployments efs-efs-provisioner | grep Server'
+        detected_efs_server = subprocess.check_output(
+            efs_server_cmd, shell=True)
+        if detected_efs_server:
+            efs_server = detected_efs_server.decode().split(':')[1].strip()
+    elif k8s_type == 'minikube':
+        efs_server_cmd = 'kubectl get svc -n default | grep nfs-server | awk \'{print $3}\''
+        detected_efs_server = subprocess.check_output(
+            efs_server_cmd, shell=True)
+        if detected_efs_server:
+            efs_server = detected_efs_server.decode().strip()
+
+    return efs_server
+
+def detect_deployed_efs_path():
+    hiss.echo('Looking for deployed efs path...')
+    efs_path = ''
+    efs_path_cmd = 'kubectl get pvc | grep efs | awk \'{print $3}\''
+    detected_efs_path = subprocess.check_output(efs_path_cmd, shell=True)
+    if detected_efs_path:
+        efs_path = detected_efs_path.decode().strip()
+    return efs_path
+
+def detect_deployed_efs_pod():
+    hiss.echo('Looking for deployed efs pod...')
+    efs_pod = ''
+    efs_pod_cmd = 'kubectl get pod -n default | grep test-efs | awk \'{print $1}\''
+    detected_efs_pod = subprocess.check_output(efs_pod_cmd, shell=True)
+    if detected_efs_pod:
+        efs_pod = detected_efs_pod.decode().strip()
+    return efs_pod
 
 def extract_cfg(mamba_config, dev_mode):
     hiss.echo('Extract config to default config path: %s ' %
@@ -40,31 +80,11 @@ def extract_cfg(mamba_config, dev_mode):
 
     # Detect current environment setting
     # EFS_SERVER
-    efs_server = ''
-    if k8s_type == 'eks':
-        efs_server_cmd = 'kubectl describe deployments efs-efs-provisioner | grep Server'
-        detected_efs_server = subprocess.check_output(
-            efs_server_cmd, shell=True)
-        if detected_efs_server:
-            efs_server = detected_efs_server.decode().split(':')[1].strip()
-    elif k8s_type == 'minikube':
-        efs_server_cmd = 'kubectl get svc -n default | grep nfs-server | awk \'{print $3}\''
-        detected_efs_server = subprocess.check_output(
-            efs_server_cmd, shell=True)
-        if detected_efs_server:
-            efs_server = detected_efs_server.decode().strip()
+    efs_server = detect_deployed_efs_server(k8s_type)
     # EFS_PATH
-    efs_path = ''
-    efs_path_cmd = 'kubectl get pvc | grep efs | awk \'{print $3}\''
-    detected_efs_path = subprocess.check_output(efs_path_cmd, shell=True)
-    if detected_efs_path:
-        efs_path = detected_efs_path.decode().strip()
+    efs_path = detect_deployed_efs_path()
     # EFS_POD
-    efs_pod = ''
-    efs_pod_cmd = 'kubectl get pod -n default | grep test-efs | awk \'{print $1}\''
-    detected_efs_pod = subprocess.check_output(efs_pod_cmd, shell=True)
-    if detected_efs_pod:
-        efs_pod = detected_efs_pod.decode().strip()
+    efs_pod = detect_deployed_efs_pod()
 
     if not efs_pod and k8s_type == 'eks':
         retry = 3
