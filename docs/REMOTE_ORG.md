@@ -39,12 +39,41 @@ mamba channel-config auto-update
 
 ## 6. Install chaincode test
 ```
-curl -s -X POST   http://admin-rca-ica.akc:4001/chaincodes   -H "content-type: application/json"   -d '{
+curl --location --request POST http://localhost:4001/api/v2/chaincodes/packageCC \
+--header 'content-type: application/json' \
+--data-raw '{
   "orgname":"akc",
-  "chaincodeId":"fabcar",
-  "chaincodePath":"chaincodes/fabcar/",
-  "chaincodeVersion":"v1.0",
-  "chaincodeType":"golang"
+  "chaincodePath":"/chaincodes/fabcar",
+  "chaincodeName":"fabcar",
+  "chaincodeVersion":"2",
+  "chaincodeType":"golang",
+  "peerIndex": "0"
+}'
+curl --location --request POST http://localhost:4001/api/v2/chaincodes/install \
+--header 'content-type: application/json' \
+--data-raw '{
+  "orgname":"akc",
+  "chaincodeName":"fabcar",
+  "chaincodePath":"fabcar.tar.gz",
+  "peerIndex": "0"
+}'
+
+curl --location --request POST http://localhost:4001/api/v2/chaincodes/queryInstalled \
+--header 'content-type: application/json' \
+--data-raw '{
+    "orgname":"akc",
+    "peerIndex": "0"
+}'
+curl --location --request POST http://localhost:4001/api/v2/chaincodes/approveForMyOrg \
+--header 'content-type: application/json' \
+--data-raw '{
+    "orgname":"akc",
+    "peerIndex": "0",
+    "chaincodeName": "fabcar",
+    "chaincodeVersion": 2,
+    "channelName": "akcchannel",
+    "packageId": "fabcar_2:dd2f978e3976a3df9812335447207907051b24e7315841ac922b5fd376e74cb8",
+    "ordererAddress": "orderer0-orderer.orderer:7050"
 }'
 ```
 
@@ -56,45 +85,74 @@ cp /tmp/artifact/akc-network/akc-ca-data/ica-akc-ca-chain.pem /tmp/artifact/merc
 
 ## 8. Join merchant to channel
 ```
-curl -s -X POST   http://admin-rca-ica.default:4001/registerUser   -H "content-type: application/json"   -d '{
-  "orgname":"merchant"
+curl -s -X POST   http://admin-v2-merchant.merchant:4001/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
+  "orgName":"merchant",
+  "adminName": "ica-merchant-admin",
+  "adminPassword": "ica-merchant-adminpw"
 }'
-curl -s -X POST   http://admin-rca-ica.default:4001/joinchannel   -H "content-type: application/json"   -d '{
-  "orgname":"merchant",
+curl -s -X POST   http://admin-v2-merchant.merchant:4001/api/v2/cas/registerUser   -H "content-type: application/json"   -d '{
+  "orgName":"merchant",
+  "userName": "merchant",
+  "adminName": "ica-merchant-admin"
+}'
+curl -s -X POST   http://admin-v2-merchant.merchant:4001/api/v2/channels/join   -H "content-type: application/json"   -d '{
+  "orgName":"merchant",
+  "peerIndex": "0",
   "channelName":"akcchannel"
-}'
-curl -s -X POST   http://admin-rca-ica.default:4001/chaincodes   -H "content-type: application/json"   -d '{
-  "orgname":"merchant",
-  "chaincodeId":"fabcar",
-  "chaincodePath":"chaincodes/fabcar/",
-  "chaincodeVersion":"v1.0",
-  "chaincodeType":"golang"
 }'
 ```
 
 ## 9. Init or upgrade chaincode on operator cluster
-- Init
-```
-curl -s -X POST   http://admin-rca-ica.akc:4001/initchaincodes   -H "content-type: application/json"   -d '{
-  "orgname":"akc",
-  "channelName":"akcchannel",
-  "chaincodeId":"fabcar",
-  "chaincodeVersion":"v1.0",
+- Install
+curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/chaincodes/packageCC \
+--header 'content-type: application/json' \
+--data-raw '{
+  "orgname":"merchant",
+  "chaincodePath":"/chaincodes/fabcar",
+  "chaincodeName":"fabcar",
+  "chaincodeVersion":"2",
   "chaincodeType":"golang",
-  "args":[]
+  "peerIndex": "0"
+}'
+curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/chaincodes/install \
+--header 'content-type: application/json' \
+--data-raw '{
+  "orgname":"merchant",
+  "chaincodeName":"fabcar",
+  "chaincodePath":"fabcar.tar.gz",
+  "peerIndex": "0"
+}'
+
+curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/chaincodes/queryInstalled \
+--header 'content-type: application/json' \
+--data-raw '{
+    "orgname":"merchant",
+    "peerIndex": "0"
+}'
+curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/chaincodes/approveForMyOrg \
+--header 'content-type: application/json' \
+--data-raw '{
+    "orgname":"merchant",
+    "peerIndex": "0",
+    "chaincodeName": "fabcar",
+    "chaincodeVersion": 2,
+    "channelName": "akcchannel",
+    "packageId": "fabcar_2:dd2f978e3976a3df9812335447207907051b24e7315841ac922b5fd376e74cb8",
+    "ordererAddress": "orderer0-orderer.orderer:7050"
+}'
+- Commit
+```
+curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/chaincodes/commitChaincodeDefinition \
+--header 'content-type: application/json' \
+--data-raw '{
+    "chaincodeName": "fabcar",
+    "chaincodeVersion": 2,
+    "channelName": "akcchannel",
+    "target": "0 merchant 0 akc",
+    "ordererAddress": "orderer0-orderer.orderer:7050"
 }'
 ```
-- Or upgrade if chaincode exists
-```
-curl -s -X POST   http://admin-rca-ica.ordererhai:4001/upgradeChainCode   -H "content-type: application/json"   -d '{
-  "orgname":"akc",
-  "channelName":"akcchannel",
-  "chaincodeId":"fabcar",
-  "chaincodeVersion":"v1.0",
-  "chaincodeType":"golang",
-  "args":[]
-}'
-```
+
 
 ## 10. Try invoke chaincode on merchant cluster:
 ```

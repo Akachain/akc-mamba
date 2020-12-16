@@ -39,6 +39,8 @@ def setup_admin(org):
     dict_env = {
         'ORG_NAME': org,
         'ORG_DOMAIN': domain,
+        'PEER_NAMES': settings.PEER_ORGS,
+        'PEER_DOMAINS': settings.PEER_DOMAINS,
         'ORDERER_DOMAIN': orderer_domains[0],
         'ORGDERER_NAME': orderer_names[0],
         'EFS_SERVER': settings.EFS_SERVER,

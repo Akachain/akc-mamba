@@ -21,8 +21,10 @@ function main {
   local DEFAULT_ORG_NAME=""
   local DEFAULT_ORG_DOMAIN="" 
   local DEFAULT_ADMIN_URL=""
+  local DEFAULT_TARGET_PEER=""
   for PEER_ORG in $PEER_ORGS
   do
+    DEFAULT_TARGET_PEER="$DEFAULT_TARGET_PEER 0 $PEER_ORG"
     if [ "$DEFAULT_ORG_DOMAIN" == "" ]; then
       DEFAULT_ORG_NAME=$PEER_ORG
       getDomain $DEFAULT_ORG_NAME
@@ -67,6 +69,9 @@ function main {
   }');
   logResult "$CREATE_CHANNEL_CC"
   sleep 3s
+
+
+
   # Sometimes Join takes time hence RETRY at least 3 times
   log "JOIN CHANNEL"
   local MAX_RETRY=3
@@ -81,7 +86,8 @@ function main {
       JOINCHANNEL=$(curl -s -X POST   ${ADMIN_URL}/api/v2/channels/join   -H "content-type: application/json"   -d '{
         "orgName":"'"${PEER_ORG}"'",
         "peerIndex":"0",
-        "channelName":"'"${CHANNEL_NAME}"'"
+        "channelName":"'"${CHANNEL_NAME}"'",
+        "ordererAddress": "'"${ORDERER_ADDRESS}"'"
       }');
       logResult "$JOINCHANNEL"
       res=$?
@@ -148,7 +154,7 @@ function main {
       "chaincodeName":"fabcar",
       "chaincodeVersion":1,
       "channelName":"'"${CHANNEL_NAME}"'",
-      "target": "'"0 ${DEFAULT_ORG_NAME}"'",
+      "target": "'"${DEFAULT_TARGET_PEER}"'",
       "ordererAddress": "'"${ORDERER_ADDRESS}"'"
     }');
     logResult "$COMMIT_CHAINCODE"
