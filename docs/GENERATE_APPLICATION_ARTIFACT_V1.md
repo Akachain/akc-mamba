@@ -1,16 +1,21 @@
 - Run admin-v1
+Create github secret to pull image:
 ```
-python3 mamba.py adminv1 setup
+kubectl create secret docker-registry mamba --docker-server=docker.pkg.github.com --docker-username=yout_username --docker-password=your_token --docker-email=your_email -n orderer
+```
+Use mamba to setup admin v1
+```
+mamba adminv1 setup
 ```
 
 - Generate artifact
 ```
-python3 mamba.py gen-artifact setup
+mamba gen-artifact setup
 ```
 
 - Generate folder crypto-config v1
 ```
-python3 mamba.py updatefolder
+mamba updatefolder
 ```
 
 - Create User
