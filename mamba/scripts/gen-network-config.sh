@@ -30,9 +30,9 @@ function printCA {
 
     # Fabric-CA supports dynamic user enrollment via REST APIs. A \"root\" user, a.k.a registrar, is
     # needed to enroll and invoke new users.
-    registrar:
-      - enrollId: $INT_CA_ADMIN_USER
-        enrollSecret: $INT_CA_ADMIN_PASS
+    # registrar:
+    #   - enrollId: $INT_CA_ADMIN_USER
+    #     enrollSecret: $INT_CA_ADMIN_PASS
     # [Optional] The optional name of the CA.
     caName: $INT_CA_NAME
     "
@@ -60,17 +60,18 @@ function printPeer {
     done
   done
 
-  endorsementOrg=($ENDORSEMENT_ORG_NAME)
+  endorsementOrgName=($ENDORSEMENT_ORG_NAME)
+  endorsementOrgDomain=($ENDORSEMENT_ORG_DOMAIN)
   endorsementAddress=($ENDORSEMENT_ORG_ADDRESS)
   endorsementTlsCert=($ENDORSEMENT_ORG_TLSCERT)
   for (( i=0; i<${#endorsementOrg[@]}; i++ ))
   do
     echo "
-  ${endorsementOrg[i]}:
+  ${endorsementAddress[i]}:
     url: grpcs://${endorsementAddress[i]}:7051
 
     grpcOptions:
-      ssl-target-name-override: ${endorsementOrg[i]}
+      ssl-target-name-override: ${endorsementOrgName[i]}.${endorsementOrgDomain[i]}
     tlsCACerts:
       path: /shared/${endorsementTlsCert[i]}"
   done
@@ -129,10 +130,10 @@ function printOrgs {
     certificateAuthorities:
       - $INT_CA_NAME
 
-    adminPrivateKey:
-      path: /shared/crypto-config-v1/peerOrganizations/$DOMAIN/users/admin/msp/keystore/key.pem
-    signedCert:
-      path: /shared/crypto-config-v1/peerOrganizations/$DOMAIN/users/admin/msp/signcerts/cert.pem
+    # adminPrivateKey:
+    #   path: /shared/crypto-config-v1/peerOrganizations/$DOMAIN/users/admin/msp/keystore/key.pem
+    # signedCert:
+    #   path: /shared/crypto-config-v1/peerOrganizations/$DOMAIN/users/admin/msp/signcerts/cert.pem
     "
 }
 function printNetworkConfig {
@@ -192,10 +193,10 @@ channels:
       done
       echo "
     peers:"
-      for endorsementOrg in $ENDORSEMENT_ORG_NAME
+      for endorsementOrgAddress in $ENDORSEMENT_ORG_ADDRESS
       do
         echo "
-      $endorsementOrg:
+      $endorsementOrgAddress:
         endorsingPeer: true
         chaincodeQuery: true
         ledgerQuery: true
