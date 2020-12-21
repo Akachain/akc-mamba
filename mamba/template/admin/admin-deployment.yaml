@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: admin-v2-{{ORG_NAME}}
-        image: akachain/akc-admin:2.0.2
+        image: akachain/akc-admin:2.1.0
         ports:  
         - containerPort: 4001
         imagePullPolicy: Always
@@ -63,6 +63,8 @@ spec:
             mountPath: /chaincodes
           - name: artifacts-efs
             mountPath: /data/app/artifacts/
+          - name: wallet
+            mountPath: /data/app/wallet/
       volumes:
       - name: akc-ca-data
         nfs:
@@ -76,6 +78,10 @@ spec:
         nfs:
           server: {{EFS_SERVER}}
           path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin-v2/artifacts/
+      - name: wallet
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin-v2/wallet/
       imagePullSecrets:
       - name: mamba
       

@@ -33,30 +33,28 @@ function main {
     fi
   done
 
-  # # Enroll admin for each org
-  # for PEER_ORG in $PEER_ORGS
-  # do
-  #   getDomain $PEER_ORG
-  #   ADMIN_URL="http://admin-v2-${PEER_ORG}.${DOMAIN}:4001"
-  #   initOrgVars $PEER_ORG
-  #   log "Enroll Admin: $PEER_ORG"
-  #   ENROLL_ADMIN=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
-  #     "orgName":"'"${PEER_ORG}"'",
-  #     "adminName": "'"${INT_CA_ADMIN_USER}"'",
-  #     "adminPassword": "'"${INT_CA_ADMIN_PASS}"'"
-  #   }');
-  #   logResult "$ENROLL_ADMIN"
+  # Enroll admin for each org
+  for PEER_ORG in $PEER_ORGS
+  do
+    getDomain $PEER_ORG
+    ADMIN_URL="http://admin-v2-${PEER_ORG}.${DOMAIN}:4001"
+    initOrgVars $PEER_ORG
+    log "Enroll Admin: $PEER_ORG"
+    ENROLL_ADMIN=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
+      "orgName":"'"${PEER_ORG}"'",
+      "adminName": "'"${INT_CA_ADMIN_USER}"'",
+      "adminPassword": "'"${INT_CA_ADMIN_PASS}"'"
+    }');
+    logResult "$ENROLL_ADMIN"
 
-  #   log "Register User: $PEER_ORG"
-  #   REGISTER_USER=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/registerUser   -H "content-type: application/json"   -d '{
-  #     "orgName":"'"${PEER_ORG}"'",
-  #     "affiliation":"'"${PEER_ORG}"'.akc",
-  #     "userName": "'"${PEER_ORG}"'",
-  #     "role": "client",
-  #     "adminName": "'"${INT_CA_ADMIN_USER}"'"
-  #   }');
-  #   logResult "$ENROLL_ADMIN"
-  # done
+    log "Register User: $PEER_ORG"
+    REGISTER_USER=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/registerUser   -H "content-type: application/json"   -d '{
+      "orgName":"'"${PEER_ORG}"'",
+      "userName": "'"${PEER_ORG}"'",
+      "adminName": "'"${INT_CA_ADMIN_USER}"'"
+    }');
+    logResult "$ENROLL_ADMIN"
+  done
 
   # Create channel
   log "CREATE CHANNEL: $CHANNEL_NAME"
@@ -161,12 +159,11 @@ function main {
 
   # Invoke sample chaincode
   log "INVOKE CHAINCODE"
-  INVOKE_CHAINCODE=$(curl -s -X POST   ${DEFAULT_ADMIN_URL}/api/v2/chaincodes/invokeCLI   -H "content-type: application/json"   -d '{
+  INVOKE_CHAINCODE=$(curl -s -X POST   ${DEFAULT_ADMIN_URL}/api/v2/chaincodes/invoke   -H "content-type: application/json"   -d '{
     "chaincodeName": "fabcar",
     "channelName": "'"${CHANNEL_NAME}"'",
-    "target": "'"0 ${DEFAULT_ORG_NAME}"'",
-    "ordererAddress": "'"${ORDERER_ADDRESS}"'",
     "args": [],
+    "userName": "akc",
     "fcn": "initLedger",
     "isInit": "0"
   }');
