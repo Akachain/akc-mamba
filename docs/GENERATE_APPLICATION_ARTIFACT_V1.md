@@ -1,7 +1,7 @@
 - Run admin-v1
 Create github secret to pull image:
 ```
-kubectl create secret docker-registry mamba --docker-server=docker.pkg.github.com --docker-username=yout_username --docker-password=your_token --docker-email=your_email -n orderer
+kubectl create secret docker-registry mamba --docker-server=docker.pkg.github.com --docker-username=your_username --docker-password=your_token --docker-email=your_email -n orderer
 ```
 Use mamba to setup admin v1
 ```
