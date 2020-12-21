@@ -41,21 +41,18 @@ def setup_ica(ica_org):
 
     ica_name = 'ica-%s' % ica_org
 
-    rca_host = settings.EXTERNAL_RCA_ADDRESSES
-    if not settings.EXTERNAL_RCA_ADDRESSES:
-        rca_host = '%s.%s' % (settings.RCA_NAME, settings.RCA_DOMAIN)
+    rca_host = settings.REMOTE_RCA_ADDRESS or '%s.%s' % (settings.RCA_NAME, settings.RCA_DOMAIN)
 
-    if settings.K8S_TYPE == 'minikube':
-        storage_class = 'standard'
-    else:
-        storage_class = 'gp2'
+    storage_class = 'standard' if settings.K8S_TYPE == 'minikube' else 'gp2'
+
+    rca_name = settings.RCA_NAME or settings.REMOTE_RCA_NAME
 
     k8s_template_file = '%s/ica/fabric-deployment-ica.yaml' % util.get_k8s_template_path()
     dict_env = {
         'ORG': ica_org,
         'ICA_NAME': ica_name,
         'ICA_DOMAIN': ica_domain,
-        'RCA_NAME': settings.RCA_NAME,
+        'RCA_NAME': rca_name,
         'RCA_HOST': rca_host,
         'FABRIC_CA_TAG': settings.FABRIC_CA_TAG,
         'EFS_SERVER': settings.EFS_SERVER,

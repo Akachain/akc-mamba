@@ -55,9 +55,9 @@ def create_new_org():
     # Create crypto-config folder to contains artifacts
     update_folder()
 
-    # Default value of ORDERER_DOMAINS = default, it needed to run processes below
-    if (settings.ORDERER_DOMAINS == ''):
-        settings.ORDERER_DOMAINS='default'
+    # # Default value of ORDERER_DOMAINS = default, it needed to run processes below
+    # if (settings.ORDERER_DOMAINS == ''):
+    #     settings.ORDERER_DOMAINS='default'
 
     hiss.rattle('Config map for external chaincode')
     config_all_peer()
@@ -73,13 +73,13 @@ def create_new_org():
     if settings.PRIVATE_DOCKER_IMAGE == 'true':
         create_docker_secret('default','mamba')
 
+    # # # Return value ORDERER_DOMAINS
+    # if (settings.ORDERER_DOMAINS == 'default'):
+    #     settings.ORDERER_DOMAINS=''
+
     # Create new a new Admin service
     time.sleep(1)
     setup_all_admin()
-
-    # # Return value ORDERER_DOMAINS
-    if (settings.ORDERER_DOMAINS == 'default'):
-        settings.ORDERER_DOMAINS=''
 
     dict_env = {
         'ORG_NAME': settings.PEER_ORGS,
