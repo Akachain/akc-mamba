@@ -9,14 +9,15 @@ with open('requirements.txt', 'r') as f:
 
 setuptools.setup(
     name='akc-mamba',
-    version='2.0.4a7',
-    entry_points={'console_scripts': ['mamba = mamba:mamba']},
+    version='2.1.0.a7',
+    entry_points={'console_scripts': ['mamba = cli.mamba:mamba']},
     author="akaChain",
     author_email="admin@akachain.io",
     description="A production ready, complete experience in deploying a Hyperledger Fabric",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     url="https://github.com/Akachain/akc-mamba",
+    package_data={'': ['*']},
     include_package_data=True,
     install_requires=REQUIREMENTS,
     # package_dir={'': 'mamba'},
