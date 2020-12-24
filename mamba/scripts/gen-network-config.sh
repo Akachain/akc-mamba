@@ -64,7 +64,7 @@ function printPeer {
   endorsementOrgDomain=($ENDORSEMENT_ORG_DOMAIN)
   endorsementAddress=($ENDORSEMENT_ORG_ADDRESS)
   endorsementTlsCert=($ENDORSEMENT_ORG_TLSCERT)
-  for (( i=0; i<${#endorsementOrg[@]}; i++ ))
+  for (( i=0; i<${#endorsementOrgName[@]}; i++ ))
   do
     echo "
   ${endorsementAddress[i]}:

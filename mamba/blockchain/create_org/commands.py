@@ -66,7 +66,7 @@ def create_new_org():
     setup_all_peer()
 
     # Run jobs to generate application artifacts
-    # generate_artifact()
+    generate_artifact()
     generate_all_ccp()
 
     # Create secret if use private docker hub
