@@ -25,7 +25,7 @@ def detect_deployed_efs_server(k8s_type):
         pods = KubeHelper().find_pod(namespace="default", keyword="efs-efs-provisioner")
         if not pods:
             return efs_server
-        efs_server_cmd = 'kubectl describe deployments efs-efs-provisioner | grep Server'
+        efs_server_cmd = 'kubectl describe deployments -n default efs-efs-provisioner | grep Server'
         detected_efs_server = subprocess.check_output(
             efs_server_cmd, shell=True)
         if detected_efs_server:
