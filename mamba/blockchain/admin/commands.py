@@ -14,12 +14,11 @@ def setup_admin(org):
     # Get orderer information
     orderer_names = settings.ORDERER_ORGS.split(' ')
     orderer_domains = settings.ORDERER_DOMAINS.split(' ')
-    if settings.REMOTE_ORDERER_NAME != '':
+    if orderer_names == '' and settings.REMOTE_ORDERER_NAME != '':
         orderer_names = settings.REMOTE_ORDERER_NAME.split(' ')
         orderer_domains = settings.REMOTE_ORDERER_DOMAIN.split(' ')
 
     # Build endorsement config
-    print(settings.ENDORSEMENT_ORG_NAME)
     peer_orgs = '%s %s' % (settings.PEER_ORGS, settings.ENDORSEMENT_ORG_NAME)
     peer_domains = '%s %s' % (settings.PEER_DOMAINS, settings.ENDORSEMENT_ORG_DOMAIN)
     print(peer_orgs)

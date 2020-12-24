@@ -41,7 +41,7 @@ def setup_ica(ica_org):
 
     ica_name = 'ica-%s' % ica_org
 
-    rca_host = settings.REMOTE_RCA_ADDRESS or '%s.%s' % (settings.RCA_NAME, settings.RCA_DOMAIN)
+    rca_host = settings.REMOTE_RCA_ADDRESS if settings.RCA_NAME == '' else '%s.%s' % (settings.RCA_NAME, settings.RCA_DOMAIN)
 
     storage_class = 'standard' if settings.K8S_TYPE == 'minikube' else 'gp2'
 
