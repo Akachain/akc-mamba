@@ -8,7 +8,7 @@
     curl --location --request POST http://localhost:4001/api/v2/chaincodes/packageExternalCC \
     --header 'content-type: application/json' \
     --data-raw '{
-        "orgname":"akc",
+        "orgName":"akc",
         "chaincodeName":"fabcar"
     }'
     ```
@@ -46,7 +46,7 @@
     curl --location --request POST http://localhost:4001/api/v2/chaincodes/install \
     --header 'content-type: application/json' \
     --data-raw '{
-        "orgname":"akc",
+        "orgName":"akc",
         "chaincodeName":"fabcar",
         "chaincodePath":"fabcar.tgz",
         "peerIndex": "0"
@@ -57,7 +57,7 @@
     curl --location --request POST http://localhost:4001/api/v2/chaincodes/queryInstalled \
     --header 'content-type: application/json' \
     --data-raw '{
-        "orgname":"akc",
+        "orgName":"akc",
         "peerIndex": "0"
     }'
     ```
@@ -70,7 +70,7 @@
     curl --location --request POST http://localhost:4001/api/v2/chaincodes/approveForMyOrg \
     --header 'content-type: application/json' \
     --data-raw '{
-        "orgname":"akc",
+        "orgName":"akc",
         "peerIndex": "0",
         "chaincodeName": "fabcar",
         "chaincodeVersion": 1,

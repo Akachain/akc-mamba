@@ -46,7 +46,7 @@ mamba channel-config auto-update
 curl --location --request POST http://admin-v2-akc.akc:4001/api/v2/chaincodes/packageCC \
 --header 'content-type: application/json' \
 --data-raw '{
-  "orgname":"akc",
+  "orgName":"akc",
   "chaincodePath":"/chaincodes/fabcar",
   "chaincodeName":"fabcar",
   "chaincodeVersion":"2",
@@ -56,22 +56,23 @@ curl --location --request POST http://admin-v2-akc.akc:4001/api/v2/chaincodes/pa
 curl --location --request POST http://admin-v2-akc.akc:4001/api/v2/chaincodes/install \
 --header 'content-type: application/json' \
 --data-raw '{
-  "orgname":"akc",
   "chaincodeName":"fabcar",
   "chaincodePath":"fabcar.tar.gz",
-  "peerIndex": "0"
+  "target": "0 akc"
 }'
 
 curl --location --request POST http://admin-v2-akc.akc:4001/api/v2/chaincodes/queryInstalled \
 --header 'content-type: application/json' \
 --data-raw '{
-    "orgname":"akc",
-    "peerIndex": "0"
+    "orgName":"akc",
+    "peerIndex": "0",
+    "chaincodeName": "fabcar",
+    "chaincodeVersion": "2"
 }'
 curl --location --request POST http://admin-v2-akc.akc:4001/api/v2/chaincodes/approveForMyOrg \
 --header 'content-type: application/json' \
 --data-raw '{
-    "orgname":"akc",
+    "orgName":"akc",
     "peerIndex": "0",
     "chaincodeName": "fabcar",
     "chaincodeVersion": 2,
@@ -119,7 +120,7 @@ curl -s -X POST   http://admin-v2-merchant.merchant:4001/api/v2/channels/join   
 curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/chaincodes/packageCC \
 --header 'content-type: application/json' \
 --data-raw '{
-  "orgname":"merchant",
+  "orgName":"merchant",
   "chaincodePath":"/chaincodes/fabcar",
   "chaincodeName":"fabcar",
   "chaincodeVersion":"2",
@@ -129,22 +130,23 @@ curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/cha
 curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/chaincodes/install \
 --header 'content-type: application/json' \
 --data-raw '{
-  "orgname":"merchant",
   "chaincodeName":"fabcar",
   "chaincodePath":"fabcar.tar.gz",
-  "peerIndex": "0"
+  "target": "0 merchant"
 }'
 
 curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/chaincodes/queryInstalled \
 --header 'content-type: application/json' \
 --data-raw '{
-    "orgname":"merchant",
-    "peerIndex": "0"
+    "orgName":"merchant",
+    "peerIndex": "0",
+    "chaincodeName": "fabcar",
+    "chaincodeVersion": "2"
 }'
 curl --location --request POST http://admin-v2-merchant.merchant:4001/api/v2/chaincodes/approveForMyOrg \
 --header 'content-type: application/json' \
 --data-raw '{
-    "orgname":"merchant",
+    "orgName":"merchant",
     "peerIndex": "0",
     "chaincodeName": "fabcar",
     "chaincodeVersion": 2,
@@ -174,7 +176,7 @@ cp /tmp/artifact/c-merchant/akc-ca-data/crypto-config/merchant.merchant/peers/pe
 ## 12. Try invoke chaincode on merchant cluster:
 ```
 curl -s -X POST   http://admin-rca-ica.default:4001/invokeChainCode   -H "content-type: application/json"   -d '{
-  "orgname":"merchant",
+  "orgName":"merchant",
   "channelName":"akcchannel",
   "chaincodeId":"fabcar",
   "args": ["CAR1", "a", "b", "c", "d"],
@@ -182,7 +184,7 @@ curl -s -X POST   http://admin-rca-ica.default:4001/invokeChainCode   -H "conten
 }'
 
 curl -s -X POST   http://admin-rca-ica.akc:4001/invokeChainCode   -H "content-type: application/json"   -d '{
-  "orgname":"akc",
+  "orgName":"akc",
   "channelName":"akcchannel",
   "chaincodeId":"fabcar",
   "args": ["CAR1", "a", "b", "c", "d"],

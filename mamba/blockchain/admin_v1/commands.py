@@ -19,7 +19,8 @@ def setup_admin():
     if not pods:
         return hiss.hiss('cannot find tiller pod')
 
-    mkdir_cmd = ('mkdir -p '+settings.EFS_ROOT+'/admin/crypto-path;'
+    mkdir_cmd = ('mkdir -p '+settings.EFS_ROOT+'/admin/artifacts;'
+    'mkdir -p '+settings.EFS_ROOT+'/admin/crypto-path;'
     'mkdir -p '+settings.EFS_ROOT+'/admin/crypto-store;')
 
     ## Exec command

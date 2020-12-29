@@ -14,6 +14,14 @@ def setup_admin(org):
     # Get orderer information
     orderer_names = settings.ORDERER_ORGS.split(' ')
     orderer_domains = settings.ORDERER_DOMAINS.split(' ')
+    if orderer_names == '' and settings.REMOTE_ORDERER_NAME != '':
+        orderer_names = settings.REMOTE_ORDERER_NAME.split(' ')
+        orderer_domains = settings.REMOTE_ORDERER_DOMAIN.split(' ')
+
+    # Build endorsement config
+    peer_orgs = '%s %s' % (settings.PEER_ORGS, settings.ENDORSEMENT_ORG_NAME)
+    peer_domains = '%s %s' % (settings.PEER_DOMAINS, settings.ENDORSEMENT_ORG_DOMAIN)
+    print(peer_orgs)
 
     # Create application artifact folder
     hiss.echo('Create wallet folder')
@@ -39,8 +47,8 @@ def setup_admin(org):
     dict_env = {
         'ORG_NAME': org,
         'ORG_DOMAIN': domain,
-        'PEER_NAMES': settings.PEER_ORGS,
-        'PEER_DOMAINS': settings.PEER_DOMAINS,
+        'PEER_NAMES': peer_orgs,
+        'PEER_DOMAINS': peer_domains,
         'ORDERER_DOMAIN': orderer_domains[0],
         'ORGDERER_NAME': orderer_names[0],
         'EFS_SERVER': settings.EFS_SERVER,
