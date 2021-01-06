@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: {{ORDERER_DOMAIN}}
+  name: admin-v1
+spec:
+  serviceName: admin-v1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-v1
+      tier: {{ORDERER_DOMAIN}}
+  template:
+    metadata:
+      labels:
+        app: admin-v1
+        tier: {{ORDERER_DOMAIN}}
+    spec:
+      containers:
+      - name: admin-v1
+        image: docker.pkg.github.com/akachain/akc-admin/master:v1.5.2
+        ports:  
+        - containerPort: 4001
+        imagePullPolicy: Always
+        env:
+        - name: NODE_ENV
+          value: development
+        volumeMounts:
+          - name: akc-ca-data
+            mountPath: /shared/
+          - name: crypto-store-efs
+            mountPath: /tmp/crypto-store/
+          - name: crypto-path-efs
+            mountPath: /data/app/crypto-path/
+          - name: artifacts-efs
+            mountPath: /data/app/artifacts/
+      volumes:
+      - name: akc-ca-data
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+      - name: crypto-store-efs
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-store/
+      - name: crypto-path-efs
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin/crypto-path/
+      - name: artifacts-efs
+        nfs:
+          server: {{EFS_SERVER}}
+          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/admin-v2/artifacts/
+      imagePullSecrets:
+      - name: mamba

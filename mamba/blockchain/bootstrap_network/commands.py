@@ -1,8 +1,8 @@
+from os import path
 import click
 import yaml
 import re
 from kubernetes import client
-from os import path
 from utils import hiss, util
 from settings import settings
 

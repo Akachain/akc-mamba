@@ -23,8 +23,10 @@ from blockchain.orderer.commands import setup_all_orderer
 from blockchain.peer.commands import setup_all_peer
 from blockchain.gen_artifact.commands import generate_artifact
 from k8s.secret.commands import create_docker_secret
-from blockchain.admin.commands import setup_admin
+from blockchain.admin.commands import setup_all_admin
 from blockchain.bootstrap_network.commands import bootstrap_network
+from blockchain.external_chaincode.commands import config_all_peer
+from blockchain.generate_ccp.commands import generate_all_ccp
 
 
 def create_new_org():
@@ -53,27 +55,31 @@ def create_new_org():
     # Create crypto-config folder to contains artifacts
     update_folder()
 
-    # Default value of ORDERER_DOMAINS = default, it needed to run processes below
-    if (settings.ORDERER_DOMAINS == ''):
-        settings.ORDERER_DOMAINS='default'
+    # # Default value of ORDERER_DOMAINS = default, it needed to run processes below
+    # if (settings.ORDERER_DOMAINS == ''):
+    #     settings.ORDERER_DOMAINS='default'
+
+    hiss.rattle('Config map for external chaincode')
+    config_all_peer()
 
     # Create new StatefullSet peers
     setup_all_peer()
 
     # Run jobs to generate application artifacts
     generate_artifact()
+    generate_all_ccp()
 
     # Create secret if use private docker hub
     if settings.PRIVATE_DOCKER_IMAGE == 'true':
         create_docker_secret('default','mamba')
 
+    # # # Return value ORDERER_DOMAINS
+    # if (settings.ORDERER_DOMAINS == 'default'):
+    #     settings.ORDERER_DOMAINS=''
+
     # Create new a new Admin service
     time.sleep(1)
-    setup_admin()
-
-    # # Return value ORDERER_DOMAINS
-    if (settings.ORDERER_DOMAINS == 'default'):
-        settings.ORDERER_DOMAINS=''
+    setup_all_admin()
 
     dict_env = {
         'ORG_NAME': settings.PEER_ORGS,

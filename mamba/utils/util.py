@@ -4,6 +4,7 @@ import datetime
 import json
 import re
 import yaml
+from pkg_resources import resource_filename, Requirement
 from utils import hiss
 from settings import settings
 
@@ -51,23 +52,24 @@ def smart_append(list_item, items):
         list_item.append(items)
     return list_item
 
+def get_package_resource(package_or_requirement: str, resource_name: str):
+    if package_or_requirement == '':
+        return resource_filename(Requirement.parse('akc-mamba'), resource_name)
+    return resource_filename(package_or_requirement, resource_name)
 
 def get_temp_path():
     return expanduser('~/.akachain/akc-mamba/mamba/_temp')
 
-
 def get_k8s_template_path():
     return expanduser('~/.akachain/akc-mamba/mamba/template')
-
 
 def split_timenow_utc():
     # Get current datetime (UTC)
     current_time = datetime.datetime.utcnow().replace(
         microsecond=0).isoformat().split('T')
 
-    current_time[1] = current_time[1].replace(':','')
+    current_time[1] = current_time[1].replace(':', '')
     return current_time
-
 
 def make_folder(path_folder):
     if not os.path.exists(path_folder):
@@ -76,7 +78,6 @@ def make_folder(path_folder):
         os.mkdir(path_folder)
     # else:
     #     hiss.sub_echo('Folder temp %s exists.' % path_folder)
-
 
 def make_temp_folder():
     # hiss.echo('Create Folder temp')
@@ -89,7 +90,6 @@ def make_temp_folder():
     # Make folder temp if it not exists
     yaml_path = '%s/%s' % (temp_path, current_time[0])
     make_folder(yaml_path)
-
 
 def get_domain(org_name):
     orgs = settings.ORGS.split(' ')

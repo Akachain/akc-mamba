@@ -4,33 +4,21 @@
 # https://stackoverflow.com/questions/13034496/using-global-variables-between-files
 import os
 from os.path import expanduser
-import yaml
 import shutil
 from utils.kube import KubeHelper
 from dotenv import load_dotenv
-from utils import util
-import git
-import subprocess
+from utils import util, hiss
+from k8s.config import commands
 
-def init(dotenv_path, set_default):
-    default_path = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
-    if set_default:
-        shutil.copy(dotenv_path, default_path)
-        load_dotenv(default_path)
-    else:
-        print('Loading config from akachain git repo...')
-        # clone repo akc-mamba to load config
-        mamba_path = expanduser('~/.akachain')
-        if not os.path.isdir(mamba_path):
-            os.makedirs(mamba_path)
-            git.Git(mamba_path).clone('https://github.com/Akachain/akc-mamba.git', branch='binary-config-v2')
-            env_template_path = expanduser('~/.akachain/akc-mamba/mamba/config/operator.env-template')
-            shutil.copy(env_template_path, default_path)
-            bashCommand = 'sudo vi ' + default_path
-            subprocess.call(bashCommand, shell=True)
 
-        print("%s", dotenv_path)
-        load_dotenv(dotenv_path)
+def init():
+
+    DEFAULT_CONFIG_PATH = expanduser('~/.akachain/akc-mamba/mamba/config/.env')
+    commands.extract(force_all=False, force_config=False,
+                     force_script=False, force_template=False, force_other=False, dev_mode=False)
+
+    # Load env
+    load_dotenv(DEFAULT_CONFIG_PATH)
 
     global PVS_PATH
     global K8S_TYPE
@@ -67,7 +55,8 @@ def init(dotenv_path, set_default):
     EFS_ROOT = os.getenv('EFS_ROOT')
     EFS_POD = os.getenv('EFS_POD')
     EFS_EXTEND = os.getenv('EFS_EXTEND')
-    EFS_SERVER_ID = os.getenv('EFS_SERVER_ID')
+    if EFS_SERVER:
+        EFS_SERVER_ID = EFS_SERVER.split('.')[0]
 
     global RCA_NAME
     global RCA_DOMAIN
@@ -128,11 +117,25 @@ def init(dotenv_path, set_default):
     EXTERNAL_ORG_PEER1_ADDRESSES = os.getenv('EXTERNAL_ORG_PEER1_ADDRESSES')
     EXTERNAL_RCA_ADDRESSES = os.getenv('EXTERNAL_RCA_ADDRESSES')
 
+
+    global REMOTE_RCA_NAME, REMOTE_RCA_ADDRESS
+    global REMOTE_ORDERER_NAME, REMOTE_ORDERER_DOMAIN
+    REMOTE_RCA_NAME = os.getenv('REMOTE_RCA_NAME')
+    REMOTE_RCA_ADDRESS = os.getenv('REMOTE_RCA_ADDRESS')
+    REMOTE_ORDERER_NAME = os.getenv('REMOTE_ORDERER_NAME')
+    REMOTE_ORDERER_DOMAIN = os.getenv('REMOTE_ORDERER_DOMAIN')
+
+    global ENDORSEMENT_ORG_NAME, ENDORSEMENT_ORG_DOMAIN, ENDORSEMENT_ORG_ADDRESS, ENDORSEMENT_ORG_TLSCERT
+    ENDORSEMENT_ORG_NAME = os.getenv('ENDORSEMENT_ORG_NAME')
+    ENDORSEMENT_ORG_DOMAIN = os.getenv('ENDORSEMENT_ORG_DOMAIN')
+    ENDORSEMENT_ORG_ADDRESS = os.getenv('ENDORSEMENT_ORG_ADDRESS')
+    ENDORSEMENT_ORG_TLSCERT = os.getenv('ENDORSEMENT_ORG_TLSCERT')
+
     global NEW_ORG_NAME
     NEW_ORG_NAME = os.getenv('NEW_ORG_NAME')
 
     global ORGS, DOMAINS
-    ORGS = (ORDERER_ORGS+' ' +PEER_ORGS).strip()
+    ORGS = (ORDERER_ORGS+' ' + PEER_ORGS).strip()
     DOMAINS = (ORDERER_DOMAINS+' '+PEER_DOMAINS).strip()
 
     global DEPLOYMENT_ENV

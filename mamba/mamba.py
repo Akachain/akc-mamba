@@ -1,12 +1,14 @@
+import os
+from os.path import expanduser
 import click
 from settings import settings
-from os.path import expanduser
 
 from utils import hiss
 
 from k8s.vpn.commands import vpn
 from k8s.secret.commands import secret
 from k8s.environment.commands import environment
+from k8s.config.commands import extract_config
 
 from blockchain.copyscripts.commands import copyscripts
 from blockchain.reg_orgs.commands import reg_orgs
@@ -25,6 +27,7 @@ from blockchain.peer.commands import peer
 from blockchain.update_anchor_peer.commands import anchor_peer
 from blockchain.gen_artifact.commands import gen_artifact
 from blockchain.admin.commands import admin
+from blockchain.admin_v1.commands import adminv1
 from blockchain.bootstrap_network.commands import bootstrap
 from blockchain.start_network.commands import start
 from blockchain.delete_network.commands import delete
@@ -41,17 +44,12 @@ from blockchain.external_chaincode.commands import externalCC
 from blockchain.generate_ccp.commands import ccp
 
 
-@click.group(invoke_without_command=True)
-@click.option('-config', default=expanduser('~/.akachain/akc-mamba/mamba/config/.env'))
-@click.option('--set-default/--no-default', default=False)
-
-def mamba(config, set_default):
+@click.group()
+def mamba():
     # Setup all shared global utilities in settings module
-    settings.init(config, set_default)
-    if mamba.invoke_without_command:
-       hiss.rattle('Initialize mamba')
-       hiss.echo('Successfully with \'%s\' on the %s!' % (config, settings.EKS_CLUSTER_NAME))
+    settings.init()
 
+mamba.add_command(extract_config)
 mamba.add_command(environment)
 mamba.add_command(vpn)
 mamba.add_command(copyscripts)
@@ -70,6 +68,7 @@ mamba.add_command(peer)
 mamba.add_command(gen_artifact)
 mamba.add_command(channel_artifact)
 mamba.add_command(admin)
+mamba.add_command(adminv1)
 mamba.add_command(secret)
 mamba.add_command(bootstrap)
 mamba.add_command(start)

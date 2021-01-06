@@ -4,7 +4,7 @@ from settings import settings
 from os import path
 from os.path import expanduser
 from shutil import copyfile
-from utils import hiss
+from utils import hiss, util
 
 
 def copy_scripts():
@@ -13,17 +13,17 @@ def copy_scripts():
     # Find efs pod
     pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
     if not pods:
-        return hiss.hiss('cannot find tiller pod')
+        return hiss.hiss('cannot find EFS pod')
 
     # Check empty folder
     exec_command = [
         '/bin/bash',
         '-c',
-        'test -d %s && echo "1" || echo "0"'  % (settings.EFS_ROOT)]
+        'test -d %s/akc-ca-data && echo "1" || echo "0"'  % (settings.EFS_ROOT)]
 
     result_get_folder = settings.k8s.exec_pod(
         podName=pods[0], namespace="default", command=exec_command)
-    if int(result_get_folder.data) < 3:
+    if int(result_get_folder.data) < 1:
         hiss.sub_echo('Folder %s not found. Creating...' % settings.EFS_ROOT)
         exec_command = [
             '/bin/bash',
@@ -73,8 +73,7 @@ def copy_scripts():
 
     # Copy test chaincode to efs
     hiss.sub_echo('Copy test chaincode to efs')
-    artifacts_path = os.path.abspath(os.path.join(
-        __package__, "../blockchain/artifacts/src/chaincodes"))
+    artifacts_path = util.get_package_resource('blockchain', 'artifacts/src/chaincodes')
     if not settings.k8s.cp_to_pod(podName=pods[0], namespace='default', source=artifacts_path, target='%s/admin-v2/chaincodes' % settings.EFS_ROOT):
         return hiss.hiss('connot copy test chaincode to pod %s' % pods[0])
 

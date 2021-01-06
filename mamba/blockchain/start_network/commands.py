@@ -79,7 +79,7 @@ def start_network():
     setup_all_peer()
 
     # # Run jobs to generate application artifacts
-    # generate_artifact()
+    generate_artifact()
     generate_all_ccp()
 
     # Create secret if use private docker hub
@@ -94,8 +94,8 @@ def start_network():
     # Bootrap network
     bootstrap_network()
 
-    # Setup anchor peer
-    setup_all()
+    # # Setup anchor peer
+    # setup_all()
 
     # # cat log
     # domains = settings.ORDERER_DOMAINS.split(' ')

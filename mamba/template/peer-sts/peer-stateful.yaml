@@ -99,9 +99,9 @@ spec:
         - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
           value: peer{{PEER_INDEX}}-{{PEER_ORG}}.{{PEER_DOMAIN}}:7051
         - name: CORE_PEER_GOSSIP_USELEADERELECTION
-          value: "true"
-        - name: CORE_PEER_GOSSIP_ORGLEADER
           value: "false"
+        - name: CORE_PEER_GOSSIP_ORGLEADER
+          value: "true"
         - name: CORE_PEER_COMMITTER_ENABLED
           value: "true"
         - name: CORE_PEER_PROFILE_ENABLED
