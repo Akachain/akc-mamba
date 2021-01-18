@@ -36,7 +36,6 @@ def detect_deployed_efs_server(k8s_type):
             efs_server_cmd, shell=True)
         if detected_efs_server:
             efs_server = detected_efs_server.decode().strip()
-
     return efs_server
 
 def detect_deployed_efs_path():
@@ -81,6 +80,9 @@ def extract_cfg(mamba_config, dev_mode):
     # Detect current environment setting
     # EFS_SERVER
     efs_server = detect_deployed_efs_server(k8s_type)
+    # EFS_SERVER_ID
+    efs_server_id = efs_server.split('.')[0]
+    print('efs_server: ', efs_server)
     # EFS_PATH
     efs_path = detect_deployed_efs_path()
     # EFS_POD
@@ -109,6 +111,9 @@ def extract_cfg(mamba_config, dev_mode):
             if efs_server:
                 newline = re.sub(r'EFS_SERVER=.*',
                                  f'EFS_SERVER=\"{efs_server}\"', newline)
+            if efs_server_id:
+                newline = re.sub(r'EFS_SERVER_ID=.*',
+                                 f'EFS_SERVER_ID=\"{efs_server_id}\"', newline)
             if efs_path:
                 newline = re.sub(
                     r'EFS_PATH=.*', f'EFS_PATH=\"efs-{efs_path}\"', newline)

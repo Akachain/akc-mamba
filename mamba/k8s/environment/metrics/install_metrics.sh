@@ -1,6 +1,6 @@
 #!/bin/bash
 set -xe
-helm install stable/metrics-server \
+helm install ~/.akachain/helm-charts/stable/metrics-server \
     --name metrics-server \
     --namespace metrics
 

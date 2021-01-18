@@ -1,5 +1,5 @@
 #!/bin/bash
 set -xe
-helm upgrade metrics-server stable/metrics-server \
+helm upgrade metrics-server ~/.akachain/helm-charts/stable/metrics-server \
     --recreate-pods
 

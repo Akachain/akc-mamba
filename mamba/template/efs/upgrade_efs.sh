@@ -1,6 +1,6 @@
 #!/bin/bash
 set -xe
-helm upgrade efs stable/efs-provisioner \
+helm upgrade efs ~/.akachain/helm-charts/stable/efs-provisioner \
     --set efsProvisioner.efsFileSystemId=$1 \
     --set efsProvisioner.awsRegion=$2 \
     --set efsProvisioner.path=/pvs \
