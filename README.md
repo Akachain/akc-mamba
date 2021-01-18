@@ -26,9 +26,9 @@ Besides original Hyperledger Fabric, AKC-Mamba uses several inhouse developed to
 
 1. Create a bastion host to access the VPC with the EKS cluster inside it following the instruction [here](https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html)
 
-1. Install Python3 in the bastion host with
+1. Install Python3.6 ([Guideline](https://realpython.com/installing-python/#how-to-install-on-ubuntu-and-linux-mint)) in the bastion host with
     ```
-    sudo apt-get install python3
+    sudo apt-get install python3.6
     ```
 
 1. Make sure you have all necessary tools on your bastion host following this 
