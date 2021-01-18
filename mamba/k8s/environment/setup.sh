@@ -3,7 +3,7 @@ set -e
 cd ~/.akachain/akc-mamba/mamba
 
 function podPending {
-  PODSPENDING=$(kubectl get pods --namespace=$1 | awk '{ if ($3!="Completed") print $2}' | grep 0 | wc -l | awk '{print $1}')
+  PODSPENDING=$(kubectl get pods --namespace=$1 | grep "$2" | awk '{ if ($3!="Completed") print $2}' | grep 0 | wc -l | awk '{print $1}')
   while [ "${PODSPENDING}" != "0" ];
   do
     printf -- "\e[2m  Waiting on Pod to deploy in namespace $1. Pods pending = ${PODSPENDING} \033[0m\033"
@@ -23,8 +23,13 @@ function helmInstall {
   kubectl apply -f ./k8s/environment/helm/1rbac.yaml
   ./k8s/environment/helm/2install_helm.sh
   # Check install process
-  podPending kube-system
+  podPending kube-system tiller
   echo -e '\nInstall helm success'
+  echo -e '\nClone helm charts'
+  # TODO: Need update this repo if it exists
+  if [ ! -d ~/.akachain/helm-charts ]; then
+    git clone https://github.com/Akachain/helm-charts ~/.akachain/helm-charts
+  fi
 }
 
 function autoscaler {
@@ -140,7 +145,7 @@ function ingress {
     ingress=`cat "./k8s/environment/ingress/1alb-ingress-controller.yaml" | sed \
         -e "s/{{EKS_CLUSTER_NAME}}/$EKS_CLUSTER_NAME/g"`
     echo "$ingress" | kubectl apply -f -
-    podPending kube-system
+    podPending kube-system alb-ingress-controller
     echo -e 'Installed ALB-Ingress'
   else
     printf -- '\033[32m You run k8s mode '$K8S_TYPE' and will not install ingress. \033[0m\n';
@@ -169,7 +174,7 @@ function metrics {
 
 function environment {
   helmInstall
-  autoscaler
+  # autoscaler
   storageClass
   efs
   ingress

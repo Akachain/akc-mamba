@@ -73,6 +73,7 @@ function main {
     log "Enroll Admin: $PEER_ORG"
     ENROLL_ADMIN=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
       "orgName":"'"${PEER_ORG}"'",
+      "orgDomain":"'"${DOMAIN}"'",
       "adminName": "'"${INT_CA_ADMIN_USER}"'",
       "adminPassword": "'"${INT_CA_ADMIN_PASS}"'"
     }');
@@ -81,6 +82,7 @@ function main {
     log "Register User: $PEER_ORG"
     REGISTER_USER=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/registerUser   -H "content-type: application/json"   -d '{
       "orgName":"'"${PEER_ORG}"'",
+      "orgDomain":"'"${DOMAIN}"'",
       "userName": "'"${PEER_ORG}"'",
       "adminName": "'"${INT_CA_ADMIN_USER}"'"
     }');
