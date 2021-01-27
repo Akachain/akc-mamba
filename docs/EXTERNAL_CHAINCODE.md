@@ -9,7 +9,8 @@
     --header 'content-type: application/json' \
     --data-raw '{
         "orgName":"akc",
-        "chaincodeName":"fabcar"
+        "chaincodeName":"fabcar",
+        "chaincodeDomain":"akc"
     }'
     ```
 ### b. Manual
@@ -17,7 +18,7 @@
   - ```connection.json```: Connection to the external chaincode service:
     ```
     {
-        "address": "chaincode-fabcar-org1.akc:7052",
+        "address": "fabcar-akc.akc:7052",
         "dial_timeout": "10s",
         "tls_required": false,
         "client_auth_required": false,
