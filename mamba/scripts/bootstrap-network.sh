@@ -74,8 +74,8 @@ function main {
     ENROLL_ADMIN=$(curl -s -X POST   ${ADMIN_URL}/api/v2/cas/enrollAdmin   -H "content-type: application/json"   -d '{
       "orgName":"'"${PEER_ORG}"'",
       "orgDomain":"'"${DOMAIN}"'",
-      "adminName": "'"${INT_CA_ADMIN_USER}"'",
-      "adminPassword": "'"${INT_CA_ADMIN_PASS}"'"
+      "adminName": "'"${ADMIN_NAME}"'",
+      "adminPassword": "'"${ADMIN_PASS}"'"
     }');
     logResult "$ENROLL_ADMIN"
 

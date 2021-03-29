@@ -88,11 +88,13 @@ function initOrgVars {
 
    # Admin identity for the org
    ADMIN_NAME=admin-${ORG}
-   ADMIN_PASS=${ADMIN_NAME}pw
+   # ADMIN_PASS=${ADMIN_NAME}pw
+   ADMIN_PASS=browsingpw1@
 
    # Typical user identity for the org
    USER_NAME=user-${ORG}
-   USER_PASS=${USER_NAME}pw
+   # USER_PASS=${USER_NAME}pw
+   USER_PASS=browsingpw1@
 
    # Cert files
    ROOT_CA_CERTFILE=/${DATA}/rca-${ORG}-ca-cert.pem
@@ -136,7 +138,8 @@ function initOrdererVars {
    ORDERER_PORT=7050
 
    ORDERER_NAME=orderer${INDEX}-${ORG}
-   ORDERER_PASS=${ORDERER_NAME}pw
+   # ORDERER_PASS=${ORDERER_NAME}pw
+   ORDERER_PASS=browsingpw1@
    ORDERER_NAME_PASS=${ORDERER_NAME}:${ORDERER_PASS}
    ORDERER_LOGFILE=$LOGDIR/${ORDERER_NAME}.log
    MYHOME=/etc/hyperledger/orderer
@@ -204,7 +207,8 @@ function initPeerVars {
    PEER_NAME=${PEER_PREFIX}${NUM}-${ORG}
    PEER_HOST=${PEER_NAME}.${DOMAIN}
 
-   PEER_PASS=${PEER_NAME}pw
+   # PEER_PASS=${PEER_NAME}pw
+   PEER_PASS=browsingpw1@
    PEER_NAME_PASS=${PEER_NAME}:${PEER_PASS}
    PEER_LOGFILE=$LOGDIR/${PEER_NAME}.log
    MYHOME=/opt/gopath/src/github.com/hyperledger/fabric/peer

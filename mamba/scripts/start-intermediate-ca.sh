@@ -35,4 +35,3 @@ sed -i "/affiliations:/a \\   $aff" \
 
 # Start the intermediate CA
 fabric-ca-server start
-# tail -f /etc/hosts

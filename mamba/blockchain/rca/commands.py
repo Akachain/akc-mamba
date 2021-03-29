@@ -38,6 +38,8 @@ def setup_rca():
         'RCA_NAME': settings.RCA_NAME,
         'FABRIC_ORGS': settings.ORGS,
         'FABRIC_CA_TAG': settings.FABRIC_CA_TAG,
+        'ENABLE_LDAP': settings.ENABLE_LDAP,
+        'ROOT_CA_LDAP_URL': settings.ROOT_CA_LDAP_URL,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND,
