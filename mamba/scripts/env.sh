@@ -89,12 +89,25 @@ function initOrgVars {
    # Admin identity for the org
    ADMIN_NAME=admin-${ORG}
    # ADMIN_PASS=${ADMIN_NAME}pw
-   ADMIN_PASS=browsingpw1@
+   # ADMIN_PASS=browsingpw1@
+
+   if [ -z "$LDAP_ADMIN_PASS" ]
+   then
+      ADMIN_PASS=browsingpw1@
+   else
+      ADMIN_PASS=$LDAP_ADMIN_PASS
+   fi
 
    # Typical user identity for the org
    USER_NAME=user-${ORG}
    # USER_PASS=${USER_NAME}pw
-   USER_PASS=browsingpw1@
+   # USER_PASS=browsingpw1@
+   if [ -z "$LDAP_USER_PASS" ]
+   then
+      USER_PASS=browsingpw1@
+   else
+      USER_PASS=$LDAP_USER_PASS
+   fi
 
    # Cert files
    ROOT_CA_CERTFILE=/${DATA}/rca-${ORG}-ca-cert.pem
@@ -139,7 +152,14 @@ function initOrdererVars {
 
    ORDERER_NAME=orderer${INDEX}-${ORG}
    # ORDERER_PASS=${ORDERER_NAME}pw
-   ORDERER_PASS=browsingpw1@
+   # ORDERER_PASS=browsingpw1@
+   if [ -z "$LDAP_ORDERER_PASS" ]
+   then
+      ORDERER_PASS=browsingpw1@
+   else
+      ORDERER_PASS=$LDAP_ORDERER_PASS
+   fi
+   
    ORDERER_NAME_PASS=${ORDERER_NAME}:${ORDERER_PASS}
    ORDERER_LOGFILE=$LOGDIR/${ORDERER_NAME}.log
    MYHOME=/etc/hyperledger/orderer
@@ -208,7 +228,14 @@ function initPeerVars {
    PEER_HOST=${PEER_NAME}.${DOMAIN}
 
    # PEER_PASS=${PEER_NAME}pw
-   PEER_PASS=browsingpw1@
+   # PEER_PASS=browsingpw1@
+   if [ -z "$LDAP_PEER_PASS" ]
+   then
+      PEER_PASS=browsingpw1@
+   else
+      PEER_PASS=$LDAP_PEER_PASS
+   fi
+   
    PEER_NAME_PASS=${PEER_NAME}:${PEER_PASS}
    PEER_LOGFILE=$LOGDIR/${PEER_NAME}.log
    MYHOME=/opt/gopath/src/github.com/hyperledger/fabric/peer
