@@ -21,66 +21,80 @@ spec:
        org:  {{ICA_DOMAIN}}
        name: {{ICA_NAME}}
     spec:
-     containers:
-       - name: {{ICA_NAME}}
-         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
-         env:
-         - name:  FABRIC_CA_SERVER_HOME
-           value: /etc/hyperledger/fabric-ca
-         - name:  FABRIC_CA_SERVER_TLS_ENABLED
-           value: "true"
-         - name:  FABRIC_CA_SERVER_CA_NAME
-           value: {{ICA_NAME}}.{{ICA_DOMAIN}}
-         - name:  FABRIC_CA_SERVER_CSR_HOSTS
-           value: {{ICA_NAME}}.{{ICA_DOMAIN}}
-         - name:  FABRIC_CA_SERVER_DEBUG
-           value: "true"
-         - name:  BOOTSTRAP_USER_PASS
-           value: {{ICA_NAME}}-admin:{{ICA_NAME}}-adminpw
-         - name:  TARGET_CHAINFILE
-           value: /data/{{ICA_NAME}}-ca-chain.pem
-        #  - name:  FABRIC_ORGS
-        #    value: {{FABRIC_ORG}}
-         - name:  FABRIC_CA_SERVER_INTERMEDIATE_TLS_CERTFILES
-           value: /data/{{RCA_NAME}}-cert.pem
-         - name:  PARENT_URL
-           value: https://{{ICA_NAME}}:browsingpw1@@{{RCA_HOST}}:7054
-         - name:  ORG
-           value: {{ORG}}
-         - name:  FABRIC_CA_SERVER_LDAP_ENABLED
-           value: "true"
-         - name:  FABRIC_CA_SERVER_LDAP_URL
-           value: "ldap://CN=admin,CN=Users,OU=hogwarts3,DC=hogwarts3,DC=akachains,DC=io:xxxx@sample-ldap.akachains.io:389/DC=hogwarts3,DC=akachains,DC=io"
-         ports:
-          - containerPort: 7054 
-         command: ["sh"]
-        #  args:  ["-c", "/scripts/start-intermediate-ca.sh 2>&1"]
-         args:  ["-c", "tail -f /etc/hosts"]
-         volumeMounts:
-          - mountPath: /etc/hyperledger/fabric-ca
-            name: {{ICA_NAME}}-pvc
-          - mountPath: /scripts
-            name: scripts
-          - mountPath: /data
-            name: data
-     volumes:
-       - name: scripts
-         nfs:
-          server: {{EFS_SERVER}}
-          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
-       - name: data
-         nfs:
-          server: {{EFS_SERVER}}
-          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
-  volumeClaimTemplates:
-  - metadata:
-      name: {{ICA_NAME}}-pvc
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      storageClassName: {{STORAGE_CLASS}}
-      resources:
-        requests:
-          storage: 3Gi
+      initContainers:
+      - name: init
+        image: busybox
+        command: ['/bin/sh', '-c', 'cp /etc/hyperledger/fabric-ca/fabric-ca-server-config.yaml /tmp/artifact/fabric-ca-server-config.yaml']
+        volumeMounts:
+          - mountPath: /etc/hyperledger/fabric-ca/fabric-ca-server-config.yaml
+            subPath: fabric-ca-server-config.yaml
+            name: {{ICA_NAME}}-configmap
+          - name: tmp
+            mountPath: /tmp/artifact
+      containers:
+        - name: {{ICA_NAME}}
+          image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
+          env:
+          - name:  FABRIC_CA_SERVER_HOME
+            value: /etc/hyperledger/fabric-ca
+          - name:  FABRIC_CA_SERVER_TLS_ENABLED
+            value: "true"
+          - name:  FABRIC_CA_SERVER_CA_NAME
+            value: {{ICA_NAME}}.{{ICA_DOMAIN}}
+          - name:  FABRIC_CA_SERVER_CSR_HOSTS
+            value: {{ICA_NAME}}.{{ICA_DOMAIN}}
+          - name:  FABRIC_CA_SERVER_DEBUG
+            value: "true"
+          - name:  BOOTSTRAP_USER_PASS
+            value: {{ICA_NAME}}-admin:{{ICA_NAME}}-adminpw
+          - name:  TARGET_CHAINFILE
+            value: /data/{{ICA_NAME}}-ca-chain.pem
+          #  - name:  FABRIC_ORGS
+          #    value: {{FABRIC_ORG}}
+          - name:  FABRIC_CA_SERVER_INTERMEDIATE_TLS_CERTFILES
+            value: /data/{{RCA_NAME}}-cert.pem
+          - name:  PARENT_URL
+            value: https://{{ICA_NAME}}:browsingpw1@@{{RCA_HOST}}:7054
+          - name:  ORG
+            value: {{ORG}}
+          - name:  FABRIC_CA_SERVER_LDAP_ENABLED
+            value: "true"
+          - name:  FABRIC_CA_SERVER_LDAP_URL
+            value: "ldap://CN=admin,CN=Users,OU=hogwarts3,DC=hogwarts3,DC=akachains,DC=io:xxxx@sample-ldap.akachains.io:389/DC=hogwarts3,DC=akachains,DC=io"
+          ports:
+            - containerPort: 7054 
+          command: ["sh"]
+          #  args:  ["-c", "/scripts/start-intermediate-ca.sh 2>&1"]
+          args:  ["-c", "tail -f /etc/hosts"]
+          volumeMounts:
+            - mountPath: /etc/hyperledger/fabric-ca
+              name: {{ICA_NAME}}-pvc
+            - mountPath: /scripts
+              name: scripts
+            - mountPath: /data
+              name: data
+            - name: tmp
+              mountPath: /tmp/artifact
+      volumes:
+        - name: scripts
+          nfs:
+            server: {{EFS_SERVER}}
+            path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+        - name: data
+          nfs:
+            server: {{EFS_SERVER}}
+            path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+        - name: tmp
+          emptyDir: {}
+    volumeClaimTemplates:
+    - metadata:
+        name: {{ICA_NAME}}-pvc
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{STORAGE_CLASS}}
+        resources:
+          requests:
+            storage: 3Gi
 ---
 apiVersion: v1
 kind: Service

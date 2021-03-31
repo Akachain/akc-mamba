@@ -21,6 +21,16 @@ spec:
        org: {{ORG}}
        name: {{RCA_NAME}}
     spec:
+      initContainers:
+      - name: init
+        image: busybox
+        command: ['/bin/sh', '-c', 'cp /etc/hyperledger/fabric-ca/fabric-ca-server-config.yaml /tmp/artifact/fabric-ca-server-config.yaml']
+        volumeMounts:
+          - mountPath: /etc/hyperledger/fabric-ca/fabric-ca-server-config.yaml
+            subPath: fabric-ca-server-config.yaml
+            name: {{RCA_NAME}}-configmap
+          - name: tmp
+            mountPath: /tmp/artifact
       containers:
         - name: {{RCA_NAME}}
           image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
@@ -56,9 +66,8 @@ spec:
               name: rca-scripts
             - mountPath: /data
               name: rca-data
-            - mountPath: /etc/hyperledger/fabric-ca/fabric-ca-server-config.yaml
-              subPath: fabric-ca-server-config.yaml
-              name: {{RCA_NAME}}-configmap
+            - name: tmp
+              mountPath: /tmp/artifact
       volumes:
         - name: rca-scripts
           nfs:
@@ -71,6 +80,8 @@ spec:
         - name: {{RCA_NAME}}-configmap
           configMap:
             name: {{RCA_NAME}}-configmap
+        - name: tmp
+          emptyDir: {}
       
   volumeClaimTemplates:
   - metadata:

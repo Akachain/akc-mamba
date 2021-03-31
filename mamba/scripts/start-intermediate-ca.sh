@@ -1,6 +1,8 @@
 #!/bin/bash
 
 source $(dirname "$0")/env.sh
+mkdir -p $FABRIC_CA_SERVER_HOME
+cp /tmp/artifact/fabric-ca-server-config.yaml /etc/hyperledger/fabric-ca/fabric-ca-server-config.yaml
 initOrgVars $ORG
 
 set -e
@@ -25,8 +27,8 @@ cp $FABRIC_CA_SERVER_HOME/ca-chain.pem $TARGET_CHAINFILE
 aff=$aff"\n   $ORG.akc: []"
 # done
 aff="${aff#\\n   }"
-sed -i "/affiliations:/a \\   $aff" \
-   $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
+# sed -i "/affiliations:/a \\   $aff" \
+#    $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
 
 # sed -i 's+C: US+C: VN+g' $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
 # sed -i "s+ST: \"North Carolina\"+ST: \"Hanoi\"+g" $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
