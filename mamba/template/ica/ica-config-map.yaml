@@ -7,7 +7,7 @@ metadata:
   labels:
     app: {{ICA_NAME}}-configmap
 data:
-  fabric-ca-server-config.yam: |
+  fabric-ca-server-config.yaml: |
     #############################################################################
     #   This is a configuration file for the fabric-ca-server command.
     #
