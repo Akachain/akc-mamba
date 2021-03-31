@@ -61,6 +61,10 @@ def setup_ica(ica_org):
         'PVS_PATH': settings.PVS_PATH,
         'STORAGE_CLASS': storage_class
     }
+    k8s_template_file_configmap = '%s/ica/ica-config-map.yaml' % util.get_k8s_template_path()
+    settings.k8s.apply_yaml_from_template(
+        namespace=ica_domain, k8s_template_file=k8s_template_file_configmap, dict_env=dict_env)
+
     settings.k8s.apply_yaml_from_template(
         namespace=ica_domain, k8s_template_file=k8s_template_file, dict_env=dict_env)
 
