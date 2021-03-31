@@ -21,50 +21,57 @@ spec:
        org: {{ORG}}
        name: {{RCA_NAME}}
     spec:
-     containers:
-       - name: {{RCA_NAME}}
-         image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
-         env:
-         - name:  FABRIC_CA_SERVER_HOME
-           value: /etc/hyperledger/fabric-ca
-         - name:  FABRIC_CA_SERVER_TLS_ENABLED
-           value: "true"
-         - name:  FABRIC_CA_SERVER_CSR_CN
-           value: {{RCA_NAME}}.{{ORG}}
-         - name:  FABRIC_CA_SERVER_CSR_HOSTS
-           value: {{RCA_NAME}}.{{ORG}}
-         - name:  FABRIC_CA_SERVER_DEBUG
-           value: "true"
-         - name:  BOOTSTRAP_USER_PASS
-           value: {{RCA_NAME}}-admin:{{RCA_NAME}}-adminpw
-         - name:  TARGET_CERTFILE
-           value: /data/{{RCA_NAME}}-cert.pem
-         - name:  FABRIC_ORGS
-           value: "{{FABRIC_ORGS}}"
-         - name:  FABRIC_CA_SERVER_LDAP_ENABLED
-           value: "{{ENABLE_LDAP}}"
-         - name:  FABRIC_CA_SERVER_LDAP_URL
-           value: "{{ROOT_CA_LDAP_URL}}"
-         ports:
-          - containerPort: 7054
-         command: ["sh"]
-         args:  ["-c", "/scripts/start-root-ca.sh 2>&1"]
-         volumeMounts:
-          - mountPath: /etc/hyperledger/fabric-ca
-            name: {{RCA_NAME}}-pvc
-          - mountPath: /scripts
-            name: rca-scripts
-          - mountPath: /data
-            name: rca-data
-     volumes:
-       - name: rca-scripts
-         nfs:
-          server: {{EFS_SERVER}}
-          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
-       - name: rca-data
-         nfs:
-          server: {{EFS_SERVER}}
-          path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+      containers:
+        - name: {{RCA_NAME}}
+          image: hyperledger/fabric-ca:{{FABRIC_CA_TAG}}
+          env:
+          - name:  FABRIC_CA_SERVER_HOME
+            value: /etc/hyperledger/fabric-ca
+          - name:  FABRIC_CA_SERVER_TLS_ENABLED
+            value: "true"
+          - name:  FABRIC_CA_SERVER_CSR_CN
+            value: {{RCA_NAME}}.{{ORG}}
+          - name:  FABRIC_CA_SERVER_CSR_HOSTS
+            value: {{RCA_NAME}}.{{ORG}}
+          - name:  FABRIC_CA_SERVER_DEBUG
+            value: "true"
+          - name:  BOOTSTRAP_USER_PASS
+            value: {{RCA_NAME}}-admin:{{RCA_NAME}}-adminpw
+          - name:  TARGET_CERTFILE
+            value: /data/{{RCA_NAME}}-cert.pem
+          - name:  FABRIC_ORGS
+            value: "{{FABRIC_ORGS}}"
+          - name:  FABRIC_CA_SERVER_LDAP_ENABLED
+            value: "{{ENABLE_LDAP}}"
+          - name:  FABRIC_CA_SERVER_LDAP_URL
+            value: "{{ROOT_CA_LDAP_URL}}"
+          ports:
+            - containerPort: 7054
+          command: ["sh"]
+          args:  ["-c", "/scripts/start-root-ca.sh 2>&1"]
+          volumeMounts:
+            - mountPath: /etc/hyperledger/fabric-ca
+              name: {{RCA_NAME}}-pvc
+            - mountPath: /scripts
+              name: rca-scripts
+            - mountPath: /data
+              name: rca-data
+            - mountPath: /etc/hyperledger/fabric-ca/fabric-ca-server-config.yaml
+              subPath: fabric-ca-server-config.yaml
+              name: {{RCA_NAME}}-configmap
+      volumes:
+        - name: rca-scripts
+          nfs:
+            server: {{EFS_SERVER}}
+            path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-scripts/
+        - name: rca-data
+          nfs:
+            server: {{EFS_SERVER}}
+            path: {{PVS_PATH}}/{{EFS_PATH}}/{{EFS_EXTEND}}/akc-ca-data/
+        - name: {{RCA_NAME}}-configmap
+          configMap:
+            name: {{RCA_NAME}}-configmap
+      
   volumeClaimTemplates:
   - metadata:
       name: {{RCA_NAME}}-pvc
