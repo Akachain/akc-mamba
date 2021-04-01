@@ -14,9 +14,14 @@ function main {
 
 # Enroll the CA administrator
 function enrollCAAdmin {
-
+    if [ "$LDAP_ORDERER_PASS" == "true" ]
+    then
+      export CLIENT_ADMIN_USER_PASS="admin-client-$ORG:browsingpw1@"
+    else
+      export CLIENT_ADMIN_USER_PASS=$CA_ADMIN_USER_PASS
+    fi
     # export CLIENT_ADMIN_USER_PASS="admin-client-$ORG:admin-client-${ORG}pw"
-    export CLIENT_ADMIN_USER_PASS="admin-client-$ORG:browsingpw1@"
+    
 
     initOrgVars $ORG
     getDomain $ORG
@@ -25,27 +30,54 @@ function enrollCAAdmin {
     mkdir -p $FABRIC_CA_CLIENT_HOME
     export FABRIC_CA_CLIENT_TLS_CERTFILES=$CA_CHAINFILE
     fabric-ca-client enroll -u https://$CLIENT_ADMIN_USER_PASS@$CA_HOST:7054
-
-    echo "NodeOUs:
-    Enable: true
-    ClientOUIdentifier:
-      Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
-      OrganizationalUnitIdentifier: fabric-client
-    PeerOUIdentifier:
-      Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
-      OrganizationalUnitIdentifier: fabric-peer
-    AdminOUIdentifier:
-      Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
-      OrganizationalUnitIdentifier: fabric-admin
-    OrdererOUIdentifier:
-      Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
-      OrganizationalUnitIdentifier: fabric-orderer" > ${FABRIC_CA_CLIENT_HOME}/msp/config.yaml
+    if [ "$LDAP_ORDERER_PASS" == "true" ]
+    then
+      echo "NodeOUs:
+      Enable: true
+      ClientOUIdentifier:
+        Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
+        OrganizationalUnitIdentifier: fabric-client
+      PeerOUIdentifier:
+        Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
+        OrganizationalUnitIdentifier: fabric-peer
+      AdminOUIdentifier:
+        Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
+        OrganizationalUnitIdentifier: fabric-admin
+      OrdererOUIdentifier:
+        Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
+        OrganizationalUnitIdentifier: fabric-orderer" > ${FABRIC_CA_CLIENT_HOME}/msp/config.yaml
+    else
+      echo "NodeOUs:
+      Enable: true
+      ClientOUIdentifier:
+        Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
+        OrganizationalUnitIdentifier: client
+      PeerOUIdentifier:
+        Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
+        OrganizationalUnitIdentifier: peer
+      AdminOUIdentifier:
+        Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
+        OrganizationalUnitIdentifier: admin
+      OrdererOUIdentifier:
+        Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
+        OrganizationalUnitIdentifier: orderer" > ${FABRIC_CA_CLIENT_HOME}/msp/config.yaml
+    fi
+    
 }
 
 # Register the admin and user identities associated with the org
 function registerOrgIdentities {
     initOrgVars $ORG
     enrollCAAdmin
+    if [ "$LDAP_ORDERER_PASS" == "false" ]
+    then
+      log "Registering admin identity: $ADMIN_NAME with $CA_NAME"
+      # The admin identity has the "admin" attribute which is added to ECert by default
+      # fabric-ca-client register -d --id.name $ADMIN_NAME --id.secret $ADMIN_PASS --id.attrs "hf.Registrar.Roles=client,hf.Registrar.Attributes=*,hf.Revoker=true,hf.GenCRL=true,admin=true:ecert,abac.init=true:ecert"
+      fabric-ca-client register --id.name $ADMIN_NAME --id.secret $ADMIN_PASS --id.type admin --id.affiliation ""
+      log "Registering user identity: $USER_NAME with $CA_NAME"
+      fabric-ca-client register --id.name $USER_NAME --id.secret $USER_PASS --id.type client --id.affiliation ""
+    fi
     # log "Registering admin identity: $ADMIN_NAME with $CA_NAME"
     # # The admin identity has the "admin" attribute which is added to ECert by default
     # # fabric-ca-client register -d --id.name $ADMIN_NAME --id.secret $ADMIN_PASS --id.attrs "hf.Registrar.Roles=client,hf.Registrar.Attributes=*,hf.Revoker=true,hf.GenCRL=true,admin=true:ecert,abac.init=true:ecert"
