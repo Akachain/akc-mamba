@@ -64,8 +64,8 @@ spec:
           ports:
             - containerPort: 7054 
           command: ["sh"]
-          #  args:  ["-c", "/scripts/start-intermediate-ca.sh 2>&1"]
-          args:  ["-c", "tail -f /etc/hosts"]
+          args:  ["-c", "/scripts/start-intermediate-ca.sh 2>&1"]
+          # args:  ["-c", "tail -f /etc/hosts"]
           volumeMounts:
             - mountPath: /etc/hyperledger/fabric-ca
               name: {{ICA_NAME}}-pvc
