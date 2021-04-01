@@ -60,7 +60,7 @@ spec:
           - name:  FABRIC_CA_SERVER_LDAP_ENABLED
             value: "{{ENABLE_LDAP}}"
           - name:  FABRIC_CA_SERVER_LDAP_URL
-            value: "{{ROOT_CA_LDAP_URL}}"
+            value: "{{INTERMEDIATE_CA_LDAP_URL}}"
           ports:
             - containerPort: 7054 
           command: ["sh"]
