@@ -58,9 +58,9 @@ spec:
           - name:  ORG
             value: {{ORG}}
           - name:  FABRIC_CA_SERVER_LDAP_ENABLED
-            value: "true"
+            value: "{{ENABLE_LDAP}}"
           - name:  FABRIC_CA_SERVER_LDAP_URL
-            value: "ldap://CN=admin,CN=Users,OU=hogwarts3,DC=hogwarts3,DC=akachains,DC=io:xxxx@sample-ldap.akachains.io:389/DC=hogwarts3,DC=akachains,DC=io"
+            value: "{{ROOT_CA_LDAP_URL}}"
           ports:
             - containerPort: 7054 
           command: ["sh"]
