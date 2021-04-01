@@ -29,6 +29,16 @@ def delete_ica(ica_org):
     # Delete stateful set
     return settings.k8s.delete_stateful(name=ica_name, namespace=ica_domain)
 
+def delete_ica_config_map(ica_org):
+    ica_name_cm = 'ica-%s-configmap' % ica_org
+    # Get domain ica to create namespace
+    ica_domain = util.get_domain(ica_org)
+    if not ica_domain:
+        return hiss.hiss('Fail to get domain of %s ' % ica_org)
+
+    # Delete config map
+    return settings.k8s.delete_config_map(name=ica_name_cm,namespace=ica_domain)
+
 def setup_ica(ica_org):
 
     # Get domain ica to create namespace
@@ -82,6 +92,7 @@ def delete_all_ica():
     # TODO: Multiprocess
     for org in orgs:
         delete_ica(org)
+        delete_ica_config_map(org)
 
 def terminate_all_ica():
     orgs = settings.ORGS.split(' ')

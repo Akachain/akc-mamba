@@ -340,3 +340,19 @@ class KubeHelper:
             print('api_response: ', api_response)
         except ApiException as e:
             return hiss.hiss("Exception when calling AppsV1Api->create_namespaced_stateful_set: %s\n" % e)
+
+    def delete_config_map(self, name, namespace):
+        action = 'Delete'
+        
+        try:
+            body = client.V1DeleteOptions(propagation_policy='Background')
+            api_response = self.coreApi.delete_namespaced_config_map(
+                name, namespace, body=body)
+            self.check_pod_status_by_keyword(
+                keyword=name, namespace=namespace, is_delete=True)
+            hiss.echo('%s config map %s on namespace %s success' %
+                      (action, name, namespace))
+            return util.Result(success=True, data=api_response)
+        except ApiException as e:
+            err_msg = "Exception when calling CoreV1Api->delete_namespaced_config_map: %s\n" % e
+            return util.Result(success=hiss.hiss(err_msg), msg=err_msg)
