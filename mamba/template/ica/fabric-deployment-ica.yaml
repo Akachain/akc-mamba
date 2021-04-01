@@ -89,15 +89,15 @@ spec:
         - name: {{ICA_NAME}}-configmap
           configMap:
             name: {{ICA_NAME}}-configmap
-    volumeClaimTemplates:
-    - metadata:
-        name: {{ICA_NAME}}-pvc
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        storageClassName: {{STORAGE_CLASS}}
-        resources:
-          requests:
-            storage: 3Gi
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ICA_NAME}}-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{STORAGE_CLASS}}
+      resources:
+        requests:
+          storage: 3Gi
 ---
 apiVersion: v1
 kind: Service
