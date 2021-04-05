@@ -14,7 +14,7 @@ function main {
 
 # Enroll the CA administrator
 function enrollCAAdmin {
-    if [ "$LDAP_ORDERER_PASS" == "true" ]
+    if [ "$ENABLE_LDAP" == "true" ]
     then
       export CLIENT_ADMIN_USER_PASS="admin-client-$ORG:browsingpw1@"
     else
@@ -30,7 +30,7 @@ function enrollCAAdmin {
     mkdir -p $FABRIC_CA_CLIENT_HOME
     export FABRIC_CA_CLIENT_TLS_CERTFILES=$CA_CHAINFILE
     fabric-ca-client enroll -u https://$CLIENT_ADMIN_USER_PASS@$CA_HOST:7054
-    if [ "$LDAP_ORDERER_PASS" == "true" ]
+    if [ "$ENABLE_LDAP" == "true" ]
     then
       echo "NodeOUs:
       Enable: true
@@ -69,7 +69,7 @@ function enrollCAAdmin {
 function registerOrgIdentities {
     initOrgVars $ORG
     enrollCAAdmin
-    if [ "$LDAP_ORDERER_PASS" == "false" ]
+    if [ "$ENABLE_LDAP" == "false" ]
     then
       log "Registering admin identity: $ADMIN_NAME with $CA_NAME"
       # The admin identity has the "admin" attribute which is added to ECert by default
