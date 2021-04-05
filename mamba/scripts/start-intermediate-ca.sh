@@ -27,7 +27,7 @@ cp $FABRIC_CA_SERVER_HOME/ca-chain.pem $TARGET_CHAINFILE
 aff=$aff"\n   $ORG.akc: []"
 # done
 aff="${aff#\\n   }"
-sed -i "/affiliations:/a \\   $aff" \
+sed -i "/affiliations:/a \\  $aff" \
    $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
 
 # sed -i 's+C: US+C: VN+g' $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
