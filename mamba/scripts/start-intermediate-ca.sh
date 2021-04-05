@@ -24,7 +24,7 @@ cp $FABRIC_CA_SERVER_HOME/ca-chain.pem $TARGET_CHAINFILE
 #########################
 # Add the custom orgs
 # for o in $ORGS; do
-aff=$aff"\n   $ORG.akc: []"
+aff=$aff"\n  $ORG.akc: []"
 # done
 aff="${aff#\\n   }"
 sed -i "/affiliations:/a \\  $aff" \
