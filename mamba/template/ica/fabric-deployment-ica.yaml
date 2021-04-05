@@ -54,7 +54,8 @@ spec:
           - name:  FABRIC_CA_SERVER_INTERMEDIATE_TLS_CERTFILES
             value: /data/{{RCA_NAME}}-cert.pem
           - name:  PARENT_URL
-            value: https://{{ICA_NAME}}:browsingpw1@@{{RCA_HOST}}:7054
+            # value: https://{{ICA_NAME}}:browsingpw1@@{{RCA_HOST}}:7054
+            value: {{PARENT_URL}}
           - name:  ORG
             value: {{ORG}}
           - name:  FABRIC_CA_SERVER_LDAP_ENABLED

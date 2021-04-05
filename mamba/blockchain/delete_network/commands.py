@@ -19,7 +19,7 @@ from blockchain.channel_artifact.commands import del_gen_channel_artifact
 from blockchain.orderer.commands import delete_all_orderer
 from blockchain.peer.commands import del_all_peer
 from blockchain.gen_artifact.commands import del_generate_artifact
-from blockchain.admin.commands import del_admin
+from blockchain.admin.commands import delete_all_admin
 from blockchain.bootstrap_network.commands import del_bootstrap_network
 
 
@@ -67,7 +67,7 @@ def delete_network():
     del_generate_artifact()
 
     # Delete Admin service
-    del_admin()
+    delete_all_admin()
 
     del_bootstrap_network()
 

@@ -57,6 +57,11 @@ def setup_ica(ica_org):
 
     rca_name = settings.RCA_NAME or settings.REMOTE_RCA_NAME
 
+    if settings.ENABLE_LDAP == 'true':
+        parent_url = 'https://{{ICA_NAME}}:browsingpw1@@{{RCA_HOST}}:7054'
+    else:
+        parent_url = 'https://{{RCA_NAME}}-admin:{{RCA_NAME}}-adminpw@{{RCA_HOST}}:7054'
+
     k8s_template_file = '%s/ica/fabric-deployment-ica.yaml' % util.get_k8s_template_path()
     dict_env = {
         'ORG': ica_org,
@@ -71,7 +76,8 @@ def setup_ica(ica_org):
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND,
         'PVS_PATH': settings.PVS_PATH,
-        'STORAGE_CLASS': storage_class
+        'STORAGE_CLASS': storage_class,
+        'PARENT_URL': parent_url
     }
     k8s_template_file_configmap = '%s/ica/ica-config-map.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(
