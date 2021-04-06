@@ -29,9 +29,10 @@ function enrollCAAdmin {
     export FABRIC_CA_CLIENT_HOME=/$DATA/crypto-config/$ORG.$DOMAIN
     mkdir -p $FABRIC_CA_CLIENT_HOME
     export FABRIC_CA_CLIENT_TLS_CERTFILES=$CA_CHAINFILE
-    fabric-ca-client enroll -u https://$CLIENT_ADMIN_USER_PASS@$CA_HOST:7054
+    
     if [ "$ENABLE_LDAP" == "true" ]
     then
+      fabric-ca-client enroll -u https://$CLIENT_ADMIN_USER_PASS@$CA_HOST:7054
       echo "NodeOUs:
       Enable: true
       ClientOUIdentifier:
@@ -47,6 +48,7 @@ function enrollCAAdmin {
         Certificate: intermediatecerts/ica-${ORG}-${DOMAIN}-7054.pem
         OrganizationalUnitIdentifier: fabric-orderer" > ${FABRIC_CA_CLIENT_HOME}/msp/config.yaml
     else
+      fabric-ca-client enroll -u https://$CA_ADMIN_USER_PASS@$CA_HOST:7054
       echo "NodeOUs:
       Enable: true
       ClientOUIdentifier:
