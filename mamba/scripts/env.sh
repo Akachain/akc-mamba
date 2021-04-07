@@ -109,6 +109,13 @@ function initOrgVars {
       USER_PASS=$LDAP_USER_PASS
    fi
 
+   if [ -z "$LDAP_ADMIN_CLIENT_PASS" ]
+   then
+      ADMIN_CLIENT_PASS=browsingpw1@
+   else
+      ADMIN_CLIENT_PASS=$LDAP_ADMIN_CLIENT_PASS
+   fi
+
    # Cert files
    ROOT_CA_CERTFILE=/${DATA}/rca-${ORG}-ca-cert.pem
    INT_CA_CHAINFILE=/${DATA}/ica-${ORG}-ca-chain.pem

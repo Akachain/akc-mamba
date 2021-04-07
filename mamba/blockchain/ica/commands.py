@@ -57,8 +57,9 @@ def setup_ica(ica_org):
 
     rca_name = settings.RCA_NAME or settings.REMOTE_RCA_NAME
 
+    ica_pass = settings.ICA_PASS
     if settings.ENABLE_LDAP == 'true':
-        parent_url = 'https://%s:browsingpw1@@%s:7054' % (ica_name, rca_host)
+        parent_url = 'https://%s:%s@%s:7054' % (ica_name, ica_pass, rca_host)
     else:
         parent_url = 'https://%s-admin:%s-adminpw@%s:7054' % (rca_name, rca_name, rca_host)
 

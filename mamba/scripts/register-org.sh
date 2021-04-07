@@ -16,7 +16,7 @@ function main {
 function enrollCAAdmin {
     if [ "$ENABLE_LDAP" == "true" ]
     then
-      export CLIENT_ADMIN_USER_PASS="admin-client-$ORG:browsingpw1@"
+      export CLIENT_ADMIN_USER_PASS="admin-client-$ORG:$ADMIN_CLIENT_PASS"
     else
       export CLIENT_ADMIN_USER_PASS=$CA_ADMIN_USER_PASS
     fi
