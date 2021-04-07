@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{RCA_NAME}}-configmap
-  namespace: {{ORG}}
+  name: {{ICA_NAME}}-configmap
+  namespace: {{ICA_DOMAIN}}
   labels:
-    app: {{RCA_NAME}}-configmap
+    app: {{ICA_NAME}}-configmap
 data:
   fabric-ca-server-config.yaml: |
     #############################################################################
@@ -133,14 +133,14 @@ data:
     #     which means this "registry" section is ignored.
     #############################################################################
     registry:
-      # Maximum number of times a password/secret can FABRIC_CA_SERVER_LDAP_URLe reused for enrollment
+      # Maximum number of times a password/secret can be reused for enrollment
       # (default: -1, which means there is no limit)
       maxenrollments: -1
 
       # Contains identity information which is used when LDAP is disabled
       identities:
-        - name: {{RCA_NAME}}-admin
-          pass: {{RCA_NAME}}-adminpw
+        - name: {{ICA_NAME}}-admin
+          pass: {{ICA_NAME}}-adminpw
           type: client
           affiliation: ""
           attrs:
@@ -196,19 +196,23 @@ data:
       attribute:
           # 'names' is an array of strings containing the LDAP attribute names which are
           # requested from the LDAP server for an LDAP identity's entry
-          names: ['memberOf']
+          names: ['cn','memberOf', 'affiliation']
           # The 'converters' section is used to convert an LDAP entry to the value of
           # a fabric CA attribute.
           # For example, the following converts an LDAP 'uid' attribute
           # whose value begins with 'revoker' to a fabric CA attribute
           # named "hf.Revoker" with a value of "true" (because the boolean expression
           # evaluates to true).
-          #    converters:
-          #       - name: hf.Revoker
-          #         value: attr("uid") =~ "revoker*"
           converters:
-            - name: hf.IntermediateCA
-              value: attr("memberOf") =~ "CN=grp-ica*"
+            - name: hf.EnrollmentID
+              value: attr("cn")
+            - name: hf.Type
+              value: map(attr("memberOf"),"roles")
+            - name: hf.Affiliation
+              value: attr("affiliation")
+              #converters:
+              #- name:
+              #value:
           # The 'maps' section contains named maps which may be referenced by the 'map'
           # function in the 'converters' section to map LDAP responses to arbitrary values.
           # For example, assume a user has an LDAP attribute named 'member' which has multiple
@@ -229,9 +233,15 @@ data:
           # "dn1,dn2,dn3", and the call to 'map' with a 2nd argument of
           # "group" replaces "dn1" with "peer" and "dn2" with "client".
           maps:
-            groups:
-                - name:
-                  value:
+            roles:
+                - name: CN=grp-client,CN=Groups,OU=hainq-local,DC=hogwarts3,DC=akachains,DC=io
+                  value: client
+                - name: CN=grp-admin,CN=Groups,OU=hainq-local,DC=hogwarts3,DC=akachains,DC=io
+                  value: admin
+                - name: CN=grp-peer,CN=Groups,OU=hainq-local,DC=hogwarts3,DC=akachains,DC=io
+                  value: peer
+                - name: CN=grp-orderer,CN=Groups,OU=hainq-local,DC=hogwarts3,DC=akachains,DC=io
+                  value: orderer
 
     #############################################################################
     # Affiliations section. Fabric CA server can be bootstrapped with the
@@ -318,7 +328,7 @@ data:
     #     CA certificates though it can still issue end entity certificates.
     ###########################################################################
     csr:
-      cn: fabric-ca-server
+      cn: 
       keyrequest:
         algo: ecdsa
         size: 256
@@ -329,11 +339,11 @@ data:
             O: Hyperledger
             OU: Fabric
       hosts:
-        - rca-akc-0
+        - ica-akc-0
         - localhost
       ca:
           expiry: 131400h
-          pathlength: 1
+          pathlength: 0
 
     ###########################################################################
     # Each CA can issue both X509 enrollment certificate as well as Idemix

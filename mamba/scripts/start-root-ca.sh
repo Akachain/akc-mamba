@@ -9,6 +9,8 @@
 set -e
 
 source $(dirname "$0")/env.sh
+mkdir -p $FABRIC_CA_SERVER_HOME
+cp /tmp/artifact/fabric-ca-server-config.yaml /etc/hyperledger/fabric-ca/fabric-ca-server-config.yaml
 # Initialize the root CA
 fabric-ca-server init -b "$BOOTSTRAP_USER_PASS" --csr.hosts "$EXTERNAL_RCA_ADDRESSES" --csr.hosts "$RCA_NAME.$RCA_DOMAIN"
 
@@ -17,10 +19,10 @@ cp $FABRIC_CA_SERVER_HOME/ca-cert.pem $TARGET_CERTFILE
 
 # Add the custom orgs
 for o in $FABRIC_ORGS; do
-   aff=$aff"\n   $o: []"
+   aff=$aff"\n  $o: []"
 done
 aff="${aff#\\n   }"
-sed -i "/affiliations:/a \\   $aff" \
+sed -i "/affiliations:/a \\  $aff" \
    $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml
 
 # sed -i 's+C: US+C: VN+g' $FABRIC_CA_SERVER_HOME/fabric-ca-server-config.yaml

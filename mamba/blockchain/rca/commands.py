@@ -21,6 +21,13 @@ def delete_rca():
     # Delete stateful set
     return settings.k8s.delete_stateful(name=name, namespace=domain)
 
+def delete_rca_config_map():
+    name = settings.RCA_NAME+"-configmap"
+    domain = settings.RCA_DOMAIN
+
+    # Delete stateful set
+    return settings.k8s.delete_config_map(name=name, namespace=domain)
+
 
 def setup_rca():
     domain = settings.RCA_DOMAIN
@@ -46,6 +53,10 @@ def setup_rca():
         'PVS_PATH': settings.PVS_PATH,
         'STORAGE_CLASS': storage_class
     }
+
+    k8s_template_file_configmap = '%s/rca/rca-config-map.yaml' % util.get_k8s_template_path()
+    settings.k8s.apply_yaml_from_template(
+        namespace=domain, k8s_template_file=k8s_template_file_configmap, dict_env=dict_env)
 
     k8s_template_file = '%s/rca/fabric-deployment-rca.yaml' % util.get_k8s_template_path()
     settings.k8s.apply_yaml_from_template(
@@ -74,6 +85,7 @@ def setup():
 def delete():
     hiss.rattle('Delete Root CA Server')
     delete_rca()
+    delete_rca_config_map()
 
 @rca.command('terminate', short_help="Terminate Root CA")
 def terminate():

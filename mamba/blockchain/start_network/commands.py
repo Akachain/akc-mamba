@@ -48,13 +48,14 @@ def start_network():
     hiss.rattle('Run jobs to register organizations')
     reg_all_org()
 
-    # Run jobs to register orderers
-    hiss.rattle('Run jobs to register orderers')
-    reg_all_orderer()
+    if settings.ENABLE_LDAP == 'false':
+        # Run jobs to register orderers
+        hiss.rattle('Run jobs to register orderers')
+        reg_all_orderer()
 
-    # Run jobs to register peers
-    hiss.rattle('Run jobs to register peers')
-    reg_all_peer()
+        # Run jobs to register peers
+        hiss.rattle('Run jobs to register peers')
+        reg_all_peer()
 
     hiss.rattle('Run jobs to enroll orderers')
     enroll_all_orderer()

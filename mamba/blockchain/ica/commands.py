@@ -29,6 +29,16 @@ def delete_ica(ica_org):
     # Delete stateful set
     return settings.k8s.delete_stateful(name=ica_name, namespace=ica_domain)
 
+def delete_ica_config_map(ica_org):
+    ica_name_cm = 'ica-%s-configmap' % ica_org
+    # Get domain ica to create namespace
+    ica_domain = util.get_domain(ica_org)
+    if not ica_domain:
+        return hiss.hiss('Fail to get domain of %s ' % ica_org)
+
+    # Delete config map
+    return settings.k8s.delete_config_map(name=ica_name_cm,namespace=ica_domain)
+
 def setup_ica(ica_org):
 
     # Get domain ica to create namespace
@@ -47,6 +57,12 @@ def setup_ica(ica_org):
 
     rca_name = settings.RCA_NAME or settings.REMOTE_RCA_NAME
 
+    ica_pass = settings.ICA_PASS
+    if settings.ENABLE_LDAP == 'true':
+        parent_url = 'https://%s:%s@%s:7054' % (ica_name, ica_pass, rca_host)
+    else:
+        parent_url = 'https://%s-admin:%s-adminpw@%s:7054' % (rca_name, rca_name, rca_host)
+
     k8s_template_file = '%s/ica/fabric-deployment-ica.yaml' % util.get_k8s_template_path()
     dict_env = {
         'ORG': ica_org,
@@ -55,12 +71,19 @@ def setup_ica(ica_org):
         'RCA_NAME': rca_name,
         'RCA_HOST': rca_host,
         'FABRIC_CA_TAG': settings.FABRIC_CA_TAG,
+        'ENABLE_LDAP': settings.ENABLE_LDAP,
+        'INTERMEDIATE_CA_LDAP_URL': settings.INTERMEDIATE_CA_LDAP_URL,
         'EFS_SERVER': settings.EFS_SERVER,
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND,
         'PVS_PATH': settings.PVS_PATH,
-        'STORAGE_CLASS': storage_class
+        'STORAGE_CLASS': storage_class,
+        'PARENT_URL': parent_url
     }
+    k8s_template_file_configmap = '%s/ica/ica-config-map.yaml' % util.get_k8s_template_path()
+    settings.k8s.apply_yaml_from_template(
+        namespace=ica_domain, k8s_template_file=k8s_template_file_configmap, dict_env=dict_env)
+
     settings.k8s.apply_yaml_from_template(
         namespace=ica_domain, k8s_template_file=k8s_template_file, dict_env=dict_env)
 
@@ -76,6 +99,7 @@ def delete_all_ica():
     # TODO: Multiprocess
     for org in orgs:
         delete_ica(org)
+        delete_ica_config_map(org)
 
 def terminate_all_ica():
     orgs = settings.ORGS.split(' ')
