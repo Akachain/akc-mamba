@@ -93,7 +93,7 @@ function initOrgVars {
 
    if [ -z "$LDAP_ADMIN_PASS" ]
    then
-      ADMIN_PASS=browsingpw1@
+      ADMIN_PASS=${ADMIN_NAME}pw
    else
       ADMIN_PASS=$LDAP_ADMIN_PASS
    fi
@@ -104,14 +104,14 @@ function initOrgVars {
    # USER_PASS=browsingpw1@
    if [ -z "$LDAP_USER_PASS" ]
    then
-      USER_PASS=browsingpw1@
+      USER_PASS=${USER_NAME}pw
    else
       USER_PASS=$LDAP_USER_PASS
    fi
 
    if [ -z "$LDAP_ADMIN_CLIENT_PASS" ]
    then
-      ADMIN_CLIENT_PASS=browsingpw1@
+      ADMIN_CLIENT_PASS=admin-client-${ORG}pw
    else
       ADMIN_CLIENT_PASS=$LDAP_ADMIN_CLIENT_PASS
    fi
@@ -162,7 +162,7 @@ function initOrdererVars {
    # ORDERER_PASS=browsingpw1@
    if [ -z "$LDAP_ORDERER_PASS" ]
    then
-      ORDERER_PASS=browsingpw1@
+      ORDERER_PASS=${ORDERER_NAME}pw
    else
       ORDERER_PASS=$LDAP_ORDERER_PASS
    fi
@@ -238,7 +238,7 @@ function initPeerVars {
    # PEER_PASS=browsingpw1@
    if [ -z "$LDAP_PEER_PASS" ]
    then
-      PEER_PASS=browsingpw1@
+      PEER_PASS=${PEER_NAME}pw
    else
       PEER_PASS=$LDAP_PEER_PASS
    fi
