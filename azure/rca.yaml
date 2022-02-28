@@ -1,0 +1,107 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: default
+  name: rca-akc
+spec:
+  serviceName: rca-akc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hyperledger
+      role: ca
+      org: default
+      name: rca-akc
+  template:
+    metadata:
+      labels:
+        app: hyperledger
+        role: ca
+        org: default
+        name: rca-akc
+    spec:
+      containers:
+        - name: rca-akc
+          image: hyperledger/fabric-ca:1.4.7
+          env:
+            - name: FABRIC_CA_SERVER_HOME
+              value: /etc/hyperledger/fabric-ca
+            - name: FABRIC_CA_SERVER_TLS_ENABLED
+              value: "true"
+            - name: FABRIC_CA_SERVER_CSR_CN
+              value: rca-akc.default
+            - name: FABRIC_CA_SERVER_CSR_HOSTS
+              value: rca-akc.default
+            - name: FABRIC_CA_SERVER_DEBUG
+              value: "true"
+            - name: BOOTSTRAP_USER_PASS
+              value: rca-akc-admin:rca-akc-adminpw
+            - name: TARGET_CERTFILE
+              value: /data/rca-akc-cert.pem
+            - name: FABRIC_ORGS
+              value: "orderer akc"
+          ports:
+            - containerPort: 7054
+          command: ["sh"]
+          args: ["-c", "/scripts/start-root-ca.sh 2>&1"]
+          volumeMounts:
+            - mountPath: /etc/hyperledger/fabric-ca
+              name: rca-akc-pvc
+            - mountPath: /scripts
+              name: efs
+              subPath: mamba-example-cluster/akc-ca-scripts
+            - mountPath: /data
+              name: efs
+              subPath: mamba-example-cluster/akc-ca-data
+      volumes:
+        - name: efs
+          persistentVolumeClaim:
+            claimName: efs
+  volumeClaimTemplates:
+    - metadata:
+        name: rca-akc-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: default
+        resources:
+          requests:
+            storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: default
+  name: rca-akc
+spec:
+  selector:
+    app: hyperledger
+    role: ca
+    org: default
+    name: rca-akc
+  type: NodePort
+  ports:
+    - name: endpoint
+      protocol: TCP
+      port: 7054
+      targetPort: 7054
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: rca-akc-nlb
+#   namespace: default
+#   annotations:
+#     service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+# spec:
+#   selector:
+#     app: hyperledger
+#     role: ca
+#     org: default
+#     name: rca-akc
+#   ports:
+#   - name: endpoint
+#     protocol: TCP
+#     port: 7054
+#     targetPort: 7054
+#   type: LoadBalancer
