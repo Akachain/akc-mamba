@@ -11,7 +11,7 @@ def copy_scripts():
     hiss.rattle('Copy scripts to EFS')
 
     # Find efs pod
-    pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
+    pods = settings.k8s.find_pod(namespace="default", keyword=settings.EFS_POD)
     if not pods:
         return hiss.hiss('cannot find EFS pod')
 
@@ -47,7 +47,7 @@ def copy_scripts():
     exec_command = [
         '/bin/bash',
         '-c',
-        'rm -rf %s/akc-ca-scripts/*' % (settings.EFS_ROOT)]
+        'rm -rf %s/akc-ca-scripts/' % (settings.EFS_ROOT)]
 
     result_create_folder = settings.k8s.exec_pod(
         podName=pods[0], namespace="default", command=exec_command)

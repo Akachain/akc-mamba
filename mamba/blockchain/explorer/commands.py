@@ -174,7 +174,7 @@ def generate_explorer_config():
 def create_explorer_config_in_efs(explorer_config):
 
     # Find efs pod
-    pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
+    pods = settings.k8s.find_pod(namespace="default", keyword=settings.EFS_POD)
     if not pods:
         return hiss.hiss('cannot find tiller pod')
 

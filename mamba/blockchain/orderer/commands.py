@@ -35,9 +35,11 @@ def setup_orderer(orderer, index):
     settings.k8s.prereqs(domain)
 
     if settings.K8S_TYPE == 'minikube':
-        store_class = 'standard'
-    else:
-        store_class = 'gp2'
+        storage_class = 'standard'
+    if settings.K8S_TYPE == 'eks':
+        storage_class = 'gp2'
+    if settings.K8S_TYPE == 'azure':
+        storage_class = 'default'
 
     dict_env = {
         'ORDERER': orderer,

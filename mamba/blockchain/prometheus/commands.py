@@ -54,7 +54,7 @@ def generate_prom_config():
 
 def cp_config_efs(yaml_path):
     # Find efs pod
-    pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
+    pods = settings.k8s.find_pod(namespace="default", keyword=settings.EFS_POD)
     if not pods:
         return hiss.hiss('cannot find tiller pod')
 

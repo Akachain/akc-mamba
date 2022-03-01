@@ -28,7 +28,7 @@ from blockchain.update_anchor_peer.commands import del_all_job
 
 def remove_cert():
     ## Find explorer_db pod
-    pods = settings.k8s.find_pod(namespace='default', keyword="test-efs")
+    pods = settings.k8s.find_pod(namespace='default', keyword=settings.EFS_POD)
     if not pods:
         return hiss.hiss('cannot find tiller pod')
     

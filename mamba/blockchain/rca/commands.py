@@ -30,8 +30,10 @@ def setup_rca():
 
     if settings.K8S_TYPE == 'minikube':
         storage_class = 'standard'
-    else:
+    if settings.K8S_TYPE == 'eks':
         storage_class = 'gp2'
+    if settings.K8S_TYPE == 'azure':
+        storage_class = 'default'
 
     dict_env = {
         'ORG': domain,

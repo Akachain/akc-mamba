@@ -10,7 +10,7 @@ def update_folder():
     hiss.rattle('Update folder crt in EFS')
 
     # Find efs pod
-    pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
+    pods = settings.k8s.find_pod(namespace="default", keyword=settings.EFS_POD)
     if not pods:
         return hiss.hiss('cannot find tiller pod')
 

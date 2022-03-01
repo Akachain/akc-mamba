@@ -292,7 +292,7 @@ class KubeHelper:
             sourcePath = source
             if os.path.isdir(sourcePath):
                 sourcePath = '%s/.' % source
-            cmd = 'kubectl cp %s -n %s %s:%s' % (
+            cmd = 'kubectl cp --no-preserve=true %s -n %s %s:%s' % (
                 sourcePath, namespace, podName, target)
             copyResult = os.system(cmd)
             if copyResult != 0:

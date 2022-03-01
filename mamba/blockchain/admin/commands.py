@@ -26,7 +26,7 @@ def setup_admin(org):
     # Create application artifact folder
     hiss.echo('Create wallet folder')
     ## Find efs pod
-    pods = settings.k8s.find_pod(namespace="default", keyword="test-efs")
+    pods = settings.k8s.find_pod(namespace="default", keyword=settings.EFS_POD)
     if not pods:
         return hiss.hiss('cannot find tiller pod')
 

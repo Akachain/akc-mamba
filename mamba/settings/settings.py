@@ -25,8 +25,10 @@ def init():
     K8S_TYPE = os.getenv('K8S_TYPE')
     if K8S_TYPE == 'eks':
         PVS_PATH = '/pvs'
-    else:
+    elif K8S_TYPE == 'minikube':
         PVS_PATH = '/exports'
+    else:
+        PVS_PATH = os.getenv('PVS_PATH')
 
     global k8s
     k8s = KubeHelper()
