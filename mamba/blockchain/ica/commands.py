@@ -47,7 +47,7 @@ def setup_ica(ica_org):
         storage_class = 'standard'
     if settings.K8S_TYPE == 'eks':
         storage_class = 'gp2'
-    if settings.K8S_TYPE == 'azure':
+    else:
         storage_class = 'default'
 
     rca_name = settings.RCA_NAME or settings.REMOTE_RCA_NAME

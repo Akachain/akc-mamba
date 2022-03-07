@@ -38,7 +38,7 @@ def setup_orderer(orderer, index):
         storage_class = 'standard'
     if settings.K8S_TYPE == 'eks':
         storage_class = 'gp2'
-    if settings.K8S_TYPE == 'azure':
+    else:
         storage_class = 'default'
 
     dict_env = {
@@ -50,7 +50,7 @@ def setup_orderer(orderer, index):
         'EFS_PATH': settings.EFS_PATH,
         'EFS_EXTEND': settings.EFS_EXTEND,
         'PVS_PATH': settings.PVS_PATH,
-        'STORE_CLASS': store_class
+        'STORE_CLASS': storage_class
     }
 
     orderer_stateful = '%s/orderer-sts/orderer-stateful.yaml' % util.get_k8s_template_path()

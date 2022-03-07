@@ -28,41 +28,42 @@ spec:
             - name: FABRIC_CA_SERVER_HOME
               value: /etc/hyperledger/fabric-ca
             - name: FABRIC_CA_SERVER_TLS_ENABLED
-              value: "true"
+              value: 'true'
             - name: FABRIC_CA_SERVER_CSR_CN
               value: rca-akc.default
             - name: FABRIC_CA_SERVER_CSR_HOSTS
               value: rca-akc.default
             - name: FABRIC_CA_SERVER_DEBUG
-              value: "true"
+              value: 'true'
             - name: BOOTSTRAP_USER_PASS
               value: rca-akc-admin:rca-akc-adminpw
             - name: TARGET_CERTFILE
               value: /data/rca-akc-cert.pem
             - name: FABRIC_ORGS
-              value: "orderer akc"
+              value: 'orderer akc'
           ports:
             - containerPort: 7054
-          command: ["sh"]
-          args: ["-c", "/scripts/start-root-ca.sh 2>&1"]
+          command: ['sh']
+          args: ['-c', 'tail -f /dev/null']
           volumeMounts:
             - mountPath: /etc/hyperledger/fabric-ca
               name: rca-akc-pvc
             - mountPath: /scripts
-              name: efs
-              subPath: mamba-example-cluster/akc-ca-scripts
-            - mountPath: /data
-              name: efs
-              subPath: mamba-example-cluster/akc-ca-data
+              name: rca-scripts
+              # subPath: mamba-example-cluster/akc-ca-scripts
+            # - mountPath: /data
+            #   name: efs
+            #   subPath: mamba-example-cluster/akc-ca-data
       volumes:
-        - name: efs
-          persistentVolumeClaim:
-            claimName: efs
+        - name: rca-scripts
+          nfs:
+            server: mambanfs.file.core.windows.net
+            path: /mambanfs/mamba-nfs
   volumeClaimTemplates:
     - metadata:
         name: rca-akc-pvc
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ['ReadWriteOnce']
         storageClassName: default
         resources:
           requests:

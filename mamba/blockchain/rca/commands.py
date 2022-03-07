@@ -32,7 +32,7 @@ def setup_rca():
         storage_class = 'standard'
     if settings.K8S_TYPE == 'eks':
         storage_class = 'gp2'
-    if settings.K8S_TYPE == 'azure':
+    else:
         storage_class = 'default'
 
     dict_env = {
